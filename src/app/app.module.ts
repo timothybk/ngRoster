@@ -1,3 +1,4 @@
+import { RostersModule } from './rosters/rosters.module';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -24,7 +25,8 @@ import { HomeComponent } from './core/home/home.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RostersModule
   ],
   providers: [],
   bootstrap: [AppComponent]
