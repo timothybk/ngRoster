@@ -60,7 +60,11 @@ export class FirefighterEditComponent implements OnInit {
   }
 
   onSubmit() {
-
+    if (this.editMode) {
+      this.ffservice.updateFirefighter(this.id, this.firefighterForm.value);
+    } else {
+      this.ffservice.addFirefighter(this.firefighterForm.value);
+    }
   }
 
   onCancel() {

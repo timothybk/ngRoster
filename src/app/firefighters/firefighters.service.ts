@@ -26,8 +26,9 @@ export class FirefightersService {
     this.firefightersChanged.next(this.firefighters.slice());
   }
 
-  updateFirefighter() {
-
+  updateFirefighter(index: number, newFirefighter: Firefighter) {
+    this.firefighters[index] = newFirefighter;
+    this.firefightersChanged.next(this.firefighters.slice());
   }
 
 
