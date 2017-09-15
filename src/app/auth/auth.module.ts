@@ -1,10 +1,12 @@
 import { AuthRoutingModule } from './auth-routing.module';
-import { AuthComponent } from './auth.component';
 import { NgModule } from '@angular/core';
+import { SigninComponent } from './signin/signin.component';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
-    AuthComponent
+    SigninComponent,
+    SignupComponent
   ],
   imports: [
     AuthRoutingModule
