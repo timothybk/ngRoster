@@ -7,11 +7,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 const rostersRoutes: Routes = [
-  { path: '', component: RostersComponent, children: [
+  { path: 'rostering', component: RostersComponent, children: [
     { path: '', component: RosterStartComponent },
     { path: 'new', component: RosterCreateComponent },
-    { path: ':id', component: RosterEditComponent },
-    { path: 'n2', component: RosterN2Component }
+    { path: 'n2', component: RosterN2Component },
+    { path: ':id', component: RosterEditComponent }
   ]},
 ];
 

@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 
 const firefighterRoutes: Routes = [
   {
-    path: '', component: FirefightersComponent, children: [
+    path: 'firefighters', component: FirefightersComponent, children: [
       { path: '', component: FirefighterListComponent },
       { path: ':id', component: FirefighterEditComponent },
     ]

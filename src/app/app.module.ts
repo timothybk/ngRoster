@@ -17,10 +17,10 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     HttpModule,
-    AppRoutingModule,
     RostersModule,
     FirefightersModule,
-    CoreModule
+    CoreModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
