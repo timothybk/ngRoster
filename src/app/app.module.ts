@@ -1,3 +1,4 @@
+import { CoreModule } from './core/core.module';
 import { RostersModule } from './rosters/rosters.module';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,8 +10,6 @@ import { FirefighterEditComponent } from './firefighters/firefighter-edit/firefi
 import { FirefighterListComponent } from './firefighters/firefighter-list/firefighter-list.component';
 import { FirefighterItemComponent } from './firefighters/firefighter-list/firefighter-item/firefighter-item.component';
 import { AuthComponent } from './auth/auth.component';
-import { HeaderComponent } from './core/header/header.component';
-import { HomeComponent } from './core/home/home.component';
 
 @NgModule({
   declarations: [
@@ -19,14 +18,13 @@ import { HomeComponent } from './core/home/home.component';
     FirefighterEditComponent,
     FirefighterListComponent,
     FirefighterItemComponent,
-    AuthComponent,
-    HeaderComponent,
-    HomeComponent
+    AuthComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RostersModule
+    RostersModule,
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
