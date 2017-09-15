@@ -2,6 +2,7 @@ import { FirefightersService } from './../firefighters.service';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-firefighter-list',
@@ -11,10 +12,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class FirefighterListComponent implements OnInit {
 
   firefighters: Firefighter[];
+  subscription: Subscription;
 
   constructor(private router: Router, private route: ActivatedRoute, private ffService: FirefightersService) { }
 
   ngOnInit() {
+    this.subscription = this.ffService.firefightersChanged
+      .subscribe(
+        (firefighters: Firefighter[]) => {
+          this.firefighters = firefighters;
+        }
+      );
     this.firefighters = this.ffService.getFirefighters();
   }
 
