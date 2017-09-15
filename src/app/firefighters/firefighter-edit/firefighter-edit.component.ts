@@ -65,6 +65,10 @@ export class FirefighterEditComponent implements OnInit {
     );
   }
 
+  onDeleteQualification(index: number) {
+    (<FormArray>this.firefighterForm.get('qualifications')).removeAt(index);
+  }
+
   onSubmit() {
     if (this.editMode) {
       this.ffservice.updateFirefighter(this.id, this.firefighterForm.value);
