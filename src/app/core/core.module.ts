@@ -1,3 +1,4 @@
+import { FirefightersService } from './../firefighters/firefighters.service';
 import { AppRoutingModule } from './../app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
@@ -15,6 +16,6 @@ import { NgModule } from '@angular/core';
     AppRoutingModule,
     HeaderComponent
   ],
-  providers: []
+  providers: [FirefightersService]
 })
 export class CoreModule {}
