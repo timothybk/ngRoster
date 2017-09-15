@@ -31,6 +31,11 @@ export class FirefightersService {
     this.firefightersChanged.next(this.firefighters.slice());
   }
 
+  deleteFirefighter(index: number) {
+    this.firefighters.splice(index, 1);
+    this.firefightersChanged.next(this.firefighters.slice());
+  }
+
 
 }
 

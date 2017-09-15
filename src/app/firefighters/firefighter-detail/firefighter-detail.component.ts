@@ -29,4 +29,9 @@ export class FirefighterDetailComponent implements OnInit {
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
+  onDeleteFirefighter() {
+    this.ffService.deleteFirefighter(this.id);
+    this.router.navigate(['firefighters']);
+  }
+
 }
