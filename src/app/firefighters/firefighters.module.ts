@@ -1,5 +1,5 @@
+import { SharedModule } from './../shared/shared.module';
 import { FirefightersRoutingModule } from './firefighters-routing.module';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { FirefightersComponent } from './firefighters.component';
@@ -20,7 +20,7 @@ import { FirefighterStartComponent } from './firefighter-start/firefighter-start
     FirefighterStartComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     ReactiveFormsModule,
     FirefightersRoutingModule
   ]
