@@ -12,6 +12,10 @@ export class FirefightersService {
   getFirefighters() {
     return this.firefighters.slice();
   }
+
+  getFirefighter(index: number) {
+    return this.firefighters[index];
+  }
 }
 
 
