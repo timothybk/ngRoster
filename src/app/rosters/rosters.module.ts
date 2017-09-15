@@ -8,6 +8,7 @@ import { RosterEditComponent } from './roster-edit/roster-edit.component';
 import { RosterN2Component } from './roster-n2/roster-n2.component';
 import { RosterCreateComponent } from './roster-create/roster-create.component';
 import { RostersComponent } from './rosters.component';
+import { RosterStartComponent } from './roster-start/roster-start.component';
 
 
 
@@ -18,7 +19,8 @@ import { RostersComponent } from './rosters.component';
     RosterEditComponent,
     RosterN2Component,
     RosterCreateComponent,
-    RostersComponent
+    RostersComponent,
+    RosterStartComponent
   ],
   imports: [
     CommonModule,
