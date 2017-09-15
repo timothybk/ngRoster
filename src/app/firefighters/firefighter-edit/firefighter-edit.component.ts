@@ -42,9 +42,9 @@ export class FirefighterEditComponent implements OnInit {
       if (firefighter['qualifications']) {
         for (const qualification of firefighter.qualifications) {
           ffQuals.push(
-            new FormGroup({
-              'name': new FormControl(qualification, Validators.required)
-            })
+
+            new FormControl(qualification, Validators.required)
+
           );
         }
       }
@@ -61,9 +61,7 @@ export class FirefighterEditComponent implements OnInit {
 
   onAddQualification() {
     (<FormArray>this.firefighterForm.get('qualifications')).push(
-      new FormGroup({
-        'name': new FormControl(null, Validators.required)
-      })
+      new FormControl(null, Validators.required)
     );
   }
 
