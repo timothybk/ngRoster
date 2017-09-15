@@ -59,16 +59,25 @@ export class FirefighterEditComponent implements OnInit {
     });
   }
 
+  onAddQualification() {
+    (<FormArray>this.firefighterForm.get('qualifications')).push(
+      new FormGroup({
+        'name': new FormControl(null, Validators.required)
+      })
+    );
+  }
+
   onSubmit() {
     if (this.editMode) {
       this.ffservice.updateFirefighter(this.id, this.firefighterForm.value);
     } else {
       this.ffservice.addFirefighter(this.firefighterForm.value);
     }
+    this.onCancel();
   }
 
   onCancel() {
-
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   getControls() {
