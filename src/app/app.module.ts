@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
@@ -11,8 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AuthComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -20,6 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
     RostersModule,
     FirefightersModule,
     CoreModule,
+    AuthModule,
     AppRoutingModule
   ],
   providers: [],
