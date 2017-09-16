@@ -14,13 +14,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  storeFirefighters() {
-    this.dataStorageService.storeFirefighters()
-      .subscribe(
-        (response: Response) => {
-          console.log(response);
-        }
-      );
+  getFirefighters() {
+    this.dataStorageService.getFirefighters();
   }
 
 }
