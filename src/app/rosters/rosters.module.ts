@@ -1,4 +1,4 @@
-import { RostersRoutingModule } from './rosters-routing.module';
+import { RostersRoutingModule } from './rosters.routing';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
