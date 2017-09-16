@@ -1,3 +1,4 @@
+import { AuthService } from './../auth/auth.service';
 import { DataStorageService } from './../shared/data-storage.service';
 import { FirefightersService } from './../firefighters/firefighters.service';
 import { AppRoutingModule } from './../app-routing.module';
@@ -19,7 +20,8 @@ import { NgModule } from '@angular/core';
   ],
   providers: [
     FirefightersService,
-    DataStorageService
+    DataStorageService,
+    AuthService
   ]
 })
 export class CoreModule {}
