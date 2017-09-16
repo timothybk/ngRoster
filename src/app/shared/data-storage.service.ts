@@ -1,3 +1,5 @@
+import { RostersService } from './../rosters/rosters.service';
+import { Pump } from './../rosters/pump.model';
 import { Qualification } from './qualification.model';
 import { Firefighter } from './firefighter.model';
 import { AuthService } from './../auth/auth.service';
@@ -10,7 +12,12 @@ import 'rxjs/RX';
 @Injectable()
 export class DataStorageService {
 
-  constructor(private http: Http, private ffService: FirefightersService, private authService: AuthService) {}
+  constructor(
+    private http: Http,
+    private ffService: FirefightersService,
+    private authService: AuthService,
+    private rostersService: RostersService
+  ) {}
 
   getFirefighters() {
     this.http.get('/api/firefighters')
@@ -34,6 +41,35 @@ export class DataStorageService {
     .subscribe(
       (firefighters: Firefighter[]) => {
         this.ffService.setFirefighters(firefighters);
+      }
+    );
+  }
+
+  getPumps() {
+    this.http.get('/api/pumps')
+    .map((response: Response) => {
+      const pumps = response.json();
+      const transformedPumps: Pump[] = [];
+      for (const pump of pumps) {
+        const seatList: string[] = [];
+        const qualList: Qualification[] = [];
+        pump.qualifications.forEach(qualification => {
+          qualList.push(new Qualification(qualification.name));
+        });
+        pump.seats.forEach(seat => {
+          seatList.push(seat);
+        });
+        transformedPumps.push(new Pump(
+          pump.name,
+          seatList,
+          qualList
+        ));
+      }
+      return transformedPumps;
+    })
+    .subscribe(
+      (pumps: Pump[]) => {
+        this.rostersService.setPumps(pumps);
       }
     );
   }

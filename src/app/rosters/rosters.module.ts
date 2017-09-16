@@ -1,3 +1,4 @@
+import { RostersService } from './rosters.service';
 import { RostersRoutingModule } from './rosters.routing';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -27,6 +28,9 @@ import { RosterPumpsComponent } from './roster-pumps/roster-pumps.component';
   imports: [
     CommonModule,
     RostersRoutingModule
+  ],
+  providers: [
+    RostersService
   ]
 })
 export class RostersModule {}

@@ -15,13 +15,28 @@ router.get('/', (req, res) => {
 // Get all posts
 router.get('/firefighters', (req, res) => {
   FireFighter.find()
-  .populate('qualifications')
+    .populate('qualifications')
     .then(result => {
       res.status(200).json(result);
     })
     .catch(error => {
       res.status(500).send(error)
     });
+});
+
+// get all pumps
+router.get('/pumps', (req, res) => {
+  Appliance.find()
+    .populate('qualifications')
+    .then(
+    result => {
+      res.status(200).json(result);
+    })
+    .catch(
+    err => {
+      res.status(500).send(err);
+    }
+    )
 });
 
 module.exports = router;

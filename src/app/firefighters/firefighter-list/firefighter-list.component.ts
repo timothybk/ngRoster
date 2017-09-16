@@ -1,6 +1,6 @@
 import { FirefightersService } from './../firefighters.service';
 import { Firefighter } from './../../shared/firefighter.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './firefighter-list.component.html',
   styleUrls: ['./firefighter-list.component.css']
 })
-export class FirefighterListComponent implements OnInit {
+export class FirefighterListComponent implements OnInit, OnDestroy {
 
   firefighters: Firefighter[];
   subscription: Subscription;
@@ -28,6 +28,10 @@ export class FirefighterListComponent implements OnInit {
 
   onNewFirefighter() {
     this.router.navigate(['new'], {relativeTo: this.route});
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }
