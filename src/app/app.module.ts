@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { FirefightersModule } from './firefighters/firefighters.module';
 import { CoreModule } from './core/core.module';
 import { RostersModule } from './rosters/rosters.module';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './app.routing';
 
 @NgModule({
   declarations: [

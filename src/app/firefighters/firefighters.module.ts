@@ -1,5 +1,5 @@
 import { SharedModule } from './../shared/shared.module';
-import { FirefightersRoutingModule } from './firefighters-routing.module';
+import { FirefightersRoutingModule } from './firefighters.routing';
 import { NgModule } from '@angular/core';
 
 import { FirefightersComponent } from './firefighters.component';
