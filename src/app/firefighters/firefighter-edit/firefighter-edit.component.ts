@@ -27,7 +27,6 @@ export class FirefighterEditComponent implements OnInit {
   }
 
   private initForm() {
-    let ffId = '';
     let ffNumber;
     let ffRank = '';
     let ffName = '';
@@ -35,7 +34,6 @@ export class FirefighterEditComponent implements OnInit {
 
     if (this.editMode) {
       const firefighter = this.ffservice.getFirefighter(this.id);
-      ffId = firefighter.id;
       ffNumber = firefighter.number;
       ffRank = firefighter.rank;
       ffName = firefighter.name;
@@ -51,7 +49,6 @@ export class FirefighterEditComponent implements OnInit {
     }
 
     this.firefighterForm = new FormGroup({
-      'id': new FormControl(ffId, Validators.required),
       'number': new FormControl(ffNumber, Validators.required),
       'rank': new FormControl(ffRank, Validators.required),
       'name': new FormControl(ffName, Validators.required),
