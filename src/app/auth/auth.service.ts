@@ -29,4 +29,12 @@ export class AuthService {
         }
       );
   }
+
+  getToken() {
+    firebase.auth().currentUser.getIdToken()
+      .then(
+        (token: string) => this.token = token
+      );
+      return this.token;
+  }
 }
