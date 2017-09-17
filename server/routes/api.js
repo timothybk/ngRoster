@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const FireFighter = require('./../models/firefighter')
-const Qualification = require('./../models/qualification')
+const FireFighter = require('./../models/firefighter');
+const Qualification = require('./../models/qualification');
+const Appliance = require('../models/appliance');
 
 // // declare axios for making http requests
 // const axios = require('axios');
