@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import { FirefightersService } from './../firefighters.service';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -11,19 +13,24 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class FirefighterListComponent implements OnInit, OnDestroy {
 
-  firefighters: Firefighter[];
+  firefightersState: Observable<{firefighters: Firefighter[]}>;
   subscription: Subscription;
 
-  constructor(private router: Router, private route: ActivatedRoute, private ffService: FirefightersService) { }
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private ffService: FirefightersService,
+    private store: Store<{firefighters:
+      {firefighters: Firefighter[]}}>
+  ) { }
 
   ngOnInit() {
-    this.subscription = this.ffService.firefightersChanged
-      .subscribe(
-        (firefighters: Firefighter[]) => {
-          this.firefighters = firefighters;
-        }
-      );
-    this.firefighters = this.ffService.getFirefighters();
+    this.firefightersState = this.store.select('firefighters');
+    // this.subscription = this.ffService.firefightersChanged
+    //   .subscribe(
+    //     (firefighters: Firefighter[]) => {
+    //       this.firefighters = firefighters;
+    //     }
+    //   );
   }
 
   onNewFirefighter() {
