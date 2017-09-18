@@ -4,7 +4,6 @@ import { FirefightersService } from './../firefighters.service';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-firefighter-list',
@@ -14,7 +13,6 @@ import { Subscription } from 'rxjs/Subscription';
 export class FirefighterListComponent implements OnInit {
 
   firefightersState: Observable<{firefighters: Firefighter[]}>;
-  subscription: Subscription;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -25,12 +23,6 @@ export class FirefighterListComponent implements OnInit {
 
   ngOnInit() {
     this.firefightersState = this.store.select('firefighters');
-    // this.subscription = this.ffService.firefightersChanged
-    //   .subscribe(
-    //     (firefighters: Firefighter[]) => {
-    //       this.firefighters = firefighters;
-    //     }
-    //   );
   }
 
   onNewFirefighter() {

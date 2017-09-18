@@ -13,17 +13,8 @@ export class FirefightersService {
     {id: 'third', number: 3, rank: 'lvl 1', name: 'third ff', qualifications: []}
   ];
 
-  getFirefighters() {
-    return this.firefighters.slice();
-  }
-
   getFirefighter(index: number) {
     return this.firefighters[index];
-  }
-
-  addFirefighter(firefighter: Firefighter) {
-    this.firefighters.push(firefighter);
-    this.firefightersChanged.next(this.firefighters.slice());
   }
 
   updateFirefighter(index: number, newFirefighter: Firefighter) {
