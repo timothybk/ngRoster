@@ -16,6 +16,11 @@ export function firefightersReducer(state = initialState, action: FirefighterAct
         ...state,
         firefighters: [...state.firefighters, action.payload]
       };
+    case FirefighterActions.SET_FIREFIGHTERS:
+      return {
+        ...state,
+        firefighters: [...action.payload]
+      };
     default:
     return state;
   }

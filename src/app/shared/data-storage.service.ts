@@ -1,3 +1,4 @@
+import { Store } from '@ngrx/store';
 import { RostersService } from './../rosters/rosters.service';
 import { Pump } from './../rosters/pump.model';
 import { Qualification } from './qualification.model';
@@ -8,6 +9,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/RX';
+import * as FirefighterActions from '../firefighters/store/firefighters.actions';
 
 @Injectable()
 export class DataStorageService {
@@ -16,7 +18,9 @@ export class DataStorageService {
     private http: Http,
     private ffService: FirefightersService,
     private authService: AuthService,
-    private rostersService: RostersService
+    private rostersService: RostersService,
+    private store: Store<{firefighters:
+      {firefighters: Firefighter[]}}>
   ) {}
 
   getFirefighters() {
@@ -40,7 +44,7 @@ export class DataStorageService {
     })
     .subscribe(
       (firefighters: Firefighter[]) => {
-        this.ffService.setFirefighters(firefighters);
+        this.store.dispatch(new FirefighterActions.SetFirefighters(firefighters));
       }
     );
   }

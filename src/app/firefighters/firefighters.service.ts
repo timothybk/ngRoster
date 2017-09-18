@@ -26,13 +26,6 @@ export class FirefightersService {
     this.firefighters.splice(index, 1);
     this.firefightersChanged.next(this.firefighters.slice());
   }
-
-  setFirefighters(firefighters: Firefighter[]) {
-    this.firefighters = firefighters;
-    this.firefightersChanged.next(this.firefighters.slice());
-  }
-
-
 }
 
 
