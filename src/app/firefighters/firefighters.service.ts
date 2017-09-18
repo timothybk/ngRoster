@@ -16,16 +16,6 @@ export class FirefightersService {
   getFirefighter(index: number) {
     return this.firefighters[index];
   }
-
-  updateFirefighter(index: number, newFirefighter: Firefighter) {
-    this.firefighters[index] = newFirefighter;
-    this.firefightersChanged.next(this.firefighters.slice());
-  }
-
-  deleteFirefighter(index: number) {
-    this.firefighters.splice(index, 1);
-    this.firefightersChanged.next(this.firefighters.slice());
-  }
 }
 
 

@@ -1,7 +1,9 @@
+import { Store } from '@ngrx/store';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FirefightersService } from './../firefighters.service';
 import { Component, OnInit } from '@angular/core';
+import * as FirefighterActions from '../store/firefighters.actions';
 
 @Component({
   selector: 'app-firefighter-detail',
@@ -15,7 +17,10 @@ export class FirefighterDetailComponent implements OnInit {
 
   constructor(private ffService: FirefightersService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private store: Store<{firefighters:
+      {firefighters: Firefighter[]}}>
+    ) { }
 
   ngOnInit() {
     this.route.params
@@ -30,7 +35,7 @@ export class FirefighterDetailComponent implements OnInit {
   }
 
   onDeleteFirefighter() {
-    this.ffService.deleteFirefighter(this.id);
+    this.store.dispatch(new FirefighterActions.DeleteFirefighter(this.id));
     this.router.navigate(['firefighters']);
   }
 

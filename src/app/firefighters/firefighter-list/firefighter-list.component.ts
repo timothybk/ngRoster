@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { FirefightersService } from './../firefighters.service';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,7 +15,6 @@ export class FirefighterListComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private ffService: FirefightersService,
     private store: Store<{firefighters:
       {firefighters: Firefighter[]}}>
   ) { }

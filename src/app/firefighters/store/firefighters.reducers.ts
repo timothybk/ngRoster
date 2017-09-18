@@ -21,6 +21,25 @@ export function firefightersReducer(state = initialState, action: FirefighterAct
         ...state,
         firefighters: [...action.payload]
       };
+    case FirefighterActions.UPDATE_FIREFIGHTER:
+      const firefighter = state.firefighters[action.payload.index];
+      const updatedFirefighter = {
+        ...firefighter,
+        ...action.payload.firefighter
+      };
+      const firefighters = [...state.firefighters];
+      firefighters[action.payload.index] = updatedFirefighter;
+      return {
+        ...state,
+        firefighters: firefighters
+      };
+    case FirefighterActions.DELETE_FIREFIGHTER:
+      const oldFirefighters = [...state.firefighters];
+      const newFirefighters = oldFirefighters.splice(action.payload, 1);
+      return {
+        ...state,
+        firefighters: newFirefighters
+      };
     default:
     return state;
   }

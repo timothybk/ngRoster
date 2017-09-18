@@ -78,7 +78,7 @@ export class FirefighterEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.ffservice.updateFirefighter(this.id, this.firefighterForm.value);
+      this.store.dispatch(new FirefighterActions.UpdateFirefighter({index: this.id, firefighter: this.firefighterForm.value}));
     } else {
       this.store.dispatch(new FirefighterActions.AddFirefighter(this.firefighterForm.value));
     }

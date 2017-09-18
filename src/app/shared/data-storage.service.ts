@@ -4,7 +4,6 @@ import { Pump } from './../rosters/pump.model';
 import { Qualification } from './qualification.model';
 import { Firefighter } from './firefighter.model';
 import { AuthService } from './../auth/auth.service';
-import { FirefightersService } from './../firefighters/firefighters.service';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -16,7 +15,6 @@ export class DataStorageService {
 
   constructor(
     private http: Http,
-    private ffService: FirefightersService,
     private authService: AuthService,
     private rostersService: RostersService,
     private store: Store<{firefighters:
