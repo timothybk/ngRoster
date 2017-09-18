@@ -1,8 +1,8 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Store } from '@ngrx/store';
-import { FirefightersService } from './../firefighters.service';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import * as FirefighterActions from '../store/firefighters.actions';
 import * as fromFirefighters from '../store/firefighters.reducers';
@@ -12,23 +12,29 @@ import * as fromFirefighters from '../store/firefighters.reducers';
   templateUrl: './firefighter-edit.component.html',
   styleUrls: ['./firefighter-edit.component.css']
 })
-export class FirefighterEditComponent implements OnInit {
+export class FirefighterEditComponent implements OnInit, OnDestroy {
   id: number;
+  firefighter: Firefighter;
   editMode = false;
   firefighterForm: FormGroup;
+  subscription: Subscription;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private ffservice: FirefightersService,
     private store: Store<fromFirefighters.AppState>
   ) { }
 
   ngOnInit() {
-    this.route.params
+    this.subscription = this.store.select('firefighters')
       .subscribe(
-        (params: Params) => {
-          this.id = +params['id'];
-          this.editMode = params['id'] != null;
+        data => {
+          if (data.editedFirefighterIndex > -1) {
+            this.firefighter = data.editedFirefighter;
+            this.editMode = true;
+            this.id = data.editedFirefighterIndex;
+          } else {
+            this.editMode = false;
+          }
           this.initForm();
         }
       );
@@ -41,7 +47,7 @@ export class FirefighterEditComponent implements OnInit {
     const ffQuals = new FormArray([]);
 
     if (this.editMode) {
-      const firefighter = this.ffservice.getFirefighter(this.id);
+      const firefighter = this.firefighter;
       ffNumber = firefighter.number;
       ffRank = firefighter.rank;
       ffName = firefighter.name;
@@ -78,7 +84,7 @@ export class FirefighterEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.store.dispatch(new FirefighterActions.UpdateFirefighter({index: this.id, firefighter: this.firefighterForm.value}));
+      this.store.dispatch(new FirefighterActions.UpdateFirefighter(this.firefighterForm.value));
     } else {
       this.store.dispatch(new FirefighterActions.AddFirefighter(this.firefighterForm.value));
     }
@@ -91,6 +97,10 @@ export class FirefighterEditComponent implements OnInit {
 
   getControls() {
     return (<FormArray>this.firefighterForm.get('qualifications')).controls;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

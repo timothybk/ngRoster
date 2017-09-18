@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FirefightersService } from './../firefighters.service';
 import { Component, OnInit } from '@angular/core';
 import * as FirefighterActions from '../store/firefighters.actions';
+import * as fromFirefighters from '../store/firefighters.reducers';
 
 @Component({
   selector: 'app-firefighter-detail',
@@ -18,8 +19,7 @@ export class FirefighterDetailComponent implements OnInit {
   constructor(private ffService: FirefightersService,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<{firefighters:
-      {firefighters: Firefighter[]}}>
+    private store: Store<fromFirefighters.AppState>
     ) { }
 
   ngOnInit() {
@@ -31,6 +31,7 @@ export class FirefighterDetailComponent implements OnInit {
   }
 
   onEditFirefighter() {
+    this.store.dispatch(new FirefighterActions.StartEdit(this.id));
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
