@@ -6,6 +6,7 @@ export const SET_FIREFIGHTERS = 'SET_FIREFIGHTERS';
 export const UPDATE_FIREFIGHTER = 'UPDATE_FIREFIGHTER';
 export const DELETE_FIREFIGHTER = 'DELETE_FIREFIGHTER';
 export const START_EDIT = 'START_EDIT';
+export const STOP_EDIT = 'STOP_EDIT';
 
 
 export class AddFirefighter implements Action {
@@ -35,7 +36,11 @@ export class DeleteFirefighter implements Action {
 export class StartEdit implements Action {
   readonly type = START_EDIT;
 
-  constructor(public payload) {}
+  constructor(public payload: number) {}
+}
+
+export class StopEdit implements Action {
+  readonly type = STOP_EDIT;
 }
 
 export type FirefighterActions =
@@ -43,4 +48,5 @@ AddFirefighter |
 SetFirefighters |
 UpdateFirefighter |
 DeleteFirefighter |
-StartEdit;
+StartEdit |
+StopEdit;

@@ -13,7 +13,6 @@ import * as fromFirefighters from '../store/firefighters.reducers';
   styleUrls: ['./firefighter-edit.component.css']
 })
 export class FirefighterEditComponent implements OnInit, OnDestroy {
-  id: number;
   firefighter: Firefighter;
   editMode = false;
   firefighterForm: FormGroup;
@@ -31,7 +30,6 @@ export class FirefighterEditComponent implements OnInit, OnDestroy {
           if (data.editedFirefighterIndex > -1) {
             this.firefighter = data.editedFirefighter;
             this.editMode = true;
-            this.id = data.editedFirefighterIndex;
           } else {
             this.editMode = false;
           }
@@ -100,6 +98,7 @@ export class FirefighterEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(new FirefighterActions.StopEdit());
     this.subscription.unsubscribe();
   }
 

@@ -1,7 +1,7 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { FirefightersService } from './../firefighters.service';
 import { Component, OnInit } from '@angular/core';
 import * as FirefighterActions from '../store/firefighters.actions';
 import * as fromFirefighters from '../store/firefighters.reducers';
@@ -15,8 +15,9 @@ export class FirefighterDetailComponent implements OnInit {
 
   firefighter: Firefighter;
   id: number;
+  subscription: Subscription;
 
-  constructor(private ffService: FirefightersService,
+  constructor(
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<fromFirefighters.AppState>
@@ -26,7 +27,12 @@ export class FirefighterDetailComponent implements OnInit {
     this.route.params
       .subscribe((params: Params) => {
         this.id = +params['id'];
-        this.firefighter = this.ffService.getFirefighter(this.id);
+        this.subscription = this.store.select('firefighters')
+          .subscribe(
+            data => {
+              this.firefighter = data.firefighters[this.id];
+            }
+          );
       });
   }
 
