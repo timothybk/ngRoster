@@ -1,10 +1,6 @@
 import { Firefighter } from './../../shared/firefighter.model';
 import * as FirefighterActions from './firefighters.actions';
 
-export interface AppState {
-  firefighters: State;
-}
-
 export interface State {
 firefighters: Firefighter[];
 editedFirefighter: Firefighter;

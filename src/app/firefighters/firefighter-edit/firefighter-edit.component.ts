@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import * as FirefighterActions from '../store/firefighters.actions';
-import * as fromFirefighters from '../store/firefighters.reducers';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'app-firefighter-edit',
@@ -20,7 +20,7 @@ export class FirefighterEditComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private store: Store<fromFirefighters.AppState>
+    private store: Store<fromApp.AppState>
   ) { }
 
   ngOnInit() {

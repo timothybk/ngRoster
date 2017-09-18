@@ -4,7 +4,7 @@ import { Firefighter } from './../../shared/firefighter.model';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import * as FirefighterActions from '../store/firefighters.actions';
-import * as fromFirefighters from '../store/firefighters.reducers';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'app-firefighter-detail',
@@ -20,7 +20,7 @@ export class FirefighterDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<fromFirefighters.AppState>
+    private store: Store<fromApp.AppState>
     ) { }
 
   ngOnInit() {
