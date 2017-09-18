@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import * as FirefighterActions from '../store/firefighters.actions';
+import * as fromFirefighters from '../store/firefighters.reducers';
 
 @Component({
   selector: 'app-firefighter-edit',
@@ -19,8 +20,7 @@ export class FirefighterEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ffservice: FirefightersService,
-    private store: Store<{firefighters:
-      {firefighters: Firefighter[]}}>
+    private store: Store<fromFirefighters.AppState>
   ) { }
 
   ngOnInit() {

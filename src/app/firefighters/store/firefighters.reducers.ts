@@ -1,12 +1,24 @@
 import { Firefighter } from './../../shared/firefighter.model';
 import * as FirefighterActions from './firefighters.actions';
 
-const initialState = {
+export interface AppState {
+  firefighters: State;
+}
+
+export interface State {
+firefighters: Firefighter[];
+editedFirefighter: Firefighter;
+editedFirefighterIndex: number;
+}
+
+const initialState: State = {
   firefighters: [
       new Firefighter('first', 1, 'SF', 'first ff', []),
       new Firefighter('second', 2, 'QF', 'second ff', []),
       new Firefighter('third', 3, 'lvl 1', 'third ff', [])
-    ]
+    ],
+  editedFirefighter: null,
+  editedFirefighterIndex: -1
 };
 
 export function firefightersReducer(state = initialState, action: FirefighterActions.FirefighterActions) {

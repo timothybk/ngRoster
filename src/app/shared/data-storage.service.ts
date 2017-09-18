@@ -9,6 +9,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/RX';
 import * as FirefighterActions from '../firefighters/store/firefighters.actions';
+import * as fromFirefighters from '../firefighters/store/firefighters.reducers';
 
 @Injectable()
 export class DataStorageService {
@@ -17,8 +18,7 @@ export class DataStorageService {
     private http: Http,
     private authService: AuthService,
     private rostersService: RostersService,
-    private store: Store<{firefighters:
-      {firefighters: Firefighter[]}}>
+    private store: Store<fromFirefighters.AppState>
   ) {}
 
   getFirefighters() {

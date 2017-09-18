@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import * as fromFirefighters from '../store/firefighters.reducers';
 
 @Component({
   selector: 'app-firefighter-list',
@@ -15,8 +16,7 @@ export class FirefighterListComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private store: Store<{firefighters:
-      {firefighters: Firefighter[]}}>
+    private store: Store<fromFirefighters.AppState>
   ) { }
 
   ngOnInit() {
