@@ -3,8 +3,6 @@ import * as FirefighterActions from './firefighters.actions';
 
 export interface State {
 firefighters: Firefighter[];
-editedFirefighter: Firefighter;
-editedFirefighterIndex: number;
 }
 
 const initialState: State = {
@@ -12,9 +10,7 @@ const initialState: State = {
       new Firefighter('first', 1, 'SF', 'first ff', []),
       new Firefighter('second', 2, 'QF', 'second ff', []),
       new Firefighter('third', 3, 'lvl 1', 'third ff', [])
-    ],
-  editedFirefighter: null,
-  editedFirefighterIndex: -1
+    ]
 };
 
 export function firefightersReducer(state = initialState, action: FirefighterActions.FirefighterActions) {
@@ -30,41 +26,23 @@ export function firefightersReducer(state = initialState, action: FirefighterAct
         firefighters: [...action.payload]
       };
     case FirefighterActions.UPDATE_FIREFIGHTER:
-      const firefighter = state.firefighters[state.editedFirefighterIndex];
+      const firefighter = {...state.firefighters[action.payload.index]};
       const updatedFirefighter = {
         ...firefighter,
-        ...action.payload
+        ...action.payload.firefighter
       };
       const firefighters = [...state.firefighters];
-      firefighters[state.editedFirefighterIndex] = updatedFirefighter;
+      firefighters[action.payload.index] = updatedFirefighter;
       return {
         ...state,
-        firefighters: firefighters,
-        editedFirefighter: null,
-        editedFirefighterIndex: -1
+        firefighters: firefighters
       };
     case FirefighterActions.DELETE_FIREFIGHTER:
       const oldFirefighters = [...state.firefighters];
       oldFirefighters.splice(action.payload, 1);
       return {
         ...state,
-        firefighters: oldFirefighters,
-        editedFirefighter: null,
-        editedFirefighterIndex: -1
-      };
-    case FirefighterActions.START_EDIT:
-      const editedFirefighter = {...state.firefighters[action.payload]};
-      return {
-        ...state,
-        editedFirefighter: editedFirefighter,
-        editedFirefighterIndex: action.payload
-
-      };
-    case FirefighterActions.STOP_EDIT:
-      return {
-        ...state,
-        editedFirefighter: null,
-        editedFirefighterIndex: -1
+        firefighters: oldFirefighters
       };
     default:
     return state;

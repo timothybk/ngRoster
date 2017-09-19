@@ -1,9 +1,12 @@
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { Firefighter } from './../../shared/firefighter.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
+
+import { Firefighter } from './../../shared/firefighter.model';
 import * as fromApp from '../../store/app.reducer';
+import * as fromFirefighters from '../store/firefighters.reducers';
 
 @Component({
   selector: 'app-firefighter-list',
@@ -12,7 +15,7 @@ import * as fromApp from '../../store/app.reducer';
 })
 export class FirefighterListComponent implements OnInit {
 
-  firefightersState: Observable<{firefighters: Firefighter[]}>;
+  firefightersState: Observable<fromFirefighters.State>;
 
   constructor(private router: Router,
     private route: ActivatedRoute,

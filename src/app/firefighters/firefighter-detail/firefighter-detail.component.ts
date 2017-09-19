@@ -1,10 +1,13 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { Firefighter } from './../../shared/firefighter.model';
-import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+
+import { Firefighter } from './../../shared/firefighter.model';
 import * as FirefighterActions from '../store/firefighters.actions';
 import * as fromApp from '../../store/app.reducer';
+import * as fromFirefighters from '../store/firefighters.reducers';
+
 
 @Component({
   selector: 'app-firefighter-detail',
@@ -15,7 +18,6 @@ export class FirefighterDetailComponent implements OnInit {
 
   firefighter: Firefighter;
   id: number;
-  subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,17 +29,14 @@ export class FirefighterDetailComponent implements OnInit {
     this.route.params
       .subscribe((params: Params) => {
         this.id = +params['id'];
-        this.subscription = this.store.select('firefighters')
-          .subscribe(
-            data => {
-              this.firefighter = data.firefighters[this.id];
-            }
-          );
+        this.store.select('firefighters')
+          .subscribe((firefightersState: fromFirefighters.State) => {
+            this.firefighter = firefightersState.firefighters[this.id];
+          });
       });
   }
 
   onEditFirefighter() {
-    this.store.dispatch(new FirefighterActions.StartEdit(this.id));
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 

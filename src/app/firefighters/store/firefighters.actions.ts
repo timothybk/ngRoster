@@ -5,9 +5,8 @@ export const ADD_FIREFIGHTER = 'ADD_FIREFIGHTER';
 export const SET_FIREFIGHTERS = 'SET_FIREFIGHTERS';
 export const UPDATE_FIREFIGHTER = 'UPDATE_FIREFIGHTER';
 export const DELETE_FIREFIGHTER = 'DELETE_FIREFIGHTER';
-export const START_EDIT = 'START_EDIT';
-export const STOP_EDIT = 'STOP_EDIT';
-
+export const STORE_FIREFIGHTERS = 'STORE_FIREFIGHTERS';
+export const FETCH_FIREFIGHTERS = 'FETCH_FIREFIGHTERS';
 
 export class AddFirefighter implements Action {
   readonly type = ADD_FIREFIGHTER;
@@ -24,7 +23,7 @@ export class SetFirefighters implements Action {
 export class UpdateFirefighter implements Action {
   readonly type = UPDATE_FIREFIGHTER;
 
-  constructor(public payload: Firefighter) {}
+  constructor(public payload: { index: number, firefighter: Firefighter}) {}
 }
 
 export class DeleteFirefighter implements Action {
@@ -33,20 +32,19 @@ export class DeleteFirefighter implements Action {
   constructor(public payload: number) {}
 }
 
-export class StartEdit implements Action {
-  readonly type = START_EDIT;
-
-  constructor(public payload: number) {}
+export class StoreFirefighters implements Action {
+  readonly type = STORE_FIREFIGHTERS;
 }
 
-export class StopEdit implements Action {
-  readonly type = STOP_EDIT;
+export class FetchFirefighters implements Action {
+  readonly type = FETCH_FIREFIGHTERS;
 }
+
 
 export type FirefighterActions =
 AddFirefighter |
 SetFirefighters |
 UpdateFirefighter |
 DeleteFirefighter |
-StartEdit |
-StopEdit;
+StoreFirefighters |
+FetchFirefighters;
