@@ -11,6 +11,7 @@ import { RosterCreateComponent } from './roster-create/roster-create.component';
 import { RostersComponent } from './rosters.component';
 import { RosterStartComponent } from './roster-start/roster-start.component';
 import { RosterPumpsComponent } from './roster-pumps/roster-pumps.component';
+import { RosterHeaderComponent } from './roster-header/roster-header.component';
 
 
 
@@ -23,7 +24,8 @@ import { RosterPumpsComponent } from './roster-pumps/roster-pumps.component';
     RosterCreateComponent,
     RostersComponent,
     RosterStartComponent,
-    RosterPumpsComponent
+    RosterPumpsComponent,
+    RosterHeaderComponent
   ],
   imports: [
     CommonModule,
