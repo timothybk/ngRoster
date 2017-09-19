@@ -1,3 +1,4 @@
+import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
 import { Qualification } from './../../shared/qualification.model';
 import { Http, Response } from '@angular/http';
@@ -11,6 +12,25 @@ import * as rostersActions from './rosters.actions';
 
 @Injectable()
 export class RostersEffects {
+
+  @Effect()
+  shiftsInstFetch = this.actions$
+  .ofType(rostersActions.FETCH_SHIFTSINSTS)
+  .switchMap(
+    (action: rostersActions.FetchShiftsInsts) => {
+      return this.http.get('/api/shift-list');
+    }
+  )
+  .map(
+    (response: Response) => {
+      const shiftsInsts = response.json();
+      const transformedShiftsInsts: ShiftInstance[] = [];
+      for (const shiftInst of shiftsInsts) {
+
+      }
+    }
+  )
+
   @Effect()
   rosterFetch = this.actions$
   .ofType(rostersActions.FETCH_PUMPS)

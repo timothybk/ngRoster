@@ -1,1 +1,3 @@
-<h2>roster list</h2>
+<ul>
+  <li *ngFor='let shiftsInst of (rostersState | async).shiftsInsts'>{{shiftsInst.date}} {{shiftsInst.firefighter.name}}</li>
+</ul>
