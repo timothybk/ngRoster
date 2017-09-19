@@ -3,6 +3,7 @@ import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Effect, Actions } from '@ngrx/effects';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/map';
 import { Http, Response } from '@angular/http';
 
 import * as firefighterActions from './firefighters.actions';

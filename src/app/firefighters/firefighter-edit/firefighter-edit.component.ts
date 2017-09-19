@@ -8,6 +8,7 @@ import { Firefighter } from './../../shared/firefighter.model';
 import * as FirefighterActions from '../store/firefighters.actions';
 import * as fromApp from '../../store/app.reducer';
 import * as fromFirefighter from '../store/firefighters.reducers';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-firefighter-edit',

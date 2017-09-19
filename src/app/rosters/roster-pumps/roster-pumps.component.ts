@@ -1,34 +1,23 @@
-import { DataStorageService } from './../../shared/data-storage.service';
-import { RostersService } from './../rosters.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import { Pump } from './../pump.model';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as fromApp from '../../store/app.reducer';
+import * as fromRosters from '../store/rosters.reducers';
+import * as RostersActions from '../store/rosters.actions';
 
 @Component({
   selector: 'app-roster-pumps',
   templateUrl: './roster-pumps.component.html',
   styleUrls: ['./roster-pumps.component.css']
 })
-export class RosterPumpsComponent implements OnInit, OnDestroy {
+export class RosterPumpsComponent implements OnInit {
 
-  pumps: Pump[];
-  subscription: Subscription;
+  rostersState: Observable<fromRosters.State>;
 
-  constructor(private rostersService: RostersService, private dataStorageService: DataStorageService) { }
+  constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
-    this.dataStorageService.getPumps();
-    this.subscription = this.rostersService.pumpsChanged
-    .subscribe(
-      (pumps: Pump[]) => {
-        this.pumps = pumps;
-      }
-    );
-    // this.pumps = this.rostersService.getPumps();
+    this.rostersState = this.store.select('rosters');
   }
-
-  ngOnDestroy() {
-
-  }
-
 }

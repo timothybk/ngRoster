@@ -5,6 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
+import { RostersEffects } from './rosters/store/rosters.effects';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { reducers } from './store/app.reducer';
@@ -27,7 +28,7 @@ import { AppRoutingModule } from './app.routing';
     AuthModule,
     SharedModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([FirefighterEffects]),
+    EffectsModule.forRoot([FirefighterEffects, RostersEffects]),
     AppRoutingModule
   ],
   providers: [],

@@ -2,9 +2,9 @@ import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { DataStorageService } from './../../shared/data-storage.service';
 import * as fromApp from '../../store/app.reducer';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
+import * as RostersActions from '../../rosters/store/rosters.actions';
 
 @Component({
   selector: 'app-header',
@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
 
   getFirefighters() {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
+    this.store.dispatch(new RostersActions.FetchPumps());
   }
 
 }
