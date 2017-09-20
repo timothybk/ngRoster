@@ -1,14 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { DropdownDirective } from './dropdown.directive';
 import { NgModule } from '@angular/core';
+
+import { DropdownDirective } from './dropdown.directive';
+import { FirefighterListComponent } from '../firefighters/firefighter-list/firefighter-list.component';
+import { FirefighterItemComponent } from '../firefighters/firefighter-list/firefighter-item/firefighter-item.component';
 
 @NgModule({
   declarations: [
-    DropdownDirective
+    DropdownDirective,
+    FirefighterListComponent,
+    FirefighterItemComponent
   ],
   exports: [
     CommonModule,
-    DropdownDirective
+    DropdownDirective,
+    FirefighterListComponent,
+    FirefighterItemComponent
   ]
 })
 export class SharedModule {}

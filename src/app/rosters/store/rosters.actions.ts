@@ -20,8 +20,6 @@ export class SetShiftsInsts implements Action {
 
 export class FetchShiftsInsts implements Action {
   readonly type = FETCH_SHIFTSINSTS;
-
-  constructor(public payload: ShiftInstance[]) {}
 }
 
 export class AddPump implements Action {

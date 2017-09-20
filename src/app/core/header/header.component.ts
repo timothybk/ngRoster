@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   getFirefighters() {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
     this.store.dispatch(new RostersActions.FetchPumps());
+    this.store.dispatch(new RostersActions.FetchShiftsInsts());
   }
 
 }

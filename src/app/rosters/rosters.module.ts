@@ -1,8 +1,9 @@
-import { RostersService } from './rosters.service';
-import { RostersRoutingModule } from './rosters.routing';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { RostersService } from './rosters.service';
+import { RostersRoutingModule } from './rosters.routing';
+import { SharedModule } from './../shared/shared.module';
 import { RosterListComponent } from './roster-list/roster-list.component';
 import { RosterItemComponent } from './roster-list/roster-item/roster-item.component';
 import { RosterEditComponent } from './roster-edit/roster-edit.component';
@@ -29,6 +30,7 @@ import { RosterHeaderComponent } from './roster-header/roster-header.component';
   ],
   imports: [
     CommonModule,
+    SharedModule,
     RostersRoutingModule
   ],
   providers: [

@@ -1,5 +1,6 @@
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
+import { Firefighter } from './../../shared/firefighter.model'
 import { Qualification } from './../../shared/qualification.model';
 import { Http, Response } from '@angular/http';
 import { Actions, Effect } from '@ngrx/effects';
@@ -26,7 +27,28 @@ export class RostersEffects {
       const shiftsInsts = response.json();
       const transformedShiftsInsts: ShiftInstance[] = [];
       for (const shiftInst of shiftsInsts) {
-
+        if (shiftInst.firefighter){
+        const newFF = new Firefighter(shiftInst.firefighter.id,
+                          shiftInst.firefighter.number,
+                          shiftInst.firefighter.rank,
+                          shiftInst.firefighter.name,
+                          shiftInst.firefighter.qualifications);
+                          
+        const newPump = new Pump(shiftInst.pump.name,
+                            shiftInst.pump.seats,
+                            shiftInst.pump.qualifications);
+        
+        transformedShiftsInsts.push(new ShiftInstance(
+          shiftInst.date,
+          newFF,
+          newPump,
+          shiftInst.shift,
+          shiftInst.md));
+        }
+      }
+      return {
+        type: rostersActions.SET_SHIFTSINSTS,
+        payload: transformedShiftsInsts
       }
     }
   )

@@ -45,6 +45,8 @@ router.get('/pumps', (req, res) => {
 //Display ShiftInstance create form on GET
 router.get('/shift-list', (req, res) => {
   ShiftInstance.find()
+  .populate('firefighter')
+  .populate('pump')
   .sort('-date')
   .then(result => {
     res.status(200).json(result);
