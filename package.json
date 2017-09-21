@@ -23,6 +23,7 @@
     "@angular/router": "^4.0.0",
     "@ngrx/effects": "^4.0.5",
     "@ngrx/store": "^4.0.3",
+    "angularfire2": "^4.0.0-rc.2",
     "body-parser": "^1.18.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",

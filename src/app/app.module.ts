@@ -14,6 +14,10 @@ import { FirefightersModule } from './firefighters/firefighters.module';
 import { CoreModule } from './core/core.module';
 import { RostersModule } from './rosters/rosters.module';
 import { AppRoutingModule } from './app.routing';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { environment } from './../environments/environment';
 
 @NgModule({
   declarations: [
@@ -27,6 +31,8 @@ import { AppRoutingModule } from './app.routing';
     CoreModule,
     AuthModule,
     SharedModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([FirefighterEffects, RostersEffects]),
     AppRoutingModule

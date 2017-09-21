@@ -1,18 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+import { Component } from '@angular/core';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'app';
-
-  ngOnInit() {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyDCdGy0r8UMhpY8M5puikjTWK2sNxih42I',
-      authDomain: 'ng-roster.firebaseapp.com'
-    });
+export class AppComponent {
+  items: FirebaseListObservable<any[]>;
+  constructor(db: AngularFireDatabase) {
+    this.items = db.list('/items');
   }
 }
