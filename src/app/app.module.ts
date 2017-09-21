@@ -7,7 +7,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
 import { RostersEffects } from './rosters/store/rosters.effects';
 import { SharedModule } from './shared/shared.module';
-import { AuthModule } from './auth/auth.module';
+// import { AuthModule } from './auth/auth.module';
 import { reducers } from './store/app.reducer';
 import { AppComponent } from './app.component';
 import { FirefightersModule } from './firefighters/firefighters.module';
@@ -29,7 +29,7 @@ import { environment } from './../environments/environment';
     RostersModule,
     FirefightersModule,
     CoreModule,
-    AuthModule,
+    // AuthModule,
     SharedModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
