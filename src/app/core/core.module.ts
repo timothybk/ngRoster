@@ -1,7 +1,5 @@
 import { AuthService } from './../auth/auth.service';
-import { DataStorageService } from './../shared/data-storage.service';
-import { FirefightersService } from './../firefighters/firefighters.service';
-import { AppRoutingModule } from './../app-routing.module';
+import { AppRoutingModule } from './../app.routing';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { NgModule } from '@angular/core';
@@ -19,8 +17,6 @@ import { NgModule } from '@angular/core';
     HeaderComponent
   ],
   providers: [
-    FirefightersService,
-    DataStorageService,
     AuthService
   ]
 })

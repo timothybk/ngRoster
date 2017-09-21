@@ -1,8 +1,12 @@
-import { FirefightersService } from './../firefighters.service';
-import { Firefighter } from './../../shared/firefighter.model';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+
+
+import { Firefighter } from './../../shared/firefighter.model';
+import * as fromApp from '../../store/app.reducer';
+import * as fromFirefighters from '../store/firefighters.reducers';
 
 @Component({
   selector: 'app-firefighter-list',
@@ -11,23 +15,18 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class FirefighterListComponent implements OnInit {
 
-  firefighters: Firefighter[];
-  subscription: Subscription;
+  firefightersState: Observable<fromFirefighters.State>;
 
-  constructor(private router: Router, private route: ActivatedRoute, private ffService: FirefightersService) { }
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<fromApp.AppState>
+  ) { }
 
   ngOnInit() {
-    this.subscription = this.ffService.firefightersChanged
-      .subscribe(
-        (firefighters: Firefighter[]) => {
-          this.firefighters = firefighters;
-        }
-      );
-    this.firefighters = this.ffService.getFirefighters();
+    this.firefightersState = this.store.select('firefighters');
   }
 
   onNewFirefighter() {
     this.router.navigate(['new'], {relativeTo: this.route});
   }
-
 }

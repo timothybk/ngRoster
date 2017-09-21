@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromFirefighters from '../../firefighters/store/firefighters.reducers';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'app-roster-n2',
@@ -7,7 +11,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RosterN2Component implements OnInit {
 
-  constructor() { }
+  firefightersState: Observable<fromFirefighters.State>;
+
+  constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
   }

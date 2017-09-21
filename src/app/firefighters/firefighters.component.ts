@@ -10,6 +10,7 @@ export class FirefightersComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }
