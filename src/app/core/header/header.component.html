@@ -10,8 +10,9 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
           <li><a style="cursor: pointer;" (click)='getFirefighters()'>Fetch Data</a></li>
-        <li><a routerLink="/signup">Register</a></li>
-        <li><a routerLink="/signin">Log in</a></li>
+        <li><a (click)='signup()' style="cursor: pointer;">Register</a></li>
+        <li><a (click)='signin()' style="cursor: pointer;">Log in</a></li>
+        <li><a (click)='signout()' style="cursor: pointer;">Log out</a></li>
       </ul>
     </div>
   </div>
