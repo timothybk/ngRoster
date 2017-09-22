@@ -1,46 +1,60 @@
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Injectable } from '@angular/core';
 import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Effect, Actions } from '@ngrx/effects';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
-import { Http, Response } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/withLatestFrom';
+import { of } from 'rxjs/observable/of';
 
 import * as firefighterActions from './firefighters.actions';
+import * as fromApp from '../../store/app.reducer';
+import * as fromFirefighters from '../store/firefighters.reducers';
 
 @Injectable()
 export class FirefighterEffects {
+
+  @Effect({dispatch: false})
+  firefightersStore = this.actions$
+  .ofType(firefighterActions.STORE_FIREFIGHTERS)
+  .withLatestFrom(this.store.select('firefighters'))
+  .switchMap(
+    ([action, state]) => {
+      return of (this.db.list('/firefighters')
+      .push(state.firefighters));
+    }
+  )
+  .catch(
+    err => of (console.log(err)));
+
   @Effect()
   firefightersFetch = this.actions$
   .ofType(firefighterActions.FETCH_FIREFIGHTERS)
   .switchMap(
     (action: firefighterActions.FetchFirefighters) => {
-      return this.http.get('/api/firefighters');
+      return this.db.list('/firefighters');
     }
   )
   .map(
-    (response: Response) => {
-    const firefighters = response.json();
-    const transformedFirefighters: Firefighter[] = [];
-    for (const firefighter of firefighters) {
-      const qualList: Qualification[] = [];
-      firefighter.qualifications.forEach(qualification => {
-        qualList.push(new Qualification(qualification.name));
-      });
-      transformedFirefighters.push(new Firefighter(
-        firefighter._id,
-        firefighter.number,
-        firefighter.rank,
-        firefighter.name,
-        qualList));
-    }
+    (firefighters) => {
+      console.log(firefighters);
+      for (const firefighter of firefighters) {
+        if (!firefighter['qualifications']) {
+          firefighter['qualifications'] = [];
+        }
+      }
     return {
       type: firefighterActions.SET_FIREFIGHTERS,
-      payload: transformedFirefighters
+      payload: firefighters
     };
   }
 );
 
   constructor(private actions$: Actions,
-              private http: Http) {}
+              private db: AngularFireDatabase,
+              private store: Store<fromApp.AppState>) { }
 }
