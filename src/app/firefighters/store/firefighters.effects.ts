@@ -18,43 +18,69 @@ import * as fromFirefighters from '../store/firefighters.reducers';
 @Injectable()
 export class FirefighterEffects {
 
-  @Effect({dispatch: false})
+  @Effect({ dispatch: false })
   firefightersStore = this.actions$
-  .ofType(firefighterActions.STORE_FIREFIGHTERS)
-  .withLatestFrom(this.store.select('firefighters'))
-  .switchMap(
-    ([action, state]) => {
-      return of (this.db.list('/firefighters')
-      .push(state.firefighters));
+    .ofType(firefighterActions.STORE_FIREFIGHTER)
+    .switchMap(
+    (action: firefighterActions.StoreFirefighter) => {
+      const ffs = this.db.list('/firefighters');
+      const firefighter = action.payload;
+      const ff = {};
+      ff['rank'] = firefighter.rank;
+      ff['name'] = firefighter.name;
+      ff['number'] = firefighter.number;
+      ff['qualifications'] = {};
+      for (const qual of firefighter.qualifications) {
+        if (qual.name === 'rescue') {
+          ff['qualifications']['rescue'] = true;
+        } else if (qual.name === 'aerial') {
+          ff['qualifications']['aerial'] = true;
+        } else if (qual.name === 'md') {
+          ff['qualifications']['md'] = true;
+        }
+      }
+      return of(
+        ffs.push(ff));
     }
-  )
-  .catch(
-    err => of (console.log(err)));
+    )
+    .catch(
+    err => of(console.log(err)));
 
   @Effect()
   firefightersFetch = this.actions$
-  .ofType(firefighterActions.FETCH_FIREFIGHTERS)
-  .switchMap(
+    .ofType(firefighterActions.FETCH_FIREFIGHTERS)
+    .switchMap(
     (action: firefighterActions.FetchFirefighters) => {
       return this.db.list('/firefighters');
     }
-  )
-  .map(
+    )
+    .map(
     (firefighters) => {
-      console.log(firefighters);
+      const transformedFirefighters: Firefighter[] = [];
       for (const firefighter of firefighters) {
-        if (!firefighter['qualifications']) {
-          firefighter['qualifications'] = [];
+        const qualArray = [];
+        if (firefighter['qualifications']) {
+          for (const qualification in firefighter.qualifications) {
+            if (firefighter.qualifications.hasOwnProperty(qualification)) {
+              qualArray.push(qualification);
+            }
+          }
         }
+        transformedFirefighters.push(new Firefighter(
+          firefighter.number,
+          firefighter.rank,
+          firefighter.name,
+          qualArray
+        ));
       }
-    return {
-      type: firefighterActions.SET_FIREFIGHTERS,
-      payload: firefighters
-    };
-  }
-);
+      return {
+        type: firefighterActions.SET_FIREFIGHTERS,
+        payload: transformedFirefighters
+      };
+    }
+    );
 
   constructor(private actions$: Actions,
-              private db: AngularFireDatabase,
-              private store: Store<fromApp.AppState>) { }
+    private db: AngularFireDatabase,
+    private store: Store<fromApp.AppState>) { }
 }

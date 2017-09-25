@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onSaveData() {
-    this.store.dispatch(new FirefighterActions.StoreFirefighters());
+    // this.store.dispatch(new FirefighterActions.StoreFirefighters());
   }
 
   onFetchData() {

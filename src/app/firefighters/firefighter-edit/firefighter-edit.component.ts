@@ -55,7 +55,7 @@ export class FirefighterEditComponent implements OnInit {
             for (const qualification of firefighter.qualifications) {
               ffQuals.push(
                 new FormGroup({
-                'name': new FormControl(qualification.name, Validators.required)
+                'name': new FormControl(qualification, Validators.required)
               })
               );
             }
@@ -89,7 +89,7 @@ export class FirefighterEditComponent implements OnInit {
     if (this.editMode) {
       this.store.dispatch(new FirefighterActions.UpdateFirefighter({index: this.id, firefighter: this.firefighterForm.value}));
     } else {
-      this.store.dispatch(new FirefighterActions.AddFirefighter(this.firefighterForm.value));
+      this.store.dispatch(new FirefighterActions.StoreFirefighter(this.firefighterForm.value));
     }
     this.onCancel();
   }
