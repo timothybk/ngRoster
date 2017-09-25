@@ -19,6 +19,7 @@ export class FirefighterEditComponent implements OnInit {
   id: number;
   editMode = false;
   firefighterForm: FormGroup;
+  key: string;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -48,6 +49,7 @@ export class FirefighterEditComponent implements OnInit {
       .subscribe(
         (firefightersState: fromFirefighter.State) => {
           const firefighter = firefightersState.firefighters[this.id];
+          this.key = firefighter.key;
           ffNumber = firefighter.number;
           ffRank = firefighter.rank;
           ffName = firefighter.name;
@@ -87,7 +89,7 @@ export class FirefighterEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.store.dispatch(new FirefighterActions.UpdateFirefighter({index: this.id, firefighter: this.firefighterForm.value}));
+      this.store.dispatch(new FirefighterActions.UpdateDbFirefighter({key: this.key, firefighter: this.firefighterForm.value}));
     } else {
       this.store.dispatch(new FirefighterActions.StoreFirefighter(this.firefighterForm.value));
     }

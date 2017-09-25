@@ -19,7 +19,7 @@ import * as fromFirefighters from '../store/firefighters.reducers';
 export class FirefighterEffects {
 
   @Effect({ dispatch: false })
-  firefightersStore = this.actions$
+  firefighterStore = this.actions$
     .ofType(firefighterActions.STORE_FIREFIGHTER)
     .switchMap(
     (action: firefighterActions.StoreFirefighter) => {
@@ -46,6 +46,34 @@ export class FirefighterEffects {
     .catch(
     err => of(console.log(err)));
 
+    @Effect({ dispatch: false })
+    firefighterUpdateDb = this.actions$
+      .ofType(firefighterActions.UPDATEDB_FIREFIGHTER)
+      .switchMap(
+      (action: firefighterActions.UpdateDbFirefighter) => {
+        const ffs = this.db.list('/firefighters');
+        const firefighter = action.payload.firefighter;
+        const ff = {};
+        ff['rank'] = firefighter.rank;
+        ff['name'] = firefighter.name;
+        ff['number'] = firefighter.number;
+        ff['qualifications'] = {};
+        for (const qual of firefighter.qualifications) {
+          if (qual.name === 'rescue') {
+            ff['qualifications']['rescue'] = true;
+          } else if (qual.name === 'aerial') {
+            ff['qualifications']['aerial'] = true;
+          } else if (qual.name === 'md') {
+            ff['qualifications']['md'] = true;
+          }
+        }
+        return of(
+          ffs.update(action.payload.key, ff));
+      }
+      )
+      .catch(
+      err => of(console.log(err)));
+
   @Effect()
   firefightersFetch = this.actions$
     .ofType(firefighterActions.FETCH_FIREFIGHTERS)
@@ -67,6 +95,7 @@ export class FirefighterEffects {
           }
         }
         transformedFirefighters.push(new Firefighter(
+          firefighter.$key,
           firefighter.number,
           firefighter.rank,
           firefighter.name,
