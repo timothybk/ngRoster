@@ -1,17 +1,16 @@
-<a style="cursor: pointer;" class="list-group-item clearfix">
-  <div class="pull-left">
+<div class="row justify-content-between">
+  <div class="col-4">
     <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
     <p class="list-group-item-text">{{firefighter.number}}</p>
   </div>
-  <div class="pull-right">
-    <div class="btn-group" appDropdown>
-      <button type="button" class="btn btn-primary dropdown-toggle">Manage N2 <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <!-- <li><a (click)="toShoppingList()" style="cursor: pointer;">To shopping list</a></li> -->
-        <li><a style="cursor: pointer;" (click)='onEdit'>Add N2</a></li>
-        <li><a style="cursor: pointer;" (click)="onDelete">Add Penalty N2</a></li>
-        <li><a style="cursor: pointer;" (click)="onDelete">Defer N2</a></li>
-      </ul>
+  <div class="col-4">
+    <div ngbDropdown class="d-inline-block">
+      <button class="btn btn-primary" id="n2Manage" ngbDropdownToggle>Manage N2</button>
+      <div ngbDropdownMenu aria-labelledby="n2Manage">
+        <button class="dropdown-item" (click)='onEdit'>Add N2</button>
+        <button class="dropdown-item" (click)="onDelete">Add Penalty N2</button>
+        <button class="dropdown-item" (click)="onDelete">Defer N2</button>
+      </div>
     </div>
   </div>
-</a>
+</div>

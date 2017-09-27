@@ -1,8 +1,7 @@
-<div class="row">
-  <div class="col-xs-12">
-    <app-roster-n2-item
-    *ngFor='let firefighterEl of (firefightersState | async).firefighters; let i = index'
-      [firefighter]='firefighterEl'
-      [index]='i'></app-roster-n2-item>
-  </div>
-</div>
+<ngb-accordion [closeOthers]="true">
+  <ngb-panel *ngFor='let firefighterEl of (firefightersState | async).firefighters; let i = index' title="{{firefighterEl.name}}">
+    <ng-template ngbPanelContent>
+      <app-roster-n2-item [firefighter]='firefighterEl' [index]='i'></app-roster-n2-item>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
