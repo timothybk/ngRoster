@@ -1,6 +1,26 @@
-<ul class="nav nav-tabs nav-justified">
-  <li role="presentation" routerLinkActive="active"><a routerLink='new'>New Roster</a></li>
-  <li role="presentation" routerLinkActive="active"><a routerLink='list'>Roster List</a></li>
-  <li role="presentation" routerLinkActive="active"><a routerLink='n2'>N2 Roster</a></li>
-  <li role="presentation" routerLinkActive="active"><a routerLink='pumps'>Pump list</a></li>
-  </ul>
+<ngb-tabset>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <a routerLink='new'>New Roster</a>
+    </ng-template>
+    <ng-template ngbTabContent></ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <a routerLink='list'>Roster List</a>
+    </ng-template>
+    <ng-template ngbTabContent></ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <a routerLink='n2'>N2 Roster</a>
+    </ng-template>
+    <ng-template ngbTabContent></ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <a routerLink='pumps'>Pump list</a>
+    </ng-template>
+    <ng-template ngbTabContent></ng-template>
+  </ngb-tab>
+</ngb-tabset>
