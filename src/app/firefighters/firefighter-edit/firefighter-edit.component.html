@@ -1,14 +1,14 @@
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
     <form [formGroup]='firefighterForm' (ngSubmit)="onSubmit()">
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <button type="submit" class="btn btn-success" [disabled]='!firefighterForm.valid'>Save</button>
           <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <div class="form-group">
             <label for="number">number</label>
             <input type="text" id='number' class="form-control" formControlName="number">
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <div class="form-group">
             <label for="rank">rank</label>
             <input type="text" id='rank' class="form-control" formControlName="rank">
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <div class="form-group">
             <label for="name">name</label>
             <input type="text" id='name' class="form-control" formControlName="name">
@@ -32,21 +32,21 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12" formArrayName="qualifications">
+        <div class="col-12" formArrayName="qualifications">
           <div class="row" *ngFor="let qualificationCtrl of getControls(); let i = index"
           [formGroupName] = 'i'
           style='margin-top: 10px;'
           >
-            <div class="col-xs-10">
+            <div class="col-10">
               <input type="text" class="form-control" formControlName='name'>
             </div>
-            <div class="col-xs-2">
+            <div class="col-2">
               <button type="button" class="btn btn-danger" (click)="onDeleteQualification(i)">X</button>
             </div>
           </div>
           <hr>
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-12">
               <button
               type="button"
               class="btn btn-success" (click)='onAddQualification()'>Add Qualification</button>
