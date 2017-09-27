@@ -21,6 +21,8 @@ export class HeaderComponent implements OnInit {
   user: Observable<firebase.User>;
   token: string;
   authState: Observable<fromAuth.State>;
+  navbarCollapsed = true;
+  components = ['1','2','3'];
 
   constructor(private router: Router,
               public afAuth: AngularFireAuth,
