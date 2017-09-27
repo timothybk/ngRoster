@@ -11,6 +11,7 @@ export const UPDATE_PUMP = 'UPDATE_PUMP';
 export const DELETE_PUMP = 'DELETE_PUMP';
 export const STORE_PUMPS = 'STORE_PUMPS';
 export const FETCH_PUMPS = 'FETCH_PUMPS';
+export const UPDATE_N2 = 'UPDATE_N2';
 
 export class SetShiftsInsts implements Action {
   readonly type = SET_SHIFTSINSTS;
@@ -54,6 +55,12 @@ export class FetchPumps implements Action {
   readonly type = FETCH_PUMPS;
 }
 
+export class UpdateN2 implements Action {
+  readonly type = UPDATE_N2;
+
+  constructor(public payload: {id: string, type: string, date: string}) {}
+}
+
 
 export type RostersActions =
 SetShiftsInsts |
@@ -63,4 +70,5 @@ SetPumps |
 UpdatePump |
 DeletePump |
 StorePumps |
+UpdateN2 |
 FetchPumps;

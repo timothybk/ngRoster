@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -37,6 +38,7 @@ import { RosterN2EditComponent } from './roster-n2/roster-n2-edit/roster-n2-edit
   imports: [
     CommonModule,
     SharedModule,
+    FormsModule,
     RostersRoutingModule
   ],
   providers: [
