@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
 import { RostersEffects } from './rosters/store/rosters.effects';
@@ -31,6 +32,7 @@ import { environment } from './../environments/environment';
     CoreModule,
     AuthModule,
     SharedModule,
+    NgbModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,

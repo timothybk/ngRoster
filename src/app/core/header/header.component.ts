@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { DropdownDirective } from './../../shared/dropdown.directive';
 import * as firebase from 'firebase/app';
 import * as fromApp from '../../store/app.reducer';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
