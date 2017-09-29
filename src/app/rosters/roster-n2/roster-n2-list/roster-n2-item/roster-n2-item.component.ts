@@ -1,7 +1,7 @@
 import { Store } from '@ngrx/store';
 import { Firefighter } from './../../../../shared/firefighter.model';
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import * as fromApp from './../../../../store/app.reducer';
 import * as RosterActions from './../../../store/rosters.actions';
@@ -21,7 +21,8 @@ export class RosterN2ItemComponent implements OnInit {
   model: NgbDateStruct;
   date: { year: number, month: number, day: number };
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>,
+              private ngbDateParserFormatter: NgbDateParserFormatter) { }
 
   ngOnInit() {
   }
@@ -33,7 +34,7 @@ export class RosterN2ItemComponent implements OnInit {
   onSubmit(type: string, f: NgForm) {
     const id = this.firefighter.key;
     const formDate = f.value.datePick;
-    const date = formDate.year + '-' + formDate.month + '-' + formDate.day;
+    const date = this.ngbDateParserFormatter.format(formDate);
 
     this.store.dispatch(new RosterActions.UpdateN2( {id: this.firefighter.key, type: type, date: date} ));
   }

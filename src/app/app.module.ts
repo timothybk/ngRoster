@@ -19,6 +19,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from './../environments/environment';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,9 @@ import { environment } from './../environments/environment';
     AngularFireAuthModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([FirefighterEffects, RostersEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 10
+    }),
     AppRoutingModule
   ],
   providers: [],
