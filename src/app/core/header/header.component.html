@@ -21,10 +21,16 @@
     </ul>
 
     <span class="d-none d-lg-inline">
-        <a routerLink="/signup">Register</a>
-        <a routerLink="/signin">Login</a>
-        <a style="cursor: pointer;" (click)="onSaveData()">Save Data</a>
-        <a style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a>
+      <div  *ngIf='(authState | async).user as user'>
+        <p>{{user.displayName}}</p>
+        <button *ngIf='!user.uid'
+                (click)='googleLogin()'
+        >Sign In with Google</button>
+
+        <button *ngIf='user.uid'
+                (click)='logout()'
+        >Logout</button>
+      </div>
     </span>
   </div>
 </header>

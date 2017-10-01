@@ -1,3 +1,4 @@
+import { AuthEffects } from './auth/store/auth.effects';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
@@ -38,7 +39,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([FirefighterEffects, RostersEffects]),
+    EffectsModule.forRoot([FirefighterEffects, RostersEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 10
     }),

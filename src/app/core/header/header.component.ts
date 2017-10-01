@@ -11,6 +11,7 @@ import * as fromApp from '../../store/app.reducer';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import * as RostersActions from '../../rosters/store/rosters.actions';
 import * as fromAuth from '../../auth/store/auth.reducers';
+import * as AuthActions from '../../auth/store/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -18,39 +19,27 @@ import * as fromAuth from '../../auth/store/auth.reducers';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  user: Observable<firebase.User>;
-  token: string;
+
   authState: Observable<fromAuth.State>;
+
   navbarCollapsed = true;
-  components = ['1','2','3'];
+  components = ['1', '2', '3'];
 
   constructor(private router: Router,
-              public afAuth: AngularFireAuth,
               private store: Store<fromApp.AppState>,
-              private authService: AuthService) {
-                this.user = afAuth.authState;
-               }
+              ) {}
 
   ngOnInit() {
     this.authState = this.store.select('auth');
+
+    this.store.dispatch(new AuthActions.GetUser());
   }
 
-  onSaveData() {
-    // this.store.dispatch(new FirefighterActions.StoreFirefighters());
+  googleLogin() {
+    this.store.dispatch(new AuthActions.GoogleLogin());
   }
 
-  onFetchData() {
-    this.store.dispatch(new FirefighterActions.FetchFirefighters());
+  logout() {
+    this.store.dispatch(new AuthActions.Logout());
   }
-
-  getFirefighters() {
-    this.store.dispatch(new FirefighterActions.FetchFirefighters());
-    this.store.dispatch(new RostersActions.FetchPumps());
-    this.store.dispatch(new RostersActions.FetchShiftsInsts());
-  }
-
-  onLogout() {
-    this.authService.logout();
-  }
-
 }

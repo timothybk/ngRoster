@@ -9,6 +9,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
 import { of } from 'rxjs/observable/of';
 
 import * as firefighterActions from './firefighters.actions';

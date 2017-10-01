@@ -10,6 +10,8 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
 
 import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
