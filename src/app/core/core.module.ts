@@ -1,3 +1,5 @@
+import { SharedModule } from './../shared/shared.module';
+import { CommonModule } from '@angular/common';
 import { AuthService } from './../auth/auth.service';
 import { AppRoutingModule } from './../app.routing';
 import { HomeComponent } from './home/home.component';
@@ -10,7 +12,9 @@ import { NgModule } from '@angular/core';
     HomeComponent
   ],
   imports: [
-    AppRoutingModule
+    AppRoutingModule,
+    CommonModule,
+    SharedModule
   ],
   exports: [
     AppRoutingModule,

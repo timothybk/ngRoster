@@ -1,18 +1,56 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a routerLink='/' class="navbar-brand">C Platoon Tools</a>
-    </div>
-    <div class="navbar-default">
-      <ul class="nav navbar-nav">
-        <li routerLinkActive="active"><a routerLink="/rostering">Rostering</a></li>
-        <li routerLinkActive="active"><a routerLink="/firefighters">Firefighters</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-          <li><a style="cursor: pointer;" (click)='getFirefighters()'>Fetch Data</a></li>
-        <li><a routerLink="/signup">Register</a></li>
-        <li><a routerLink="/signin">Log in</a></li>
-      </ul>
+<header class="navbar navbar-light navbar-fixed-top navbar-expand-lg">
+
+  <a class="navbar-brand" [routerLink]="['/']" (click)="navbarCollapsed = true">C Platoon Tools</a>
+
+  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed" [attr.aria-expanded]="!navbarCollapsed"
+    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+  <div class="navbar-collapse" [ngbCollapse]="navbarCollapsed" id="navbarContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link" [routerLink]="['/firefighters']" (click)="navbarCollapsed = true">Firefighters</a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link" [routerLink]="['/rostering']" (click)="navbarCollapsed = true">Rostering</a>
+      </li>
+      <li class="nav-item d-lg-none" *ngFor="let component of components" [routerLinkActive]="['active']">
+        <a class="nav-link" [routerLink]="['/components', component.toLowerCase()]" (click)="navbarCollapsed = true">{{ component }}</a>
+      </li>
+    </ul>
+
+    <span class="d-none d-lg-inline">
+      <div  *ngIf='(authState | async).user as user'>
+        <p>{{user.displayName}}</p>
+        <button *ngIf='!user.uid'
+                (click)='googleLogin()'
+        >Sign In with Google</button>
+
+        <button *ngIf='user.uid'
+                (click)='logout()'
+        >Logout</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a routerLink="/" class="navbar-brand"></a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse">
+    <div class="navbar-nav">
+        <div ngbDropdown class="d-inline-block">
+      <a routerLink=""></a>
+      <a routerLink=""></a>
+
     </div>
   </div>
-</nav>
+  </div>
+</nav> -->

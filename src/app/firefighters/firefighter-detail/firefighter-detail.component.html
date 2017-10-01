@@ -1,34 +1,32 @@
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
     <h4>{{firefighter.number}}</h4>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
     <h4>{{firefighter.rank}}</h4>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
     <h1>{{firefighter.name}}</h1>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let qualification of firefighter.qualifications">{{qualification.name}}</li>
+      <li class="list-group-item" *ngFor="let qualification of firefighter.qualifications">{{qualification}}</li>
     </ul>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12">
-    <div class="btn-group" appDropdown>
-      <button type="button" class="btn btn-primary dropdown-toggle">Manage firefighter <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <!-- <li><a (click)="toShoppingList()" style="cursor: pointer;">To shopping list</a></li> -->
-        <li><a style="cursor: pointer;" (click)='onEditFirefighter()'>Edit firefighter</a></li>
-        <li><a style="cursor: pointer;" (click)="onDeleteFirefighter()">Delete firefighter</a></li>
-      </ul>
+  <div class="col-12">
+    <div class="d-inline-block" ngbDropdown>
+      <button class="btn btn-primary" id="manageFirefighter" ngbDropdownToggle>Manage firefighter</button>
+      <div ngbDropdownMenu aria-labelledby="manageFirefighter">
+        <button class="dropdown-item" (click)='onEditFirefighter()'>Edit firefighter</button>
+        <button class="dropdown-item" (click)='onDeleteFirefighter()'>Delete firefighter</button>
     </div>
   </div>
 </div>

@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +14,9 @@ import { RostersComponent } from './rosters.component';
 import { RosterStartComponent } from './roster-start/roster-start.component';
 import { RosterPumpsComponent } from './roster-pumps/roster-pumps.component';
 import { RosterHeaderComponent } from './roster-header/roster-header.component';
+import { RosterN2ListComponent } from './roster-n2/roster-n2-list/roster-n2-list.component';
+import { RosterN2ItemComponent } from './roster-n2/roster-n2-list/roster-n2-item/roster-n2-item.component';
+import { RosterN2EditComponent } from './roster-n2/roster-n2-edit/roster-n2-edit.component';
 
 
 
@@ -26,11 +30,15 @@ import { RosterHeaderComponent } from './roster-header/roster-header.component';
     RostersComponent,
     RosterStartComponent,
     RosterPumpsComponent,
-    RosterHeaderComponent
+    RosterHeaderComponent,
+    RosterN2ListComponent,
+    RosterN2ItemComponent,
+    RosterN2EditComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
+    FormsModule,
     RostersRoutingModule
   ],
   providers: [

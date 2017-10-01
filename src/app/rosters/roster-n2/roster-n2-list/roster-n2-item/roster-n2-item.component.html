@@ -1,0 +1,27 @@
+<div class="row justify-content-between">
+  <div class="col-auto mr-auto">
+    <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
+    <p class="list-group-item-text">{{firefighter.number}}</p>
+  </div>
+  <div class="col-auto">
+    <div class="row">
+      <div class="col-auto ml-auto">
+        <button class="btn btn-sm btn-outline-primary" (click)="selectToday()">Select Today</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form #f='ngForm' validate>
+          <ngb-datepicker #dp name='datePick' [(ngModel)]='model' (navigate)="date = $event.next" required></ngb-datepicker>
+          <div class="row">
+            <div class="col-auto mr-auto">
+              <button class="btn btn-primary" (click)='onSubmit("N2", f)'>Roster N2</button>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-warning" (click)='onSubmit("PN2", f)'>Penalty N2</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

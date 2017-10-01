@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Firefighter } from './../../shared/firefighter.model';
 import * as fromApp from '../../store/app.reducer';
 import * as fromFirefighters from '../store/firefighters.reducers';
+import * as FirefighterActions from '../store/firefighters.actions';
 
 @Component({
   selector: 'app-firefighter-list',
@@ -20,7 +21,7 @@ export class FirefighterListComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private store: Store<fromApp.AppState>
-  ) { }
+  ) { this.store.dispatch(new FirefighterActions.FetchFirefighters()); }
 
   ngOnInit() {
     this.firefightersState = this.store.select('firefighters');

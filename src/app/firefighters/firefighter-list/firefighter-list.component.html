@@ -1,14 +1,13 @@
 <div class="row">
-  <div class="col-xs-12">
-    <button class="btn btn-success" (click)="onNewFirefighter()">New FireFighter</button>
+  <div class="col-12">
+    <button class="btn btn-success" (click)='onNewFirefighter()'>New Firefighter</button>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12">
-    <app-firefighter-item
-    *ngFor='let firefighterEl of (firefightersState | async).firefighters; let i = index'
-    [firefighter]='firefighterEl'
-    [index]='i'
-    ></app-firefighter-item>
+  <div class="col-12">
+      <app-firefighter-item *ngFor='let firefighterEl of (firefightersState | async).firefighters; let i = index' [firefighter]='firefighterEl'
+      [index]='i'>
+    </app-firefighter-item>
   </div>
 </div>
+
