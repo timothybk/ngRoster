@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
-import { Firefighter } from './../../shared/firefighter.model'
+import { Firefighter } from './../../shared/firefighter.model';
 import { Qualification } from './../../shared/qualification.model';
 import { Http, Response } from '@angular/http';
 import { Actions, Effect } from '@ngrx/effects';
