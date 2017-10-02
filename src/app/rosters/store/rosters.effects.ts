@@ -32,10 +32,17 @@ export class RostersEffects {
   )
   .mergeMap(
     payload => {
-      return of(this.db.object('/n2List/' + payload.id)
-                .update({
-                  N2: payload.date
-                }));
+      if (payload.type === 'N2') {
+        return of(this.db.object('/n2List/' + payload.id)
+        .update({
+          N2: payload.date
+        }));
+      } else {
+        return of(this.db.object('/n2List/' + payload.id)
+        .update({
+          PN2: payload.date
+        }));
+      }
     }
   )
   .map(
