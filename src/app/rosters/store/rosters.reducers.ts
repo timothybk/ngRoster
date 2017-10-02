@@ -58,6 +58,8 @@ export function rostersReducer(state = initialState, action: RostersActions.Rost
         ...state,
         pumps: oldPumps
       };
+    case RostersActions.UPDATE_N2_SUCCESS:
+    case RostersActions.ROSTERS_ERROR:
     default:
     return state;
   }
