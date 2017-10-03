@@ -8,6 +8,7 @@ import * as RostersActions from '../store/rosters.actions';
 export interface State {
   shiftsInsts: ShiftInstance[];
   pumps: Pump[];
+  n2s: Firefighter[];
 }
 
 const initialState: State = {
@@ -19,7 +20,8 @@ const initialState: State = {
     new ShiftInstance('20/12/56',
     new Firefighter('is', 9204, 'sf', 'tim', []),
     new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]), 'day', false)
-  ]
+  ],
+  n2s: []
 };
 
 export function rostersReducer(state = initialState, action: RostersActions.RostersActions) {
@@ -57,6 +59,11 @@ export function rostersReducer(state = initialState, action: RostersActions.Rost
       return {
         ...state,
         pumps: oldPumps
+      };
+      case RostersActions.STORE_N2S:
+      return {
+        ...state,
+        n2s: [...action.payload]
       };
     case RostersActions.UPDATE_N2_SUCCESS:
     case RostersActions.ROSTERS_ERROR:

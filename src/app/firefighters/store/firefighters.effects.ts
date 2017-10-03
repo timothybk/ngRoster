@@ -13,6 +13,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
 import { of } from 'rxjs/observable/of';
 
+import * as RostersActions from '../../rosters/store/rosters.actions';
 import * as firefighterActions from './firefighters.actions';
 import * as fromApp from '../../store/app.reducer';
 import * as fromFirefighters from '../store/firefighters.reducers';

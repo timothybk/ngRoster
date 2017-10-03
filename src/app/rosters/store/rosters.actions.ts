@@ -1,3 +1,4 @@
+import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
 import { Action } from '@ngrx/store';
@@ -11,6 +12,8 @@ export const UPDATE_PUMP = 'UPDATE_PUMP';
 export const DELETE_PUMP = 'DELETE_PUMP';
 export const STORE_PUMPS = 'STORE_PUMPS';
 export const FETCH_PUMPS = 'FETCH_PUMPS';
+export const STORE_N2S = 'STORE_N2S';
+export const FETCH_N2S = 'FETCH_N2S';
 export const UPDATE_N2 = 'UPDATE_N2';
 export const UPDATE_N2_SUCCESS = 'UPDATE_N2_SUCCESS';
 export const ROSTERS_ERROR = 'ROSTERS_ERROR';
@@ -57,6 +60,15 @@ export class FetchPumps implements Action {
   readonly type = FETCH_PUMPS;
 }
 
+export class StoreN2s implements Action {
+  readonly type = STORE_N2S;
+  constructor(public payload: any) {}
+}
+
+export class FetchN2s implements Action {
+  readonly type = FETCH_N2S;
+}
+
 export class UpdateN2 implements Action {
   readonly type = UPDATE_N2;
 
@@ -82,6 +94,8 @@ SetPumps |
 UpdatePump |
 DeletePump |
 StorePumps |
+StoreN2s |
+FetchN2s |
 UpdateN2 |
 UpdateN2Success |
 RostersError |
