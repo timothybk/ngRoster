@@ -1,7 +1,27 @@
-<ngb-accordion [closeOthers]="true">
-  <ngb-panel *ngFor='let firefighterEl of (rostersState | async).n2s; let i = index' title="{{firefighterEl.name}}">
-    <ng-template ngbPanelContent>
-      <app-roster-n2-item [firefighter]='firefighterEl' [index]='i'></app-roster-n2-item>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+<!-- <div class="row">
+  <div class="col col-md-6">
+    <ngb-accordion [closeOthers]="true">
+      <ngb-panel *ngFor='let firefighterEl of (rostersState | async).n2s; let i = index' title="{{firefighterEl.name}}">
+        <ng-template ngbPanelContent>
+          <app-roster-n2-item [firefighter]='firefighterEl' [index]='i'></app-roster-n2-item>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+  <div class="col col-md-6">
+    <ul *ngFor='let firefighter of (rostersState | async).n2s'>
+      <li>{{firefighter.firefighter.name}}</li>
+    </ul>
+  </div>
+</div> -->
+<div class="row">
+  <div class="col col-md-6">
+    <app-roster-n2-item *ngFor='let firefighterEl of (rostersState | async).n2s; let i = index' [firefighter]="firefighterEl"
+      [index]='i'></app-roster-n2-item>
+  </div>
+  <div class="col col-md-6">
+    <ul *ngFor='let firefighter of (rostersState | async).n2s'>
+      <li>{{firefighter.firefighter.name}}</li>
+    </ul>
+  </div>
+</div>

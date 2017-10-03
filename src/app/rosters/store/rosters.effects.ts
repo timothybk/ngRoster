@@ -1,3 +1,4 @@
+import { RosterN2 } from './../roster-n2/roster-n2.model';
 import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
 import { Store } from '@ngrx/store';
@@ -76,7 +77,9 @@ export class RostersEffects {
               .first()
             ),
             (...values) => {
-              return values;
+              n2List.forEach((firefighter, index) => {
+                firefighter.firefighter = values[index]; });
+                return n2List;
             }
           );
         }
@@ -85,7 +88,14 @@ export class RostersEffects {
     )
     .map(
     result => {
-      return new RostersActions.StoreN2s(result);
+      // console.log(result);
+      const transformedN2List: RosterN2[] = [];
+      result.forEach(firefighter => {
+        // console.log(firefighter.N2);
+        transformedN2List.push(new RosterN2(firefighter.firefighter, firefighter.N2));
+      });
+      // console.log(transformedN2List);
+      return new RostersActions.StoreN2s(transformedN2List);
     }
     );
 

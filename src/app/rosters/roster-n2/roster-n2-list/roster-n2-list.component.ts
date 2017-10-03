@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import * as fromRosters from '../../store/rosters.reducers';
 import * as fromFirefighters from '../../../firefighters/store/firefighters.reducers';
 import * as fromApp from '../../../store/app.reducer';
-import * as FirefighterActions from './../../../firefighters/store/firefighters.actions'
+import * as FirefighterActions from './../../../firefighters/store/firefighters.actions';
 import * as RostersActions from '../../store/rosters.actions';
 
 @Component({

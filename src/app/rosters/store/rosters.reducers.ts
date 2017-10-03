@@ -1,3 +1,4 @@
+import { RosterN2 } from './../roster-n2/roster-n2.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Qualification } from './../../shared/qualification.model';
@@ -8,7 +9,7 @@ import * as RostersActions from '../store/rosters.actions';
 export interface State {
   shiftsInsts: ShiftInstance[];
   pumps: Pump[];
-  n2s: Firefighter[];
+  n2s: RosterN2[];
 }
 
 const initialState: State = {

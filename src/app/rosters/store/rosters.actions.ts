@@ -1,3 +1,4 @@
+import { RosterN2 } from './../roster-n2/roster-n2.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
@@ -62,7 +63,7 @@ export class FetchPumps implements Action {
 
 export class StoreN2s implements Action {
   readonly type = STORE_N2S;
-  constructor(public payload: any) {}
+  constructor(public payload: RosterN2[]) {}
 }
 
 export class FetchN2s implements Action {
