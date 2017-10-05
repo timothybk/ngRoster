@@ -40,11 +40,34 @@ export class FirefighterEffects {
     .map(
     data => {
       console.log(data);
-          return {
-            type: firefighterActions.SET_FIREFIGHTERS,
-            payload: data
-          };
-        }
+      return {
+        type: firefighterActions.SET_FIREFIGHTERS,
+        payload: data
+      };
+    }
+    );
+
+  @Effect({ dispatch: false })
+  firefighterStore = this.actions$
+    .ofType(firefighterActions.STORE_FIREFIGHTER)
+    .map(
+    (action: firefighterActions.StoreFirefighter) => {
+      return action.payload;
+    }
+    )
+    .map(
+      firefighter => {
+        const quals = [];
+        firefighter.qualifications.forEach(qual => {
+          quals.push(qual.name);
+        });
+        const newFirefighter = {
+          ...firefighter,
+        qualifications: quals
+        };
+        const firefighterCollection = this.afs.collection<Firefighter>('firefighters');
+        firefighterCollection.add(newFirefighter);
+      }
     );
 
   constructor(
