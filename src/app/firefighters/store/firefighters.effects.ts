@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Injectable } from '@angular/core';
 import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
@@ -21,98 +21,92 @@ import * as fromFirefighters from '../store/firefighters.reducers';
 @Injectable()
 export class FirefighterEffects {
 
-  @Effect({ dispatch: false })
-  firefighterStore = this.actions$
-    .ofType(firefighterActions.STORE_FIREFIGHTER)
-    .switchMap(
-    (action: firefighterActions.StoreFirefighter) => {
-      const ffs = this.db.list('/firefighters');
-      const firefighter = action.payload;
-      const ff = {};
-      ff['rank'] = firefighter.rank;
-      ff['name'] = firefighter.name;
-      ff['number'] = firefighter.number;
-      ff['qualifications'] = {};
-      for (const qual of firefighter.qualifications) {
-        if (qual.name === 'rescue') {
-          ff['qualifications']['rescue'] = true;
-        } else if (qual.name === 'aerial') {
-          ff['qualifications']['aerial'] = true;
-        } else if (qual.name === 'md') {
-          ff['qualifications']['md'] = true;
-        }
-      }
-      return of(
-        ffs.push(ff));
-    }
-    )
-    .catch(
-    err => of(console.log(err)));
-
-    @Effect({ dispatch: false })
-    firefighterUpdateDb = this.actions$
-      .ofType(firefighterActions.UPDATEDB_FIREFIGHTER)
-      .switchMap(
-      (action: firefighterActions.UpdateDbFirefighter) => {
-        const ffs = this.db.list('/firefighters');
-        const firefighter = action.payload.firefighter;
-        const ff = {};
-        ff['rank'] = firefighter.rank;
-        ff['name'] = firefighter.name;
-        ff['number'] = firefighter.number;
-        ff['qualifications'] = {};
-        for (const qual of firefighter.qualifications) {
-          if (qual.name === 'rescue') {
-            ff['qualifications']['rescue'] = true;
-          } else if (qual.name === 'aerial') {
-            ff['qualifications']['aerial'] = true;
-          } else if (qual.name === 'md') {
-            ff['qualifications']['md'] = true;
-          }
-        }
-        return of(
-          ffs.update(action.payload.key, ff));
-      }
-      )
-      .catch(
-      err => of(console.log(err)));
-
   @Effect()
   firefightersFetch = this.actions$
     .ofType(firefighterActions.FETCH_FIREFIGHTERS)
     .switchMap(
     (action: firefighterActions.FetchFirefighters) => {
-      return this.db.list('/firefighters');
-    }
-    )
-    .map(
-    (firefighters) => {
-      const transformedFirefighters: Firefighter[] = [];
-      for (const firefighter of firefighters) {
-        const qualArray = [];
-        if (firefighter['qualifications']) {
-          for (const qualification in firefighter.qualifications) {
-            if (firefighter.qualifications.hasOwnProperty(qualification)) {
-              qualArray.push(qualification);
-            }
-          }
+      const firefighterCollection = this.afs.collection<Firefighter>('firefighters');
+      return firefighterCollection.snapshotChanges()
+        .map(actions => {
+          return actions.map(a => {
+            console.log(a.type);
+            const data = a.payload.doc.data() as Firefighter;
+            return { ...data };
+          });
         }
-        transformedFirefighters.push(new Firefighter(
-          firefighter.$key,
-          firefighter.number,
-          firefighter.rank,
-          firefighter.name,
-          qualArray
-        ));
-      }
-      return {
-        type: firefighterActions.SET_FIREFIGHTERS,
-        payload: transformedFirefighters
-      };
-    }
+        );
+    })
+    .map(
+    data => {
+      console.log(data);
+          return {
+            type: firefighterActions.SET_FIREFIGHTERS,
+            payload: data
+          };
+        }
     );
 
-  constructor(private actions$: Actions,
-    private db: AngularFireDatabase,
-    private store: Store<fromApp.AppState>) { }
+  constructor(
+    private afs: AngularFirestore,
+    private actions$: Actions,
+    private store: Store<fromApp.AppState>
+
+  ) { }
 }
+
+//   @Effect({ dispatch: false })
+  //   firefighterStore = this.actions$
+  //     .ofType(firefighterActions.STORE_FIREFIGHTER)
+  //     .switchMap(
+  //     (action: firefighterActions.StoreFirefighter) => {
+  //       const ffs = this.db.list('/firefighters');
+  //       const firefighter = action.payload;
+  //       const ff = {};
+  //       ff['rank'] = firefighter.rank;
+  //       ff['name'] = firefighter.name;
+  //       ff['number'] = firefighter.number;
+  //       ff['qualifications'] = {};
+  //       for (const qual of firefighter.qualifications) {
+  //         if (qual.name === 'rescue') {
+  //           ff['qualifications']['rescue'] = true;
+  //         } else if (qual.name === 'aerial') {
+  //           ff['qualifications']['aerial'] = true;
+  //         } else if (qual.name === 'md') {
+  //           ff['qualifications']['md'] = true;
+  //         }
+  //       }
+  //       return of(
+  //         ffs.push(ff));
+  //     }
+  //     )
+  //     .catch(
+  //     err => of(console.log(err)));
+
+  //     @Effect({ dispatch: false })
+  //     firefighterUpdateDb = this.actions$
+  //       .ofType(firefighterActions.UPDATEDB_FIREFIGHTER)
+  //       .switchMap(
+  //       (action: firefighterActions.UpdateDbFirefighter) => {
+  //         const ffs = this.db.list('/firefighters');
+  //         const firefighter = action.payload.firefighter;
+  //         const ff = {};
+  //         ff['rank'] = firefighter.rank;
+  //         ff['name'] = firefighter.name;
+  //         ff['number'] = firefighter.number;
+  //         ff['qualifications'] = {};
+  //         for (const qual of firefighter.qualifications) {
+  //           if (qual.name === 'rescue') {
+  //             ff['qualifications']['rescue'] = true;
+  //           } else if (qual.name === 'aerial') {
+  //             ff['qualifications']['aerial'] = true;
+  //           } else if (qual.name === 'md') {
+  //             ff['qualifications']['md'] = true;
+  //           }
+  //         }
+  //         return of(
+  //           ffs.update(action.payload.key, ff));
+  //       }
+  //       )
+  //       .catch(
+  //       err => of(console.log(err)));

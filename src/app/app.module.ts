@@ -1,3 +1,4 @@
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AuthEffects } from './auth/store/auth.effects';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -7,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
-import { RostersEffects } from './rosters/store/rosters.effects';
+// import { RostersEffects } from './rosters/store/rosters.effects';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { reducers } from './store/app.reducer';
@@ -38,8 +39,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFirestoreModule.enablePersistence(),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([FirefighterEffects, RostersEffects, AuthEffects]),
+    EffectsModule.forRoot([FirefighterEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 10
     }),

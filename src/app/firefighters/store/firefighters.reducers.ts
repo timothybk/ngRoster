@@ -7,9 +7,9 @@ firefighters: Firefighter[];
 
 const initialState: State = {
   firefighters: [
-      new Firefighter('first', 1, 'SF', 'first ff', []),
-      new Firefighter('second', 2, 'QF', 'second ff', []),
-      new Firefighter('third', 3, 'lvl 1', 'third ff', [])
+      {key: 'first', number: 1, rank: 'SF', name: 'first ff', qualifications: []},
+      {key: 'second', number: 2, rank: 'QF', name: 'second ff', qualifications: []},
+      {key: 'third', number: 3, rank: 'lvl 1', name: 'third ff', qualifications: []}
     ]
 };
 

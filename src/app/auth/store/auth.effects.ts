@@ -104,7 +104,7 @@ export class AuthEffects {
 
 
 
-  private googleLogin(): firebase.Promise<any> {
+  private googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.afAuth.auth.signInWithPopup(provider);
   }
