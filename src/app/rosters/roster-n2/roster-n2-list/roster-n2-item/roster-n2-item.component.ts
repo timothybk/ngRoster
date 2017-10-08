@@ -1,4 +1,3 @@
-import { RosterN2 } from './../../roster-n2.model';
 import { Store } from '@ngrx/store';
 import { Firefighter } from './../../../../shared/firefighter.model';
 import { Component, OnInit, Input } from '@angular/core';
@@ -16,7 +15,7 @@ const now = new Date();
 })
 export class RosterN2ItemComponent implements OnInit {
 
-  @Input() firefighter: RosterN2;
+  @Input() firefighter: Firefighter;
   @Input() index: number;
 
   model: NgbDateStruct;
@@ -33,10 +32,11 @@ export class RosterN2ItemComponent implements OnInit {
   }
 
   onSubmit(type: string, f: NgForm) {
-    const id = this.firefighter.firefighter.key;
+    const id = this.firefighter.id;
     const formDate = f.value.datePick;
     const date = this.ngbDateParserFormatter.format(formDate);
+    console.log(this.firefighter);
 
-    this.store.dispatch(new RosterActions.UpdateN2( {id: id, type: type, date: date} ));
+    this.store.dispatch(new RosterActions.UpdateN2( {id: id, type: type, date: new Date(date)} ));
   }
 }

@@ -8,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
-// import { RostersEffects } from './rosters/store/rosters.effects';
+import { RostersEffects } from './rosters/store/rosters.effects';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { reducers } from './store/app.reducer';
@@ -41,7 +41,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AngularFireAuthModule,
     AngularFirestoreModule.enablePersistence(),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([FirefighterEffects, AuthEffects]),
+    EffectsModule.forRoot([FirefighterEffects, AuthEffects, RostersEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 10
     }),

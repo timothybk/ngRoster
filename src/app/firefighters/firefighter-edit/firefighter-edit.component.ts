@@ -51,7 +51,7 @@ export class FirefighterEditComponent implements OnInit {
         .subscribe(
         (firefightersState: fromFirefighter.State) => {
           const firefighter = firefightersState.firefighters[this.id];
-          this.key = firefighter.key;
+          this.key = firefighter.id;
           ffNumber = firefighter.number;
           ffRank = firefighter.rank;
           ffName = firefighter.name;
@@ -82,7 +82,7 @@ export class FirefighterEditComponent implements OnInit {
         rank: this.firefighterForm.value.rank,
         name: this.firefighterForm.value.name,
         nightDuty: {
-          n2: [new Date()],
+          n2: new Date(),
           pn2: null
         },
         qualifications: {

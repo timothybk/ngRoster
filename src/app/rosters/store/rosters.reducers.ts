@@ -1,4 +1,3 @@
-import { RosterN2 } from './../roster-n2/roster-n2.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Qualification } from './../../shared/qualification.model';
@@ -9,7 +8,7 @@ import * as RostersActions from '../store/rosters.actions';
 export interface State {
   shiftsInsts: ShiftInstance[];
   pumps: Pump[];
-  n2s: RosterN2[];
+  n2s: Firefighter[];
 }
 
 const initialState: State = {
@@ -19,7 +18,7 @@ const initialState: State = {
   ],
   shiftsInsts: [
     new ShiftInstance('20/12/56',
-    {key: 'is', number: 9204, rank: 'sf', name: 'tim', nightDuty: {n2: [], pn2: null}, qualifications: {md: false,
+    {id: 'is', number: 9204, rank: 'sf', name: 'tim', nightDuty: {n2: new Date(), pn2: null}, qualifications: {md: false,
       rescue: false,
       aerial: false}},
     new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]), 'day', false)
