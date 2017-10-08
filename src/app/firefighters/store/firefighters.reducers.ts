@@ -7,9 +7,15 @@ firefighters: Firefighter[];
 
 const initialState: State = {
   firefighters: [
-      {key: 'first', number: 1, rank: 'SF', name: 'first ff', nightDuty: {n2: [], pn2: null}, qualifications: []},
-      {key: 'second', number: 2, rank: 'QF', name: 'second ff', nightDuty: {n2: [], pn2: null}, qualifications: []},
-      {key: 'third', number: 3, rank: 'lvl 1', name: 'third ff', nightDuty: {n2: [], pn2: null}, qualifications: []}
+      {key: 'first', number: 1, rank: 'SF', name: 'first ff', nightDuty: {n2: [], pn2: null}, qualifications: {md: false,
+        rescue: false,
+        aerial: false}},
+      {key: 'second', number: 2, rank: 'QF', name: 'second ff', nightDuty: {n2: [], pn2: null}, qualifications: {md: false,
+        rescue: false,
+        aerial: false}},
+      {key: 'third', number: 3, rank: 'lvl 1', name: 'third ff', nightDuty: {n2: [], pn2: null}, qualifications: {md: false,
+        rescue: false,
+        aerial: false}}
     ]
 };
 

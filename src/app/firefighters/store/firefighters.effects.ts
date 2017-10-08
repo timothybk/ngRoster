@@ -57,20 +57,8 @@ export class FirefighterEffects {
     )
     .map(
       firefighter => {
-        const quals = [];
-        firefighter.qualifications.forEach(qual => {
-          quals.push(qual.name);
-        });
-        const newFirefighter = {
-          ...firefighter,
-          nightDuty: {
-            n2: [new Date()],
-            pn2: null
-          },
-        qualifications: quals
-        };
         const firefighterCollection = this.afs.collection<Firefighter>('firefighters');
-        firefighterCollection.add(newFirefighter);
+        firefighterCollection.add(firefighter);
       }
     );
 

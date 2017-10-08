@@ -1,7 +1,7 @@
 import { Qualification } from './qualification.model';
 
 export interface Firefighter {
-  key: string;
+  key?: string;
   number: number;
   rank: string;
   name: string;
@@ -9,5 +9,9 @@ export interface Firefighter {
     n2: Date[],
     pn2: Date
   };
-  qualifications: any[];
+  qualifications: {
+    md: boolean,
+    rescue: boolean,
+    aerial: boolean
+  };
 }

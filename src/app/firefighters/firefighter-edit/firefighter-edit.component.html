@@ -32,25 +32,26 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12" formArrayName="qualifications">
-          <div class="row" *ngFor="let qualificationCtrl of getControls(); let i = index"
-          [formGroupName] = 'i'
-          style='margin-top: 10px;'
-          >
-            <div class="col-10">
-              <input type="text" class="form-control" formControlName='name'>
-            </div>
-            <div class="col-2">
-              <button type="button" class="btn btn-danger" (click)="onDeleteQualification(i)">X</button>
-            </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="md">MD</label>
+            <input type="checkbox" class="form-control" formControlName="md">
           </div>
-          <hr>
-          <div class="row">
-            <div class="col-12">
-              <button
-              type="button"
-              class="btn btn-success" (click)='onAddQualification()'>Add Qualification</button>
-            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="rescue">Rescue</label>
+            <input type="checkbox" class="form-control" formControlName="rescue">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="aerial">Aerial</label>
+            <input type="checkbox" class="form-control" formControlName="aerial">
           </div>
         </div>
       </div>

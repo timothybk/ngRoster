@@ -21,7 +21,9 @@
 <div class="row">
   <div class="col-12">
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let qualification of firefighter.qualifications">{{qualification}}</li>
+      <ng-container *ngFor="let qualification of firefighter.qualifications | keys">
+        <li class="list-group-item" *ngIf="firefighter.qualifications[qualification]">{{qualification}}</li>
+      </ng-container>
     </ul>
   </div>
 </div>
