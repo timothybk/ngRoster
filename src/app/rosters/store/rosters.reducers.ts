@@ -19,7 +19,7 @@ const initialState: State = {
   ],
   shiftsInsts: [
     new ShiftInstance('20/12/56',
-    {key: 'is', number: 9204, rank: 'sf', name: 'tim', qualifications: []},
+    {key: 'is', number: 9204, rank: 'sf', name: 'tim', nightDuty: {n2: [], pn2: null}, qualifications: []},
     new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]), 'day', false)
   ],
   n2s: []

@@ -26,7 +26,7 @@ export class FirefighterEffects {
     .ofType(firefighterActions.FETCH_FIREFIGHTERS)
     .switchMap(
     (action: firefighterActions.FetchFirefighters) => {
-      const firefighterCollection = this.afs.collection<Firefighter>('firefighters');
+      const firefighterCollection = this.afs.collection<Firefighter>('firefighters', ref => ref.orderBy('number'));
       return firefighterCollection.snapshotChanges()
         .map(actions => {
           return actions.map(a => {
@@ -63,6 +63,10 @@ export class FirefighterEffects {
         });
         const newFirefighter = {
           ...firefighter,
+          nightDuty: {
+            n2: [new Date()],
+            pn2: null
+          },
         qualifications: quals
         };
         const firefighterCollection = this.afs.collection<Firefighter>('firefighters');
