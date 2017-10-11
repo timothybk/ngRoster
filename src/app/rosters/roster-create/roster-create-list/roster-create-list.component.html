@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-12">
+      <app-roster-create-list-item *ngFor="let firefighter of (rostersState | async).flyerRankings"
+      [firefighter]='firefighter'
+      ></app-roster-create-list-item>
+  </div>
+</div>
+

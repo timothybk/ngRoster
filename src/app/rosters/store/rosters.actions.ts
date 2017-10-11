@@ -1,3 +1,4 @@
+import { Ranking } from './../ranking.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
@@ -17,6 +18,8 @@ export const FETCH_N2S = 'FETCH_N2S';
 export const UPDATE_N2 = 'UPDATE_N2';
 export const UPDATE_N2_SUCCESS = 'UPDATE_N2_SUCCESS';
 export const ROSTERS_ERROR = 'ROSTERS_ERROR';
+export const FETCH_BY_FLYER = 'FETCH_BY_FLYER';
+export const STORE_FLYER_RANKING = 'STORE_FLYER_RANKING';
 
 export class SetShiftsInsts implements Action {
   readonly type = SET_SHIFTSINSTS;
@@ -85,6 +88,16 @@ export class RostersError implements Action {
   constructor(public payload?: any) {}
 }
 
+export class FetchByFlyer implements Action {
+  readonly type = FETCH_BY_FLYER;
+}
+
+export class StoreFlyerRanking implements Action {
+  readonly type = STORE_FLYER_RANKING;
+
+  constructor(public payload: Ranking[]) {}
+}
+
 
 export type RostersActions =
 SetShiftsInsts |
@@ -99,4 +112,6 @@ FetchN2s |
 UpdateN2 |
 UpdateN2Success |
 RostersError |
-FetchPumps;
+FetchPumps |
+FetchByFlyer |
+StoreFlyerRanking;

@@ -17,6 +17,8 @@ import { RosterHeaderComponent } from './roster-header/roster-header.component';
 import { RosterN2ListComponent } from './roster-n2/roster-n2-list/roster-n2-list.component';
 import { RosterN2ItemComponent } from './roster-n2/roster-n2-list/roster-n2-item/roster-n2-item.component';
 import { RosterN2EditComponent } from './roster-n2/roster-n2-edit/roster-n2-edit.component';
+import { RosterCreateListComponent } from './roster-create/roster-create-list/roster-create-list.component';
+import { RosterCreateListItemComponent } from './roster-create/roster-create-list/roster-create-list-item/roster-create-list-item.component';
 
 
 
@@ -33,7 +35,9 @@ import { RosterN2EditComponent } from './roster-n2/roster-n2-edit/roster-n2-edit
     RosterHeaderComponent,
     RosterN2ListComponent,
     RosterN2ItemComponent,
-    RosterN2EditComponent
+    RosterN2EditComponent,
+    RosterCreateListComponent,
+    RosterCreateListItemComponent
   ],
   imports: [
     CommonModule,

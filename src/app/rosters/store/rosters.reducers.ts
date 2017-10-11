@@ -1,3 +1,4 @@
+import { Ranking } from './../ranking.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Qualification } from './../../shared/qualification.model';
@@ -9,6 +10,7 @@ export interface State {
   shiftsInsts: ShiftInstance[];
   pumps: Pump[];
   n2s: Firefighter[];
+  flyerRankings: Ranking[];
 }
 
 const initialState: State = {
@@ -23,7 +25,8 @@ const initialState: State = {
       aerial: false}},
     new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]), 'day', false)
   ],
-  n2s: []
+  n2s: [],
+  flyerRankings: []
 };
 
 export function rostersReducer(state = initialState, action: RostersActions.RostersActions) {
@@ -67,6 +70,11 @@ export function rostersReducer(state = initialState, action: RostersActions.Rost
         ...state,
         n2s: [...action.payload]
       };
+      case RostersActions.STORE_FLYER_RANKING:
+        return {
+          ...state,
+          flyerRankings: [...action.payload]
+        };
     case RostersActions.UPDATE_N2_SUCCESS:
     case RostersActions.ROSTERS_ERROR:
     default:

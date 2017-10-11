@@ -1,3 +1,4 @@
+import { Ranking } from './../ranking.model';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
@@ -65,6 +66,33 @@ export class RostersEffects {
         });
       }
     );
+
+    @Effect()
+    fetchByFlyer = this.actions$
+      .ofType(RostersActions.FETCH_BY_FLYER)
+      .switchMap(
+        (action: RostersActions.FetchByFlyer) => {
+          const rankingCollection = this.afs.collection<Ranking>('shifts', ref => ref.orderBy('f1'));
+          return rankingCollection.snapshotChanges()
+            .map(
+              actions => {
+                return actions.map(
+                  a => {
+                    const data = a.payload.doc.data() as Ranking;
+                    return { ...data };
+                });
+              }
+            );
+        }
+      )
+      .map(
+        result => {
+          return {
+            type: RostersActions.STORE_FLYER_RANKING,
+            payload: result
+          };
+        }
+      );
 
 
 

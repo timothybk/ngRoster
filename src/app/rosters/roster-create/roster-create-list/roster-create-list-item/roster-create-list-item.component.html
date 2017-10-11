@@ -1,0 +1,37 @@
+<a style="cursor: pointer;" class="list-group-item clearfix">
+  <div class="pull-left">
+    <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
+    <div class="row">
+      <div class="col">
+        <button class="btn">
+          Flyer: {{firefighter.f1 / firefighter.total * 100}}%
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn">
+          Runner: {{firefighter.run1 / firefighter.total * 100}}%
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn">
+          Rescue Pump: {{firefighter.rp1 / firefighter.total * 100}}%
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn">
+          Salvage: {{firefighter.r1 / firefighter.total * 100}}%
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn">
+          Aerial: {{firefighter.lp1 / firefighter.total * 100}}%
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn">
+          Spare: {{firefighter.spare / firefighter.total * 100}}%
+        </button>
+      </div>
+    </div>
+  </div>
+</a>
