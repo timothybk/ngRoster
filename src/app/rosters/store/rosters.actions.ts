@@ -1,4 +1,4 @@
-import { RosterN2 } from './../roster-n2/roster-n2.model';
+import { Ranking } from './../ranking.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
@@ -18,6 +18,8 @@ export const FETCH_N2S = 'FETCH_N2S';
 export const UPDATE_N2 = 'UPDATE_N2';
 export const UPDATE_N2_SUCCESS = 'UPDATE_N2_SUCCESS';
 export const ROSTERS_ERROR = 'ROSTERS_ERROR';
+export const FETCH_BY_FLYER = 'FETCH_BY_FLYER';
+export const STORE_FLYER_RANKING = 'STORE_FLYER_RANKING';
 
 export class SetShiftsInsts implements Action {
   readonly type = SET_SHIFTSINSTS;
@@ -63,7 +65,7 @@ export class FetchPumps implements Action {
 
 export class StoreN2s implements Action {
   readonly type = STORE_N2S;
-  constructor(public payload: RosterN2[]) {}
+  constructor(public payload: Firefighter[]) {}
 }
 
 export class FetchN2s implements Action {
@@ -73,7 +75,7 @@ export class FetchN2s implements Action {
 export class UpdateN2 implements Action {
   readonly type = UPDATE_N2;
 
-  constructor(public payload: {id: string, type: string, date: string}) {}
+  constructor(public payload: {id: string, type: string, date: Date}) {}
 }
 
 export class UpdateN2Success implements Action {
@@ -84,6 +86,16 @@ export class RostersError implements Action {
   readonly type = ROSTERS_ERROR;
 
   constructor(public payload?: any) {}
+}
+
+export class FetchByFlyer implements Action {
+  readonly type = FETCH_BY_FLYER;
+}
+
+export class StoreFlyerRanking implements Action {
+  readonly type = STORE_FLYER_RANKING;
+
+  constructor(public payload: Ranking[]) {}
 }
 
 
@@ -100,4 +112,6 @@ FetchN2s |
 UpdateN2 |
 UpdateN2Success |
 RostersError |
-FetchPumps;
+FetchPumps |
+FetchByFlyer |
+StoreFlyerRanking;

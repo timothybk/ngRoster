@@ -1,8 +1,8 @@
-import { RosterN2 } from './../roster-n2/roster-n2.model';
+import { Ranking } from './../ranking.model';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
 import { Store } from '@ngrx/store';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { ShiftInstance } from './../shift-instance.model';
 import { Pump } from './../pump.model';
 import { Firefighter } from './../../shared/firefighter.model';
@@ -23,84 +23,80 @@ import * as RostersActions from './rosters.actions';
 
 @Injectable()
 export class RostersEffects {
-
   @Effect()
-  rosterN2Update: Observable<RostersActions.RostersActions> = this.actions$
-    .ofType(RostersActions.UPDATE_N2)
-    .map(
-    (action: RostersActions.UpdateN2) => {
-      return action.payload;
-    }
-    )
-    .mergeMap(
-    payload => {
-      if (payload.type === 'N2') {
-        return of(this.db.object('/n2List/' + payload.id)
-          .update({
-            N2: payload.date
-          }));
-      } else {
-        return of(this.db.object('/n2List/' + payload.id)
-          .update({
-            PN2: payload.date
-          }));
-      }
-    }
-    )
-    .map(
-    () => {
-      return new RostersActions.UpdateN2Success();
-    }
-    )
-    .catch(
-    err => {
-      return of(new RostersActions.RostersError({ error: err.message }));
-    }
-    );
-
-  @Effect()
-  fetchN2s: Observable<RostersActions.RostersActions> = this.actions$
+  fetchN2s = this.actions$
     .ofType(RostersActions.FETCH_N2S)
     .switchMap(
     (action: RostersActions.FetchN2s) => {
-      return this.db
-        .list('/n2List', {
-          query: {
-            orderByChild: 'N2'
-          }
-        })
-        .mergeMap(
-        (n2List) => {
-          return Observable.forkJoin(
-            n2List.map((firefighter) => this.db
-              .object('/firefighters/' + firefighter.$key)
-              .first()
-            ),
-            (...values) => {
-              n2List.forEach((firefighter, index) => {
-                firefighter.firefighter = values[index]; });
-                return n2List;
-            }
-          );
-        }
-        );
-    }
+      const firefighterCollection = this.afs
+        .collection<Firefighter>('firefighters', ref => ref.orderBy('nightDuty.n2'));
+      return firefighterCollection.snapshotChanges()
+        .map(
+          actions => {
+            return actions.map(
+              a => {
+                const id = a.payload.doc.id;
+                const data = a.payload.doc.data() as Firefighter;
+                return {id, ...data};
+              });
+          });
+    })
+    .map(
+      data => {
+        return {
+          type: RostersActions.STORE_N2S,
+          payload: data
+        };
+      }
+    );
+
+  @Effect({dispatch: false})
+  updateN2 = this.actions$
+    .ofType(RostersActions.UPDATE_N2)
+    .map(
+      (action: RostersActions.UpdateN2) => {
+        return action.payload;
+      }
     )
     .map(
-    result => {
-      // console.log(result);
-      const transformedN2List: RosterN2[] = [];
-      result.forEach(firefighter => {
-        // console.log(firefighter.N2);
-        transformedN2List.push(new RosterN2(firefighter.firefighter, firefighter.N2));
-      });
-      // console.log(transformedN2List);
-      return new RostersActions.StoreN2s(transformedN2List);
-    }
+      data => {
+        console.log(data);
+        this.afs.collection('firefighters').doc(data.id).update({
+          'nightDuty.n2': data.date
+        });
+      }
     );
+
+    @Effect()
+    fetchByFlyer = this.actions$
+      .ofType(RostersActions.FETCH_BY_FLYER)
+      .switchMap(
+        (action: RostersActions.FetchByFlyer) => {
+          const rankingCollection = this.afs.collection<Ranking>('shifts', ref => ref.orderBy('f1'));
+          return rankingCollection.snapshotChanges()
+            .map(
+              actions => {
+                return actions.map(
+                  a => {
+                    const data = a.payload.doc.data() as Ranking;
+                    return { ...data };
+                });
+              }
+            );
+        }
+      )
+      .map(
+        result => {
+          return {
+            type: RostersActions.STORE_FLYER_RANKING,
+            payload: result
+          };
+        }
+      );
+
 
 
   constructor(private actions$: Actions,
-    private db: AngularFireDatabase,
+    private afs: AngularFirestore,
     private store: Store<fromApp.AppState>) { }
 }

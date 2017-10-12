@@ -1,3 +1,4 @@
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AuthEffects } from './auth/store/auth.effects';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -38,8 +39,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFirestoreModule.enablePersistence(),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([FirefighterEffects, RostersEffects, AuthEffects]),
+    EffectsModule.forRoot([FirefighterEffects, AuthEffects, RostersEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 10
     }),
