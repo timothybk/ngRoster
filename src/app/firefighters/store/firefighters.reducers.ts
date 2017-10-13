@@ -6,17 +6,7 @@ firefighters: Firefighter[];
 }
 
 const initialState: State = {
-  firefighters: [
-      {id: 'first', number: 1, rank: 'SF', name: 'first ff', nightDuty: {n2: new Date(), pn2: null}, qualifications: {md: false,
-        rescue: false,
-        aerial: false}},
-      {id: 'second', number: 2, rank: 'QF', name: 'second ff', nightDuty: {n2: new Date(), pn2: null}, qualifications: {md: false,
-        rescue: false,
-        aerial: false}},
-      {id: 'third', number: 3, rank: 'lvl 1', name: 'third ff', nightDuty: {n2: new Date(), pn2: null}, qualifications: {md: false,
-        rescue: false,
-        aerial: false}}
-    ]
+  firefighters: []
 };
 
 export function firefightersReducer(state = initialState, action: FirefighterActions.FirefighterActions) {

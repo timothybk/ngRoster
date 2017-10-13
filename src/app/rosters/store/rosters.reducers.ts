@@ -15,15 +15,15 @@ export interface State {
 
 const initialState: State = {
   pumps: [
-    new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]),
-    new Pump('runner', ['driver', 'offsider'], [new Qualification('aerial')])
+    // new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]),
+    // new Pump('runner', ['driver', 'offsider'], [new Qualification('aerial')])
   ],
   shiftsInsts: [
-    new ShiftInstance('20/12/56',
-    {id: 'is', number: 9204, rank: 'sf', name: 'tim', nightDuty: {n2: new Date(), pn2: null}, qualifications: {md: false,
-      rescue: false,
-      aerial: false}},
-    new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]), 'day', false)
+    // new ShiftInstance('20/12/56',
+    // {id: 'is', number: 9204, rank: 'sf', name: 'tim', nightDuty: {n2: new Date(), pn2: null}, qualifications: {md: false,
+    //   rescue: false,
+    //   aerial: false}},
+    // new Pump('flyer', ['driver', 'one', 'two', 'three'], [new Qualification('rescue')]), 'day', false)
   ],
   n2s: [],
   flyerRankings: []

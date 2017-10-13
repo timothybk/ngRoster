@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 import * as fromApp from '../../../store/app.reducer';
 import * as fromRosters from '../../store/rosters.reducers';
+import * as fromFirefighters from '../../../firefighters/store/firefighters.reducers';
 import * as RostersActions from '../../store/rosters.actions';
 
 @Component({
@@ -12,11 +13,11 @@ import * as RostersActions from '../../store/rosters.actions';
   styleUrls: ['./roster-create-list.component.css']
 })
 export class RosterCreateListComponent implements OnInit {
-  rostersState: Observable<fromRosters.State>;
+  firefightersState: Observable<fromFirefighters.State>;
 
   constructor(private store: Store<fromApp.AppState>) {
     this.store.dispatch(new RostersActions.FetchByFlyer());
-    this.rostersState = this.store.select('rosters');
+    this.firefightersState = this.store.select('firefighters');
 
   }
 

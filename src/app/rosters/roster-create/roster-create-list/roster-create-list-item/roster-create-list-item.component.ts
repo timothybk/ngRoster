@@ -1,4 +1,4 @@
-import { Ranking } from './../../../ranking.model';
+import { Firefighter } from './../../../../shared/firefighter.model';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./roster-create-list-item.component.css']
 })
 export class RosterCreateListItemComponent implements OnInit {
-  @Input() firefighter: Ranking;
+  @Input() firefighter: Firefighter;
 
   constructor() { }
 
