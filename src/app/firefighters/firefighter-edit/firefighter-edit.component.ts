@@ -89,6 +89,15 @@ export class FirefighterEditComponent implements OnInit {
           md: this.firefighterForm.value.md,
           rescue: this.firefighterForm.value.rescue,
           aerial: this.firefighterForm.value.aerial
+        },
+        shifts: {
+          f1: 0,
+          lp1: 0,
+          r1: 0,
+          rp1: 0,
+          run1: 0,
+          spare: 0,
+          total: 0
         }
       };
       this.store.dispatch(new FirefighterActions.StoreFirefighter(dispatchedFirefighter));

@@ -1,3 +1,4 @@
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -26,16 +27,13 @@ export class FirefighterEffects {
     .ofType(firefighterActions.FETCH_FIREFIGHTERS)
     .switchMap(
     (action: firefighterActions.FetchFirefighters) => {
-      const firefighterCollection = this.afs.collection<Firefighter>('firefighters', ref => ref.orderBy('number'));
-      return firefighterCollection.snapshotChanges()
-        .map(actions => {
-          return actions.map(a => {
-            console.log(a.type);
-            const data = a.payload.doc.data() as Firefighter;
-            return { ...data };
-          });
+     return this.http.get('/api/firefighters')
+      .map(
+        (response) => {
+          const firefighters: Firefighter[] = response.json();
+          return firefighters;
         }
-        );
+      );
     })
     .map(
     data => {
@@ -65,63 +63,8 @@ export class FirefighterEffects {
   constructor(
     private afs: AngularFirestore,
     private actions$: Actions,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private http: Http
 
   ) { }
 }
-
-//   @Effect({ dispatch: false })
-  //   firefighterStore = this.actions$
-  //     .ofType(firefighterActions.STORE_FIREFIGHTER)
-  //     .switchMap(
-  //     (action: firefighterActions.StoreFirefighter) => {
-  //       const ffs = this.db.list('/firefighters');
-  //       const firefighter = action.payload;
-  //       const ff = {};
-  //       ff['rank'] = firefighter.rank;
-  //       ff['name'] = firefighter.name;
-  //       ff['number'] = firefighter.number;
-  //       ff['qualifications'] = {};
-  //       for (const qual of firefighter.qualifications) {
-  //         if (qual.name === 'rescue') {
-  //           ff['qualifications']['rescue'] = true;
-  //         } else if (qual.name === 'aerial') {
-  //           ff['qualifications']['aerial'] = true;
-  //         } else if (qual.name === 'md') {
-  //           ff['qualifications']['md'] = true;
-  //         }
-  //       }
-  //       return of(
-  //         ffs.push(ff));
-  //     }
-  //     )
-  //     .catch(
-  //     err => of(console.log(err)));
-
-  //     @Effect({ dispatch: false })
-  //     firefighterUpdateDb = this.actions$
-  //       .ofType(firefighterActions.UPDATEDB_FIREFIGHTER)
-  //       .switchMap(
-  //       (action: firefighterActions.UpdateDbFirefighter) => {
-  //         const ffs = this.db.list('/firefighters');
-  //         const firefighter = action.payload.firefighter;
-  //         const ff = {};
-  //         ff['rank'] = firefighter.rank;
-  //         ff['name'] = firefighter.name;
-  //         ff['number'] = firefighter.number;
-  //         ff['qualifications'] = {};
-  //         for (const qual of firefighter.qualifications) {
-  //           if (qual.name === 'rescue') {
-  //             ff['qualifications']['rescue'] = true;
-  //           } else if (qual.name === 'aerial') {
-  //             ff['qualifications']['aerial'] = true;
-  //           } else if (qual.name === 'md') {
-  //             ff['qualifications']['md'] = true;
-  //           }
-  //         }
-  //         return of(
-  //           ffs.update(action.payload.key, ff));
-  //       }
-  //       )
-  //       .catch(
-  //       err => of(console.log(err)));
