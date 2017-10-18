@@ -1,3 +1,4 @@
+import { ShiftInstance } from './../../../shift-instance.model';
 import { Firefighter } from './../../../../shared/firefighter.model';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./roster-create-list-item.component.css']
 })
 export class RosterCreateListItemComponent implements OnInit {
-  @Input() firefighter: Firefighter;
+  @Input() firefighter: ShiftInstance;
 
   constructor() { }
 

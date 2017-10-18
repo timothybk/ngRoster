@@ -32,71 +32,95 @@ export class RostersEffects {
         .collection<Firefighter>('firefighters', ref => ref.orderBy('nightDuty.n2'));
       return firefighterCollection.snapshotChanges()
         .map(
-          actions => {
-            return actions.map(
-              a => {
-                const id = a.payload.doc.id;
-                const data = a.payload.doc.data() as Firefighter;
-                return {id, ...data};
-              });
-          });
+        actions => {
+          return actions.map(
+            a => {
+              const id = a.payload.doc.id;
+              const data = a.payload.doc.data() as Firefighter;
+              return { id, ...data };
+            });
+        });
     })
     .map(
-      data => {
-        return {
-          type: RostersActions.STORE_N2S,
-          payload: data
-        };
-      }
+    data => {
+      return {
+        type: RostersActions.STORE_N2S,
+        payload: data
+      };
+    }
     );
 
-  @Effect({dispatch: false})
+  @Effect({ dispatch: false })
   updateN2 = this.actions$
     .ofType(RostersActions.UPDATE_N2)
     .map(
-      (action: RostersActions.UpdateN2) => {
-        return action.payload;
-      }
+    (action: RostersActions.UpdateN2) => {
+      return action.payload;
+    }
     )
     .map(
-      data => {
-        console.log(data);
-        this.afs.collection('firefighters').doc(data.id).update({
-          'nightDuty.n2': data.date
-        });
-      }
+    data => {
+      console.log(data);
+      this.afs.collection('firefighters').doc(data.id).update({
+        'nightDuty.n2': data.date
+      });
+    }
     );
 
-    @Effect()
-    fetchByFlyer = this.actions$
-      .ofType(RostersActions.FETCH_BY_FLYER)
-      .switchMap(
-        (action: RostersActions.FetchByFlyer) => {
-          const rankingCollection = this.afs.collection<Ranking>('shifts', ref => ref.orderBy('f1'));
-          return rankingCollection.snapshotChanges()
-            .map(
-              actions => {
-                return actions.map(
-                  a => {
-                    const data = a.payload.doc.data() as Ranking;
-                    return { ...data };
-                });
-              }
-            );
+  @Effect()
+  fetchByFlyer = this.actions$
+    .ofType(RostersActions.FETCH_BY_FLYER)
+    .switchMap(
+    (action: RostersActions.FetchByFlyer) => {
+      const rankingCollection = this.afs.collection<Ranking>('shifts', ref => ref.orderBy('f1'));
+      return rankingCollection.snapshotChanges()
+        .map(
+        actions => {
+          return actions.map(
+            a => {
+              const data = a.payload.doc.data() as Ranking;
+              return { ...data };
+            });
         }
-      )
-      .map(
-        result => {
-          return {
-            type: RostersActions.STORE_FLYER_RANKING,
-            payload: result
-          };
+        );
+    }
+    )
+    .map(
+    result => {
+      return {
+        type: RostersActions.STORE_FLYER_RANKING,
+        payload: result
+      };
+    }
+    );
+
+  @Effect()
+  fetchShifts = this.actions$
+    .ofType(RostersActions.FETCH_SHIFTSINSTS)
+    .switchMap(
+    (action: RostersActions.FetchShiftsInsts) => {
+      return this.http.get('api/shift-list')
+        .map(
+        response => {
+          const firefighters: ShiftInstance[] = response.json();
+          return firefighters;
         }
-      );
+        );
+    })
+    .map(
+    data => {
+      console.log(data);
+      return {
+        type: RostersActions.SET_SHIFTSINSTS,
+        payload: data
+      };
+    }
+    );
 
 
 
   constructor(private actions$: Actions,
     private afs: AngularFirestore,
+    private http: Http,
     private store: Store<fromApp.AppState>) { }
 }

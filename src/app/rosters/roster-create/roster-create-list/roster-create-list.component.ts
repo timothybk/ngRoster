@@ -13,11 +13,11 @@ import * as RostersActions from '../../store/rosters.actions';
   styleUrls: ['./roster-create-list.component.css']
 })
 export class RosterCreateListComponent implements OnInit {
-  firefightersState: Observable<fromFirefighters.State>;
+  rostersState: Observable<fromRosters.State>;
 
   constructor(private store: Store<fromApp.AppState>) {
-    this.store.dispatch(new RostersActions.FetchByFlyer());
-    this.firefightersState = this.store.select('firefighters');
+    this.store.dispatch(new RostersActions.FetchShiftsInsts());
+    this.rostersState = this.store.select('rosters');
 
   }
 
