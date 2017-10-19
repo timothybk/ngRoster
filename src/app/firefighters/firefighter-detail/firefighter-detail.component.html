@@ -13,16 +13,16 @@
     <h1>{{firefighter.name}}</h1>
   </div>
 </div>
-<div class="row">
+<!-- <div class="row">
   <div class="col-12">
     <h1>Last N2: {{firefighter.nightDuty.n2.toDateString()}}</h1>
   </div>
-</div>
+</div> -->
 <div class="row">
   <div class="col-12">
     <ul class="list-group">
-      <ng-container *ngFor="let qualification of firefighter.qualifications | keys">
-        <li class="list-group-item" *ngIf="firefighter.qualifications[qualification]">{{qualification}}</li>
+      <ng-container *ngFor="let qualification of firefighter.qualifications">
+        <li class="list-group-item">{{qualification.name}}</li>
       </ng-container>
     </ul>
   </div>

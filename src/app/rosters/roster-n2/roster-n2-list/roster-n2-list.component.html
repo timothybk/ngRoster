@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col col-md-12">
     <ngb-accordion [closeOthers]="true">
-      <ngb-panel *ngFor='let firefighterEl of (rostersState | async).n2s; let i = index' title="{{firefighterEl.name}}">
+      <ngb-panel *ngFor='let firefighterEl of (rostersState | async).shiftsInsts; let i = index' title="{{firefighterEl.firefighter.name}}">
         <ng-template ngbPanelContent>
           <app-roster-n2-item [firefighter]='firefighterEl' [index]='i'></app-roster-n2-item>
         </ng-template>

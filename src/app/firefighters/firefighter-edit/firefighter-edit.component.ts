@@ -1,3 +1,4 @@
+import { Qualification } from './../../shared/qualification.model';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -51,13 +52,25 @@ export class FirefighterEditComponent implements OnInit {
         .subscribe(
         (firefightersState: fromFirefighter.State) => {
           const firefighter = firefightersState.firefighters[this.id];
-          this.key = firefighter.id;
+          this.key = firefighter._id;
           ffNumber = firefighter.number;
           ffRank = firefighter.rank;
           ffName = firefighter.name;
-          ffMd = firefighter.qualifications.md;
-          ffRescue = firefighter.qualifications.rescue;
-          ffAerial = firefighter.qualifications.aerial;
+          for (const qual of firefighter.qualifications) {
+            switch (qual.name) {
+              case 'md':
+                ffMd = true;
+                break;
+              case 'rescue':
+                ffRescue = true;
+                break;
+              case 'aerial':
+                ffAerial = true;
+                break;
+              default:
+                break;
+            }
+          }
         }
         );
 
@@ -77,6 +90,16 @@ export class FirefighterEditComponent implements OnInit {
     if (this.editMode) {
       this.store.dispatch(new FirefighterActions.UpdateDbFirefighter({ key: this.key, firefighter: this.firefighterForm.value }));
     } else {
+      const quals: Qualification[] = [];
+      const formQuals: any[] = [
+        { value: this.firefighterForm.value.md, name: 'md' },
+        { value: this.firefighterForm.value.rescue, name: 'rescue' },
+        { value: this.firefighterForm.value.aerial, name: 'aerial' }];
+      for (const qual of formQuals) {
+        if (qual.value) {
+          quals.push({name: qual.name});
+        }
+      }
       const dispatchedFirefighter = {
         number: this.firefighterForm.value.number,
         rank: this.firefighterForm.value.rank,
@@ -85,11 +108,7 @@ export class FirefighterEditComponent implements OnInit {
           n2: new Date(),
           pn2: null
         },
-        qualifications: {
-          md: this.firefighterForm.value.md,
-          rescue: this.firefighterForm.value.rescue,
-          aerial: this.firefighterForm.value.aerial
-        },
+        qualifications: quals,
         shifts: {
           f1: 0,
           lp1: 0,

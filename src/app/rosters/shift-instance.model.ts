@@ -1,12 +1,10 @@
 import { Pump } from './pump.model';
 import { Firefighter } from './../shared/firefighter.model';
 
-export class ShiftInstance {
-  constructor(
-    public firefighter: Firefighter,
-    public shifts: {
+export interface ShiftInstance {
+    firefighter: Firefighter;
+    shifts: {
       pump: string,
-      count: number}[],
-    public totalShifts: number
-  ) {}
+      count: number}[];
+    totalShifts: number;
 }

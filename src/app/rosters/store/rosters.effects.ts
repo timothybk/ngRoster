@@ -58,12 +58,14 @@ export class RostersEffects {
       return action.payload;
     }
     )
-    .map(
+    .switchMap(
     data => {
-      console.log(data);
-      this.afs.collection('firefighters').doc(data.id).update({
-        'nightDuty.n2': data.date
-      });
+      return this.http.post('/api/nightduty', data)
+        .map(
+          response => {
+            console.log(response.status);
+          }
+        );
     }
     );
 

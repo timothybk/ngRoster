@@ -4,6 +4,7 @@ const FireFighter = require('./../models/firefighter');
 const Qualification = require('./../models/qualification');
 const Appliance = require('../models/appliance');
 const ShiftInstance = require('../models/shiftinstance');
+const Nightduty = require('./../models/night-duty');
 
 // // declare axios for making http requests
 // const axios = require('axios');
@@ -168,6 +169,44 @@ router.get('/shift-list', (req, res) => {
         res.status(500).send(err);
       }
     )
+});
+
+// control get actions for nightduties
+router.get('/nightduty', (req, res, next) => {
+
+})
+
+// control post actions for nightduties
+router.post('/nightduty', (req, res, next) => {
+  console.log('received');
+  req.checkBody('firefighter', 'Firefighter must not be empty').notEmpty();
+  req.checkBody('date', 'Invalid date').notEmpty();
+  req.checkBody('type', 'type must not be empty').notEmpty();
+
+  req.sanitize('firefighter').escape();
+  req.sanitize('date').toDate();
+  req.sanitize('type').escape();
+
+  req.sanitize('firefighter').trim();
+  req.sanitize('type').trim();
+
+  const nightduty = new Nightduty({
+    firefighter: req.body.firefighter,
+    date: req.body.date,
+    type: req.body.type
+  });
+
+  const errors = req.validationErrors();
+  if (errors) {
+    res.status(500).send(errors);
+  } else {
+    nightduty.save()
+      .then(
+        () => {
+          res.status(200)
+        }
+      )
+  }
 })
 
 
