@@ -1,3 +1,4 @@
+import { Nightduty } from './../roster-n2/night-duty.model';
 import { Ranking } from './../ranking.model';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Rx';
@@ -28,21 +29,17 @@ export class RostersEffects {
     .ofType(RostersActions.FETCH_N2S)
     .switchMap(
     (action: RostersActions.FetchN2s) => {
-      const firefighterCollection = this.afs
-        .collection<Firefighter>('firefighters', ref => ref.orderBy('nightDuty.n2'));
-      return firefighterCollection.snapshotChanges()
+      return this.http.get('/api/nightduty')
         .map(
-        actions => {
-          return actions.map(
-            a => {
-              const id = a.payload.doc.id;
-              const data = a.payload.doc.data() as Firefighter;
-              return { id, ...data };
-            });
-        });
+          response => {
+            const nightduties = response.json();
+            return nightduties;
+          }
+        );
     })
     .map(
     data => {
+      console.log(data);
       return {
         type: RostersActions.STORE_N2S,
         payload: data
@@ -111,7 +108,6 @@ export class RostersEffects {
     })
     .map(
     data => {
-      console.log(data);
       return {
         type: RostersActions.SET_SHIFTSINSTS,
         payload: data

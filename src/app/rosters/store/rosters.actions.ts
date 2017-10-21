@@ -1,3 +1,4 @@
+import { Nightduty } from './../roster-n2/night-duty.model';
 import { Ranking } from './../ranking.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { ShiftInstance } from './../shift-instance.model';
@@ -65,7 +66,7 @@ export class FetchPumps implements Action {
 
 export class StoreN2s implements Action {
   readonly type = STORE_N2S;
-  constructor(public payload: Firefighter[]) {}
+  constructor(public payload: Nightduty[]) {}
 }
 
 export class FetchN2s implements Action {
