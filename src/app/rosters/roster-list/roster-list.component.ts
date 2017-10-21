@@ -15,7 +15,9 @@ export class RosterListComponent implements OnInit {
 
   rostersState: Observable<fromRosters.State>;
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>) {
+    this.store.dispatch(new RostersActions.FetchShiftsInsts());
+   }
 
   ngOnInit() {
     this.rostersState = this.store.select('rosters');

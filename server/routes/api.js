@@ -4,6 +4,7 @@ const FireFighter = require('./../models/firefighter');
 const Qualification = require('./../models/qualification');
 const Appliance = require('../models/appliance');
 const ShiftInstance = require('../models/shiftinstance');
+const Nightduty = require('./../models/night-duty');
 
 // // declare axios for making http requests
 // const axios = require('axios');
@@ -44,18 +45,197 @@ router.get('/pumps', (req, res) => {
 // get all shifts
 //Display ShiftInstance create form on GET
 router.get('/shift-list', (req, res) => {
-  ShiftInstance.find()
-  .populate('firefighter')
-  .populate('pump')
-  .sort('-date')
-  .then(result => {
-    res.status(200).json(result);
-  })
-  .catch(
+  FireFighter.find({})
+    .populate('qualifications')
+    .then((firefighters) => {
+      return Promise.all(firefighters.map((firefighter) => {
+        return ShiftInstance.aggregate()
+          .match({ 'firefighter': firefighter._id })
+          .lookup({ from: 'firefighters', localField: 'firefighter', foreignField: '_id', as: 'firefighter' })
+          .unwind('$firefighter')
+          .lookup({ from: 'appliances', localField: 'pump', foreignField: '_id', as: 'pump' })
+          .unwind('$pump')
+          .group({ _id: { pump: '$pump.name' }, count: { $sum: 1 } })
+          .sort('count')
+          .then(
+          result => {
+            const res = {
+              firefighter: firefighter,
+              shifts: result
+            }
+            return res;
+          }
+          )
+      }
+      )
+      )
+    }
+    )
+    .then(
+    // transform firefighters into Angular model
+    firefighters => {
+      const transformedFirefighters = [];
+      for (const firefighter of firefighters) {
+        const flyer = {
+          name: 'flyer',
+          exists: false
+        };
+        const runner = {
+          name: 'runner',
+          exists: false
+        };
+        const rp = {
+          name: 'rescuepump',
+          exists: false
+        };
+        const salvage = {
+          name: 'salvage',
+          exists: false
+        };
+        const aerial = {
+          name: 'bronto',
+          exists: false
+        };
+        const newArr = [];
+        let shiftCount = 0;
+        for (const shift of firefighter.shifts) {
+          switch (shift._id.pump) {
+            case 'flyer':
+              flyer.exists = true;
+              newArr.push({
+                pump: 'flyer',
+                count: shift.count
+              });
+              shiftCount += shift.count;
+              break;
+            case 'runner':
+              runner.exists = true;
+              newArr.push({
+                pump: 'runner',
+                count: shift.count
+              });
+              shiftCount += shift.count;
+              break;
+            case 'rescuepump':
+              rp.exists = true;
+              newArr.push({
+                pump: 'rescuepump',
+                count: shift.count
+              });
+              shiftCount += shift.count;
+              break;
+            case 'salvage':
+              salvage.exists = true;
+              newArr.push({
+                pump: 'salvage',
+                count: shift.count
+              });
+              shiftCount += shift.count;
+              break;
+            case 'bronto':
+              aerial.exists = true;
+              newArr.push({
+                pump: 'bronto',
+                count: shift.count
+              });
+              shiftCount += shift.count;
+              break;
+            default:
+              break;
+          }
+        }
+        const pumpArr = [flyer, runner, rp, salvage, aerial];
+        for (const pump of pumpArr) {
+          if (!pump.exists) {
+            newArr.push({
+              pump: pump.name,
+              count: 0
+            });
+          }
+        }
+        if (firefighter.firefighter.rank !== 'Station Officer') {
+          transformedFirefighters.push({
+            firefighter: firefighter.firefighter,
+            shifts: newArr,
+            totalShifts: shiftCount
+          });
+        }
+      }
+      res.status(200).json(transformedFirefighters);
+    }
+    )
+    .catch(
     err => {
       res.status(500).send(err);
     }
-  )
+    )
+});
+
+// control get actions for nightduties
+router.get('/nightduty', (req, res, next) => {
+  FireFighter.find({})
+    .then(
+    firefighters => {
+      return Promise.all(firefighters.map((firefighter) => {
+        return Nightduty.find({ 'firefighter': firefighter._id })
+          .populate('firefighter')
+          .then(
+          result => {
+            const res = {
+              firefighter: firefighter,
+              nightduties: result
+            }
+            return res;
+          }
+          )
+
+      }))
+    }
+    )
+    .then(
+    result => {
+      console.log(result);
+      res.status(200).json(result);
+    }
+    )
+    .catch(
+    err => {
+      res.status(500).send(err);
+    }
+    )
+})
+
+// control post actions for nightduties
+router.post('/nightduty', (req, res, next) => {
+  console.log('received');
+  req.checkBody('firefighter', 'Firefighter must not be empty').notEmpty();
+  req.checkBody('date', 'Invalid date').notEmpty();
+  req.checkBody('type', 'type must not be empty').notEmpty();
+
+  req.sanitize('firefighter').escape();
+  req.sanitize('date').toDate();
+  req.sanitize('type').escape();
+
+  req.sanitize('firefighter').trim();
+  req.sanitize('type').trim();
+
+  const nightduty = new Nightduty({
+    firefighter: req.body.firefighter,
+    date: req.body.date,
+    type: req.body.type
+  });
+
+  const errors = req.validationErrors();
+  if (errors) {
+    res.status(500).send(errors);
+  } else {
+    nightduty.save()
+      .then(
+      () => {
+        res.status(200)
+      }
+      )
+  }
 })
 
 

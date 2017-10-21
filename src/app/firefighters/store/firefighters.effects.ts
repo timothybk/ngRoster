@@ -37,7 +37,6 @@ export class FirefighterEffects {
     })
     .map(
     data => {
-      console.log(data);
       return {
         type: firefighterActions.SET_FIREFIGHTERS,
         payload: data

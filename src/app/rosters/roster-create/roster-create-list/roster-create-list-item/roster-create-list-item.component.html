@@ -1,35 +1,10 @@
 <a style="cursor: pointer;" class="list-group-item clearfix">
   <div class="pull-left">
-    <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
+    <h4 class="list-group-item-heading">{{firefighter.firefighter.name}}</h4>
     <div class="row">
-      <div class="col">
-        <button class="btn">
-          Flyer: {{(firefighter.shifts.f1 / firefighter.shifts.total * 100) | round}}%
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn">
-          Runner: {{(firefighter.shifts.run1 / firefighter.shifts.total * 100) | round}}%
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn">
-          Rescue Pump: {{(firefighter.shifts.rp1 / firefighter.shifts.total * 100) | round}}%
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn">
-          Salvage: {{(firefighter.shifts.r1 / firefighter.shifts.total * 100) | round}}%
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn">
-          Aerial: {{(firefighter.shifts.lp1 / firefighter.shifts.total * 100) | round}}%
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn">
-          Spare: {{(firefighter.shifts.spare / firefighter.shifts.total * 100) | round}}%
+      <div class="col" *ngFor='let pump of firefighter.shifts'>
+        <button class="btn btn-primary">
+          {{pump.pump}}: {{(pump.count / firefighter.totalShifts) * 100 | round}}%
         </button>
       </div>
     </div>

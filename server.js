@@ -3,7 +3,8 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose')
+const expressValidator = require('express-validator');
+const mongoose = require('mongoose');
 
 // Get our API routes
 const api = require('./server/routes/api');
@@ -17,6 +18,7 @@ mongoose.connect(mongodbUri);
 // Parsers for POST data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
