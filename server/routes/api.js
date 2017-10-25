@@ -96,63 +96,76 @@ router.get('/shift-list', (req, res) => {
           name: 'bronto',
           exists: false
         };
-        const newArr = [];
+        const newArr = [
+          {
+              pump: 'flyer',
+              count: 0
+            },
+            {
+              pump: 'runner',
+              count: 0
+            },
+            {
+              pump: 'rescuepump',
+              count: 0
+            },
+            {
+              pump: 'salvage',
+              count: 0
+            },
+            {
+              pump: 'bronto',
+              count: 0
+            }
+        ];
         let shiftCount = 0;
         for (const shift of firefighter.shifts) {
           switch (shift._id.pump) {
             case 'flyer':
               flyer.exists = true;
-              newArr.push({
-                pump: 'flyer',
+              newArr[0] = {
+                ...newArr[0],
                 count: shift.count
-              });
+              };
               shiftCount += shift.count;
               break;
             case 'runner':
               runner.exists = true;
-              newArr.push({
-                pump: 'runner',
+              newArr[1] = {
+                ...newArr[1],
                 count: shift.count
-              });
+              };
               shiftCount += shift.count;
               break;
             case 'rescuepump':
               rp.exists = true;
-              newArr.push({
-                pump: 'rescuepump',
-                count: shift.count
-              });
+              newArr[2] = {
+               ...newArr[2],
+               count: shift.count
+              };
               shiftCount += shift.count;
               break;
             case 'salvage':
               salvage.exists = true;
-              newArr.push({
-                pump: 'salvage',
+              newArr[3] = {
+                ...newArr[3],
                 count: shift.count
-              });
+              };
               shiftCount += shift.count;
               break;
             case 'bronto':
               aerial.exists = true;
-              newArr.push({
-                pump: 'bronto',
+              newArr[4] = {
+                ...newArr[4],
                 count: shift.count
-              });
+              };
               shiftCount += shift.count;
               break;
             default:
               break;
           }
         }
-        const pumpArr = [flyer, runner, rp, salvage, aerial];
-        for (const pump of pumpArr) {
-          if (!pump.exists) {
-            newArr.push({
-              pump: pump.name,
-              count: 0
-            });
-          }
-        }
+
         if (firefighter.firefighter.rank !== 'Station Officer') {
           transformedFirefighters.push({
             firefighter: firefighter.firefighter,

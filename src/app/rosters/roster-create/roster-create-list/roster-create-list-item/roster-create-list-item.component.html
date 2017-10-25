@@ -3,7 +3,7 @@
     <h4 class="list-group-item-heading">{{firefighter.firefighter.name}}</h4>
     <div class="row">
       <div class="col" *ngFor='let pump of firefighter.shifts'>
-        <button class="btn btn-primary">
+        <button class="btn btn-primary btn-block">
           {{pump.pump}}: {{(pump.count / firefighter.totalShifts) * 100 | round}}%
         </button>
       </div>
