@@ -6,5 +6,4 @@ export interface ShiftInstance {
     shifts: {
       pump: string,
       count: number}[];
-    totalShifts: number;
 }
