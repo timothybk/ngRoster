@@ -15,12 +15,12 @@ import * as RostersActions from '../../store/rosters.actions';
 })
 export class RosterN2ListComponent implements OnInit {
 
-  rostersState: Observable<fromRosters.State>;
+  rostersState: Observable<fromFirefighters.State>;
   sotedByN2: Observable<any>;
 
   constructor(private store: Store<fromApp.AppState>) {
-    this.store.dispatch(new RostersActions.FetchN2s());
-    this.rostersState = this.store.select('rosters');
+    this.store.dispatch(new FirefighterActions.FetchFirefighters());
+    this.rostersState = this.store.select('firefighters');
   }
 
   ngOnInit() {

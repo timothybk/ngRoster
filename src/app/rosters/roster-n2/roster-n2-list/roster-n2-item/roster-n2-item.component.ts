@@ -1,4 +1,3 @@
-import { Nightduty } from './../../night-duty.model';
 import { ShiftInstance } from './../../../shift-instance.model';
 import { Store } from '@ngrx/store';
 import { Firefighter } from './../../../../shared/firefighter.model';
@@ -17,9 +16,8 @@ const now = new Date();
 })
 export class RosterN2ItemComponent implements OnInit {
 
-  @Input() firefighter: ShiftInstance;
+  @Input() firefighter: Firefighter;
   @Input() index: number;
-  nightduties: Nightduty;
 
   model: NgbDateStruct;
   date: { year: number, month: number, day: number };
@@ -27,26 +25,14 @@ export class RosterN2ItemComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>,
               private ngbDateParserFormatter: NgbDateParserFormatter) { }
 
-  ngOnInit() {
-    this.store.select('rosters')
-      .subscribe(
-        (data) => {
-          for (const result of data.n2s) {
-            if (result.firefighter._id === this.firefighter.firefighter._id) {
-              console.log(result.nightduties);
-              this.nightduties = result;
-            }
-          }
-        }
-      );
-  }
+  ngOnInit() {}
 
   selectToday() {
     this.model = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
   }
 
   onSubmit(type: string, f: NgForm) {
-    const id = this.firefighter.firefighter._id;
+    const id = this.firefighter._id;
     const formDate = f.value.datePick;
     const date = this.ngbDateParserFormatter.format(formDate);
 

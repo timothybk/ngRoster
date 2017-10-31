@@ -6,17 +6,16 @@ export interface Firefighter {
   rank: string;
   name: string;
   nightDuty?: {
-    n2: Date,
-    pn2: Date
+    n2: Date;
+    pn2: Date;
   };
   qualifications?: Qualification[];
   shifts?: {
-    f1: number,
-    lp1: number,
-    r1: number,
-    rp1: number,
-    run1: number,
-    spare: number,
-    total: number
-  };
+    pump: string;
+    count: number;
+  }[];
+  nightduties: {
+    date: Date;
+    type: string;
+  }[];
 }

@@ -8,11 +8,12 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./roster-create-list-item.component.css']
 })
 export class RosterCreateListItemComponent implements OnInit {
-  @Input() firefighter: ShiftInstance;
+  @Input() firefighter: Firefighter;
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.firefighter);
   }
 
 }

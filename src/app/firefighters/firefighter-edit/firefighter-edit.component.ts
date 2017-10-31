@@ -104,20 +104,12 @@ export class FirefighterEditComponent implements OnInit {
         number: this.firefighterForm.value.number,
         rank: this.firefighterForm.value.rank,
         name: this.firefighterForm.value.name,
-        nightDuty: {
-          n2: new Date(),
-          pn2: null
-        },
+        nightduties: [{
+          date: new Date(),
+          type: 'n2'
+        }],
         qualifications: quals,
-        shifts: {
-          f1: 0,
-          lp1: 0,
-          r1: 0,
-          rp1: 0,
-          run1: 0,
-          spare: 0,
-          total: 0
-        }
+        shifts: []
       };
       this.store.dispatch(new FirefighterActions.StoreFirefighter(dispatchedFirefighter));
     }
