@@ -79,8 +79,17 @@ router.get("/shift-list", (req, res) => {
       // transform firefighters into Angular model
       firefighters => {
         const transformedFirefighters = [];
+        let totalFirefighters = 0;
+        const averages = {
+          flyer: 0,
+          runner: 0,
+          rescuepump: 0,
+          salvage: 0,
+          bronto: 0
+        }
         for (const firefighter of firefighters) {
           let shiftCount = 0;
+          totalFirefighters++;
 
           for (const shift of firefighter.shifts) {
             shiftCount += shift.count;
@@ -117,36 +126,40 @@ router.get("/shift-list", (req, res) => {
                   ...newArr[0],
                   count: individualCount
                 };
+                averages.flyer += shift.count;
                 break;
               case "runner":
                 newArr[1] = {
                   ...newArr[1],
                   count: individualCount
                 };
+                averages.runner += shift.count;
                 break;
               case "rescuepump":
                 newArr[2] = {
                   ...newArr[2],
                   count: individualCount
                 };
+                averages.rescuepump += shift.count;
                 break;
               case "salvage":
                 newArr[3] = {
                   ...newArr[3],
                   count: individualCount
                 };
+                averages.salvage += shift.count;
                 break;
               case "bronto":
                 newArr[4] = {
                   ...newArr[4],
                   count: individualCount
                 };
+                averages.bronto += shift.count;
                 break;
               default:
                 break;
             }
           }
-
           if (firefighter.firefighter.rank !== "Station Officer") {
             transformedFirefighters.push({
               firefighter: firefighter.firefighter,
@@ -154,6 +167,15 @@ router.get("/shift-list", (req, res) => {
             });
           }
         }
+        // const finishedAverages = {
+        //   ...averages,
+        //   flyer: flyer / totalFirefighters * 100,
+        //   runner: runner / totalFirefighters * 100,
+        //   rescuepump: rescuepump / totalFirefighters * 100,
+        //   salvage: salvage / totalFirefighters * 100,
+        //   bronto: bronto / totalFirefighters * 100
+        // }
+        // console.log(finishedAverages);
         res.status(200).json(transformedFirefighters);
       }
     )

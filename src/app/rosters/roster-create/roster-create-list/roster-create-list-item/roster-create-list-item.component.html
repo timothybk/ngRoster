@@ -3,7 +3,12 @@
     <h4 class="list-group-item-heading">{{firefighter.firefighter.name}}</h4>
     <div class="row">
       <div class="col" *ngFor='let pump of firefighter.shifts'>
-        <button class="btn btn-primary btn-block">
+        <button class="btn btn-primary btn-block"
+        [ngClass]="{
+          'btn-success': pump.count < 15,
+          'btn-warning': pump.count > 30,
+          'btn-danger': pump.count > 50
+        }">
           {{pump.pump}}: {{pump.count | round}}%
         </button>
       </div>
