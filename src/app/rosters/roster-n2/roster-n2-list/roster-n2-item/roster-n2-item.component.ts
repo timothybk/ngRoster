@@ -1,4 +1,3 @@
-import { ShiftInstance } from './../../../shift-instance.model';
 import { Store } from '@ngrx/store';
 import { Firefighter } from './../../../../shared/firefighter.model';
 import { Component, OnInit, Input } from '@angular/core';

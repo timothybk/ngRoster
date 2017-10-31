@@ -1,3 +1,4 @@
+import { Nightduty } from '../../shared/night-duty.model';
 import { Qualification } from './../../shared/qualification.model';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -100,14 +101,15 @@ export class FirefighterEditComponent implements OnInit {
           quals.push({name: qual.name});
         }
       }
+      const intialN2: Nightduty = {
+          date: new Date(),
+          type: 'n2'
+      };
       const dispatchedFirefighter = {
         number: this.firefighterForm.value.number,
         rank: this.firefighterForm.value.rank,
         name: this.firefighterForm.value.name,
-        nightduties: [{
-          date: new Date(),
-          type: 'n2'
-        }],
+        nightduties: [intialN2],
         qualifications: quals,
         shifts: []
       };

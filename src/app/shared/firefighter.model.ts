@@ -1,3 +1,5 @@
+import { Nightduty } from './../shared/night-duty.model';
+import { ShiftInstance } from './../shared/shift-instance.model';
 import { Qualification } from './qualification.model';
 
 export interface Firefighter {
@@ -10,12 +12,6 @@ export interface Firefighter {
     pn2: Date;
   };
   qualifications?: Qualification[];
-  shifts?: {
-    pump: string;
-    count: number;
-  }[];
-  nightduties: {
-    date: Date;
-    type: string;
-  }[];
+  shifts?: ShiftInstance[];
+  nightduties: Nightduty[];
 }
