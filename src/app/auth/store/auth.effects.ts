@@ -55,8 +55,6 @@ export class AuthEffects {
   @Effect()
   login: Observable<AuthActions.AuthActions> = this.actions$
     .ofType(AuthActions.GOOGLE_LOGIN)
-    // .do((action) => console.log(`Received ${action.type}`))
-    // .filter((action) => action.type === AuthActions.GOOGLE_LOGIN)
     .map(
       (action: AuthActions.GoogleLogin) => {
         return action.payload;

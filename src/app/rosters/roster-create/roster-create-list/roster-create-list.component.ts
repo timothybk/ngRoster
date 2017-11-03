@@ -19,12 +19,6 @@ export class RosterCreateListComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
     this.rostersState = this.store.select('firefighters');
-    this.rostersState.subscribe(
-      data => {
-        console.log(data);
-      }
-    );
-
   }
 
   ngOnInit() {

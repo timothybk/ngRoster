@@ -32,7 +32,6 @@ export class RosterCreateListItemComponent implements OnInit {
         this.brontoAvg = data.averages.salvage;
       }
     );
-    console.log(this.rescuepumpAvg);
    }
 
   ngOnInit() {}
