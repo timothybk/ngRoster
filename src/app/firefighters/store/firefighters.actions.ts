@@ -1,3 +1,4 @@
+import { Averages } from './../../shared/averages.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Action } from '@ngrx/store';
 
@@ -8,6 +9,7 @@ export const DELETE_FIREFIGHTER = 'DELETE_FIREFIGHTER';
 export const STORE_FIREFIGHTER = 'STORE_FIREFIGHTER';
 export const UPDATEDB_FIREFIGHTER = 'UPDATEDB_FIREFIGHTER';
 export const FETCH_FIREFIGHTERS = 'FETCH_FIREFIGHTERS';
+export const STORE_AVERAGES = 'STORE_AVERAGES';
 
 export class AddFirefighter implements Action {
   readonly type = ADD_FIREFIGHTER;
@@ -49,6 +51,12 @@ export class FetchFirefighters implements Action {
   readonly type = FETCH_FIREFIGHTERS;
 }
 
+export class StoreAverages implements Action {
+  readonly type = STORE_AVERAGES;
+
+  constructor(public payload: Averages) {}
+}
+
 
 export type FirefighterActions =
 AddFirefighter |
@@ -56,4 +64,5 @@ SetFirefighters |
 UpdateFirefighter |
 DeleteFirefighter |
 StoreFirefighter |
+StoreAverages |
 FetchFirefighters;

@@ -2,7 +2,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AuthEffects } from './auth/store/auth.effects';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -29,7 +29,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     RostersModule,
     FirefightersModule,
     CoreModule,

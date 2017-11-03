@@ -33,7 +33,6 @@ router.get("/firefighters", (req, res) => {
     .populate("qualifications")
     .then(firefighters => {
       return Promise.all(
-
         firefighters.map(firefighter => {
           const promiseShifts = ShiftInstance.aggregate()
             .match({ firefighter: firefighter._id })
@@ -146,6 +145,57 @@ router.get("/firefighters", (req, res) => {
           });
         })
       );
+    })
+    .then(result => {
+      let flyerTotal = 0;
+      let runnerTotal = 0;
+      let rescuepumpTotal = 0;
+      let salvageTotal = 0;
+      let brontoTotal = 0;
+      let rescueFirefighters = 0;
+      let aerialFirefighters = 0;
+
+      for (const firefighter of result) {
+        if (firefighter.rank !== "Station Officer" && firefighter.name !== 'dummy') {
+          for (const qual of firefighter.qualifications) {
+            if (qual.name === "rescue") {
+              rescueFirefighters++;
+            } else if (qual.name === "aerial") {
+              aerialFirefighters++;
+            }
+          }
+          for (const shift of firefighter.shifts) {
+            if (shift.pump === "rescuepump") {
+              rescuepumpTotal += shift.count;
+            } else if (shift.pump === "salvage") {
+              salvageTotal += shift.count;
+            } else if (shift.pump === "bronto") {
+              brontoTotal += shift.count;
+            } else if (shift.pump === "runner") {
+              runnerTotal += shift.count;
+            } else {
+              flyerTotal += shift.count;
+            }
+          }
+        }
+      }
+      const flyerAvg = flyerTotal / result.length;
+      const runnerAvg = runnerTotal / result.length;
+      const rescuepumpAvg = rescuepumpTotal / result.length;
+      const salvageAvg = salvageTotal / rescueFirefighters;
+      const brontoAvg = brontoTotal / aerialFirefighters;
+
+      const averages = {
+        flyer: flyerAvg,
+        runner: runnerAvg,
+        rescuepump: rescuepumpAvg,
+        salvage: salvageAvg,
+        bronto: brontoAvg
+      };
+      return {
+        firefighters: result,
+        averages: averages
+      };
     })
     .then(result => {
       res.status(200).json(result);

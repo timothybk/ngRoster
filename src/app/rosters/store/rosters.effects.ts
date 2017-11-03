@@ -1,7 +1,7 @@
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
 import { Store } from '@ngrx/store';
-import { Http, Response } from '@angular/http';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/switchMap';
@@ -19,14 +19,20 @@ export class RostersEffects {
       return action.payload;
     })
     .switchMap(data => {
-      return this.http.post('/api/nightduty', data).map(response => {
-        console.log(response.status);
-      });
+      const req = new HttpRequest(
+        'POST',
+        '/api/nightduty',
+        data,
+        {
+          reportProgress: true
+        }
+      );
+      return this.httpClient.request(req);
     });
 
   constructor(
     private actions$: Actions,
-    private http: Http,
+    private httpClient: HttpClient,
     private store: Store<fromApp.AppState>
   ) {}
 }
