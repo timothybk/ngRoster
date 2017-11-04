@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
   authState: Observable<fromAuth.State>;
 
   navbarCollapsed = true;
-  components = ['1', '2', '3'];
 
   constructor(private router: Router,
               private store: Store<fromApp.AppState>,
