@@ -25,8 +25,6 @@ export class AuthEffects {
   @Effect()
   getUser: Observable<AuthActions.AuthActions> = this.actions$
     .ofType(AuthActions.GET_USER)
-    // .do((action) => console.log(`Received ${action.type}`))
-    // .filter((action) => action.type === AuthActions.GET_USER)
     .map(
     (action: AuthActions.GetUser) => {
       return action.payload;
@@ -45,12 +43,7 @@ export class AuthEffects {
       } else {
         return new AuthActions.NotAuthenticated();
       }
-    })
-    .catch(
-    err => {
-      return Observable.of(new AuthActions.AuthError());
-    }
-    );
+    });
 
   @Effect()
   login: Observable<AuthActions.AuthActions> = this.actions$
@@ -87,11 +80,6 @@ export class AuthEffects {
   .map(
     authData => {
       return new AuthActions.NotAuthenticated();
-    }
-  )
-  .catch(
-    err => {
-      return Observable.of(new AuthActions.AuthError({error: err.msg}));
     }
   );
 
