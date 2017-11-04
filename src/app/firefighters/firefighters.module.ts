@@ -1,3 +1,4 @@
+import { AuthGuard } from './../auth/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -24,6 +25,7 @@ import { FirefighterStartComponent } from './firefighter-start/firefighter-start
     ReactiveFormsModule,
     FirefightersRoutingModule
   ],
+  providers: [AuthGuard],
   exports: []
 })
 export class FirefightersModule {}
