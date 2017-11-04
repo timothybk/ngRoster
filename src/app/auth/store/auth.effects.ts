@@ -69,11 +69,6 @@ export class AuthEffects {
       credential => {
         return new AuthActions.GetUser();
       }
-    )
-    .catch(
-      err => {
-        return Observable.of(new AuthActions.AuthError({error: err.msg}));
-      }
     );
 
   @Effect()
