@@ -29,7 +29,8 @@ export class RosterCreateListItemComponent implements OnInit {
         this.runnerAvg = data.averages.runner;
         this.rescuepumpAvg = data.averages.rescuepump;
         this.salvageAvg = data.averages.salvage;
-        this.brontoAvg = data.averages.salvage;
+        this.brontoAvg = data.averages.bronto;
+        console.log('f' + this.flyerAvg,'run' + this.runnerAvg,'rp' + this.rescuepumpAvg,'r' + this.salvageAvg,'a' + this.brontoAvg)
       }
     );
    }
@@ -50,7 +51,9 @@ export class RosterCreateListItemComponent implements OnInit {
       average = this.brontoAvg;
     }
 
-    if (pump.count < average) {
+    if (pump.count < average && pump.count > (average - 10)) {
+      return 'btn-primary';
+    } else if (pump.count < average) {
       return 'btn-success';
     } else if (pump.count < (average + 10)) {
       return 'btn-warning';

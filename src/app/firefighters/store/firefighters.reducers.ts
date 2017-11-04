@@ -27,7 +27,7 @@ export function firefightersReducer(state = initialState, action: FirefighterAct
     case FirefighterActions.STORE_AVERAGES:
       return {
         ...state,
-        averages: action.payload
+        averages: {...action.payload}
       };
     case FirefighterActions.UPDATE_FIREFIGHTER:
       const firefighter = {...state.firefighters[action.payload.index]};

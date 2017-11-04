@@ -192,6 +192,7 @@ router.get("/firefighters", (req, res) => {
         salvage: salvageAvg,
         bronto: brontoAvg
       };
+      console.log(averages)
       return {
         firefighters: result,
         averages: averages
