@@ -30,7 +30,6 @@ export class RosterCreateListItemComponent implements OnInit {
         this.rescuepumpAvg = data.averages.rescuepump;
         this.salvageAvg = data.averages.salvage;
         this.brontoAvg = data.averages.bronto;
-        console.log('f' + this.flyerAvg,'run' + this.runnerAvg,'rp' + this.rescuepumpAvg,'r' + this.salvageAvg,'a' + this.brontoAvg)
       }
     );
    }
