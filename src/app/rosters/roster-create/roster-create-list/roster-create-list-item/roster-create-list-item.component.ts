@@ -1,3 +1,4 @@
+import { ShiftBuilder } from './../../../../shared/shift-builder.model';
 import { PumpCounts } from './../../../../shared/pump-counts.model';
 import { ShiftInstance } from './../../../../shared/shift-instance.model';
 import { Observable } from 'rxjs/Rx';
@@ -6,6 +7,7 @@ import { Firefighter } from './../../../../shared/firefighter.model';
 import { Component, OnInit, Input } from '@angular/core';
 
 import * as fromApp from './../../../../store/app.reducer';
+import * as RostersActions from './../../../store/rosters.actions';
 import * as fromFirefighters from './../../../../firefighters/store/firefighters.reducers';
 
 @Component({
@@ -21,6 +23,7 @@ export class RosterCreateListItemComponent implements OnInit {
   displayNumber: number;
 
   firefightersState: Observable<fromFirefighters.State>;
+
   flyerAvgs: PumpCounts;
   runnerAvgs: PumpCounts;
   rescuepumpAvgs: PumpCounts;
@@ -101,5 +104,21 @@ export class RosterCreateListItemComponent implements OnInit {
     } else {
       return 'btn-danger';
     }
+  }
+
+  sendToBuilder(pump) {
+    let pumpIndex = 0;
+    if (pump.pump === 'flyer') {
+      pumpIndex = 0;
+    } else if (pump.pump === 'runner') {
+      pumpIndex = 1;
+    } else if (pump.pump === 'rescuepump') {
+      pumpIndex = 2;
+    } else if (pump.pump === 'salvage') {
+      pumpIndex = 3;
+    } else if (pump.pump === 'bronto') {
+      pumpIndex = 4;
+    }
+    this.store.dispatch(new RostersActions.UpdateBuilder({pump: pumpIndex, position: 'one', firefighter: this.firefighter.name}))
   }
 }

@@ -19,6 +19,7 @@ import { RosterN2ItemComponent } from './roster-n2/roster-n2-list/roster-n2-item
 import { RosterCreateListComponent } from './roster-create/roster-create-list/roster-create-list.component';
 // tslint:disable-next-line:max-line-length
 import { RosterCreateListItemComponent } from './roster-create/roster-create-list/roster-create-list-item/roster-create-list-item.component';
+import { RosterCreateBuilderComponent } from './roster-create/roster-create-builder/roster-create-builder.component';
 
 
 
@@ -35,7 +36,8 @@ import { RosterCreateListItemComponent } from './roster-create/roster-create-lis
     RosterN2ListComponent,
     RosterN2ItemComponent,
     RosterCreateListComponent,
-    RosterCreateListItemComponent
+    RosterCreateListItemComponent,
+    RosterCreateBuilderComponent
   ],
   imports: [
     CommonModule,

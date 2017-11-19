@@ -1,0 +1,10 @@
+<h3>Flyer</h3>
+<div class="card" *ngFor='let pump of (rostersState | async).currentShift'>
+  <div class="card-block">
+    <h4 class="card-title">{{pump.pump}}</h4>
+    <p class="card-text">driver: {{pump.driver}}</p>
+    <p class="card-text">One: {{pump.one}}</p>
+    <p class="card-text">Two: {{pump.two}}</p>
+    <p class="card-text">Three: {{pump.three}}</p>
+  </div>
+</div>

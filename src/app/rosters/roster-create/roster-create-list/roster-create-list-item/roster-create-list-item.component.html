@@ -4,6 +4,7 @@
     <div class="row">
       <div class="col" *ngFor='let pump of firefighter.shifts'>
         <button class="btn btn-primary btn-block"
+        (click)='sendToBuilder(pump)'
         [ngClass]="getClass(pump)">
           {{pump.pump}}: {{getDisplayNumber(pump) | round}}%
         </button>
