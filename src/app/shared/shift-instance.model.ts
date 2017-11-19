@@ -1,4 +1,6 @@
+import { PumpCounts } from './pump-counts.model';
+
 export interface ShiftInstance {
   pump: string;
-  count: number;
+  counts: PumpCounts;
 }

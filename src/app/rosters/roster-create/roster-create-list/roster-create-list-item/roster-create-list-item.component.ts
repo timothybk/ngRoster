@@ -1,3 +1,4 @@
+import { PumpCounts } from './../../../../shared/pump-counts.model';
 import { ShiftInstance } from './../../../../shared/shift-instance.model';
 import { Observable } from 'rxjs/Rx';
 import { Store } from '@ngrx/store';
@@ -14,51 +15,91 @@ import * as fromFirefighters from './../../../../firefighters/store/firefighters
 })
 export class RosterCreateListItemComponent implements OnInit {
   @Input() firefighter: Firefighter;
+  @Input() dayMode: boolean;
+  @Input() driverMode: boolean;
+
+  displayNumber: number;
+
   firefightersState: Observable<fromFirefighters.State>;
-  flyerAvg: number;
-  runnerAvg: number;
-  rescuepumpAvg: number;
-  salvageAvg: number;
-  brontoAvg: number;
+  flyerAvgs: PumpCounts;
+  runnerAvgs: PumpCounts;
+  rescuepumpAvgs: PumpCounts;
+  salvageAvgs: PumpCounts;
+  brontoAvgs: PumpCounts;
 
   constructor(private store: Store<fromApp.AppState>) {
     this.firefightersState = this.store.select('firefighters');
-    this.firefightersState.subscribe(
-      (data) => {
-        this.flyerAvg = data.averages.flyer;
-        this.runnerAvg = data.averages.runner;
-        this.rescuepumpAvg = data.averages.rescuepump;
-        this.salvageAvg = data.averages.salvage;
-        this.brontoAvg = data.averages.bronto;
-      }
-    );
-   }
+    this.firefightersState.subscribe(data => {
+      this.flyerAvgs = data.averages.flyer;
+      this.runnerAvgs = data.averages.runner;
+      this.rescuepumpAvgs = data.averages.rescuepump;
+      this.salvageAvgs = data.averages.salvage;
+      this.brontoAvgs = data.averages.bronto;
+    });
+    console.log(this.flyerAvgs.dayBack);
+  }
 
   ngOnInit() {}
 
+  getDisplayNumber(pump: ShiftInstance) {
+    if (this.dayMode) {
+      if (this.driverMode) {
+        return pump.counts.dayDrive;
+      } else {
+        return pump.counts.dayBack;
+      }
+    } else {
+      if (this.driverMode) {
+        return pump.counts.nightDrive;
+      } else {
+        return pump.counts.nightBack;
+      }
+    }
+  }
+
   getClass(pump: ShiftInstance) {
     let average = 1;
+    let selection;
+    let compare;
     if (pump.pump === 'flyer') {
-      average = this.flyerAvg;
+      selection = this.flyerAvgs;
     } else if (pump.pump === 'runner') {
-      average = this.runnerAvg;
+      selection = this.runnerAvgs;
     } else if (pump.pump === 'rescuepump') {
-      average = this.rescuepumpAvg;
+      selection = this.rescuepumpAvgs;
     } else if (pump.pump === 'salvage') {
-      average = this.salvageAvg;
+      selection = this.salvageAvgs;
     } else if (pump.pump === 'bronto') {
-      average = this.brontoAvg;
+      selection = this.brontoAvgs;
     }
 
-    if (pump.count < average && pump.count > (average - 10)) {
+    if (this.dayMode) {
+      if (this.driverMode) {
+        compare = pump.counts.dayDrive;
+        average = selection.dayDrive;
+      } else {
+        compare = pump.counts.dayBack;
+        average = selection.dayBack;
+      }
+    } else {
+      if (this.driverMode) {
+        compare = pump.counts.nightDrive;
+        average = selection.nightDrive;
+      } else {
+        compare = pump.counts.nightBack;
+        average = selection.dayBack;
+      }
+    }
+
+
+    if (compare < average && compare > average - 10) {
       return 'btn-primary';
-    } else if (pump.count < average) {
+    } else if (compare < average) {
       return 'btn-success';
-    } else if (pump.count < (average + 10)) {
+    } else if (compare < average + 10) {
       return 'btn-warning';
     } else {
       return 'btn-danger';
     }
   }
-
 }

@@ -5,7 +5,7 @@
       <div class="col" *ngFor='let pump of firefighter.shifts'>
         <button class="btn btn-primary btn-block"
         [ngClass]="getClass(pump)">
-          {{pump.pump}}: {{pump.count | round}}%
+          {{pump.pump}}: {{getDisplayNumber(pump) | round}}%
         </button>
       </div>
     </div>

@@ -9,7 +9,7 @@ averages: Averages;
 
 const initialState: State = {
   firefighters: [],
-  averages: {flyer: 10, runner: 10, rescuepump: 10, salvage: 10, bronto: 10}
+  averages: null
 };
 
 export function firefightersReducer(state = initialState, action: FirefighterActions.FirefighterActions) {

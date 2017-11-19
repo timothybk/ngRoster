@@ -1,7 +1,21 @@
 <div class="row">
+  <div class="col-md">
+    <button class="btn btn-primary"
+    (click)="dayModeSwitch()"
+    >Day Mode: {{dayMode}}</button>
+  </div>
+  <div class="col-md">
+    <button class="btn btn-primary"
+    (click)="driverModeSwitch()"
+    >Driver Mode: {{driverMode}}</button>
+  </div>
+</div>
+<div class="row">
   <div class="col-12">
       <app-roster-create-list-item *ngFor="let firefighter of (rostersState | async).firefighters"
       [firefighter]='firefighter'
+      [dayMode]='dayMode'
+      [driverMode]='driverMode'
       ></app-roster-create-list-item>
   </div>
 </div>

@@ -1,7 +1,9 @@
+import { PumpCounts } from './pump-counts.model';
+
 export interface Averages {
-  flyer: number;
-  runner: number;
-  rescuepump: number;
-  salvage: number;
-  bronto: number;
+  flyer: PumpCounts;
+  runner: PumpCounts;
+  rescuepump: PumpCounts;
+  salvage: PumpCounts;
+  bronto: PumpCounts;
 }

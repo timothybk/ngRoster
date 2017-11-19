@@ -50,8 +50,14 @@ router.get("/firefighters", (req, res) => {
               as: "pump"
             })
             .unwind("$pump")
-            .group({ _id: { pump: "$pump.name" }, count: { $sum: 1 } })
-            .sort("count")
+            .group({
+              _id: {
+                pump: "$pump.name",
+                shift: "$shift",
+                md: "$md"
+              },
+              count: { $sum: 1 }
+            })
             .then(result => {
               let shiftCount = 0;
               const newFirefighter = {
@@ -65,61 +71,105 @@ router.get("/firefighters", (req, res) => {
               const newArr = [
                 {
                   pump: "flyer",
-                  count: 0
+                  counts: {
+                    dayDrive: 0,
+                    dayBack: 0,
+                    nightDrive: 0,
+                    nightBack: 0
+                  }
                 },
                 {
                   pump: "runner",
-                  count: 0
+                  counts: {
+                    dayDrive: 0,
+                    dayBack: 0,
+                    nightDrive: 0,
+                    nightBack: 0
+                  }
                 },
                 {
                   pump: "rescuepump",
-                  count: 0
+                  counts: {
+                    dayDrive: 0,
+                    dayBack: 0,
+                    nightDrive: 0,
+                    nightBack: 0
+                  }
                 },
                 {
                   pump: "salvage",
-                  count: 0
+                  counts: {
+                    dayDrive: 0,
+                    dayBack: 0,
+                    nightDrive: 0,
+                    nightBack: 0
+                  }
                 },
                 {
                   pump: "bronto",
-                  count: 0
+                  counts: {
+                    dayDrive: 0,
+                    dayBack: 0,
+                    nightDrive: 0,
+                    nightBack: 0
+                  }
                 }
               ];
 
               for (const shift of result) {
                 const individualCount = shift.count / shiftCount * 100;
-                switch (shift._id.pump) {
-                  case "flyer":
-                    newArr[0] = {
-                      ...newArr[0],
-                      count: individualCount
-                    };
-                    break;
-                  case "runner":
-                    newArr[1] = {
-                      ...newArr[1],
-                      count: individualCount
-                    };
-                    break;
-                  case "rescuepump":
-                    newArr[2] = {
-                      ...newArr[2],
-                      count: individualCount
-                    };
-                    break;
-                  case "salvage":
-                    newArr[3] = {
-                      ...newArr[3],
-                      count: individualCount
-                    };
-                    break;
-                  case "bronto":
-                    newArr[4] = {
-                      ...newArr[4],
-                      count: individualCount
-                    };
-                    break;
-                  default:
-                    break;
+                if (shift._id.md) {
+                  if (shift._id.shift === "day") {
+                    if (shift._id.pump === 'flyer') {
+                      newArr[0].counts.dayDrive = individualCount;
+                    } else if (shift._id.pump === 'runner') {
+                      newArr[1].counts.dayDrive = individualCount;
+                    } else if (shift._id.pump === 'rescuepump') {
+                      newArr[2].counts.dayDrive = individualCount;
+                    } else if (shift._id.pump === 'salvage') {
+                      newArr[3].counts.dayDrive = individualCount;
+                    } else {
+                      newArr[4].counts.dayDrive = individualCount;
+                    }
+                  } else {
+                    if (shift._id.pump === 'flyer') {
+                      newArr[0].counts.nightDrive = individualCount;
+                    } else if (shift._id.pump === 'runner') {
+                      newArr[1].counts.nightDrive = individualCount;
+                    } else if (shift._id.pump === 'rescuepump') {
+                      newArr[2].counts.nightDrive = individualCount;
+                    } else if (shift._id.pump === 'salvage') {
+                      newArr[3].counts.nightDrive = individualCount;
+                    } else {
+                      newArr[4].counts.nightDrive = individualCount;
+                    }
+                  }
+                } else {
+                  if (shift._id.shift === "day") {
+                    if (shift._id.pump === 'flyer') {
+                      newArr[0].counts.dayBack = individualCount;
+                    } else if (shift._id.pump === 'runner') {
+                      newArr[1].counts.dayBack = individualCount;
+                    } else if (shift._id.pump === 'rescuepump') {
+                      newArr[2].counts.dayBack = individualCount;
+                    } else if (shift._id.pump === 'salvage') {
+                      newArr[3].counts.dayBack = individualCount;
+                    } else {
+                      newArr[4].counts.dayBack = individualCount;
+                    }
+                  } else {
+                    if (shift._id.pump === 'flyer') {
+                      newArr[0].counts.nightBack = individualCount;
+                    } else if (shift._id.pump === 'runner') {
+                      newArr[1].counts.nightBack = individualCount;
+                    } else if (shift._id.pump === 'rescuepump') {
+                      newArr[2].counts.nightBack = individualCount;
+                    } else if (shift._id.pump === 'salvage') {
+                      newArr[3].counts.nightBack = individualCount;
+                    } else {
+                      newArr[4].counts.nightBack = individualCount;
+                    }
+                  }
                 }
               }
               return newArr;
@@ -147,50 +197,118 @@ router.get("/firefighters", (req, res) => {
       );
     })
     .then(result => {
-      let flyerTotal = 0;
-      let runnerTotal = 0;
-      let rescuepumpTotal = 0;
-      let salvageTotal = 0;
-      let brontoTotal = 0;
-      let rescueFirefighters = 0;
-      let aerialFirefighters = 0;
+      let flyerDayDriveTotal = 0;
+      let flyerDayBackTotal = 0;
+      let flyerNightDriveTotal = 0;
+      let flyerNightBackTotal = 0;
+
+      let runnerDayDriveTotal = 0;
+      let runnerDayBackTotal = 0;
+      let runnerNightDriveTotal = 0;
+      let runnerNightBackTotal = 0;
+
+      let rescuepumpDayDriveTotal = 0;
+      let rescuepumpDayBackTotal = 0;
+      let rescuepumpNightDriveTotal = 0;
+      let rescuepumpNightBackTotal = 0;
+
+      let salvageDayDriveTotal = 0;
+      let salvageDayBackTotal = 0;
+      let salvageNightDriveTotal = 0;
+      let salvageNightBackTotal = 0;
+
+      let brontoDayDriveTotal = 0;
+      let brontoDayBackTotal = 0;
+      let brontoNightDriveTotal = 0;
+      let brontoNightBackTotal = 0;
 
       for (const firefighter of result) {
-        if (firefighter.rank !== "Station Officer" && firefighter.name !== 'dummy') {
-          for (const qual of firefighter.qualifications) {
-            if (qual.name === "rescue") {
-              rescueFirefighters++;
-            } else if (qual.name === "aerial") {
-              aerialFirefighters++;
-            }
-          }
+        if (
+          firefighter.rank !== "Station Officer" &&
+          firefighter.name !== "dummy"
+        ) {
           for (const shift of firefighter.shifts) {
             if (shift.pump === "rescuepump") {
-              rescuepumpTotal += shift.count;
+              rescuepumpDayDriveTotal += shift.counts.dayDrive;
+              rescuepumpDayBackTotal += shift.counts.dayBack;
+              rescuepumpNightDriveTotal += shift.counts.nightDrive;
+              rescuepumpNightBackTotal += shift.counts.nightBack;
             } else if (shift.pump === "salvage") {
-              salvageTotal += shift.count;
+              salvageDayDriveTotal += shift.counts.dayDrive;
+              salvageDayBackTotal += shift.counts.dayBack;
+              salvageNightDriveTotal += shift.counts.nightDrive;
+              salvageNightBackTotal += shift.counts.nightBack;
             } else if (shift.pump === "bronto") {
-              brontoTotal += shift.count;
+              brontoDayDriveTotal += shift.counts.dayDrive;
+              brontoDayBackTotal += shift.counts.dayBack;
+              brontoNightDriveTotal += shift.counts.nightDrive;
+              brontoNightBackTotal += shift.counts.nightBack;
             } else if (shift.pump === "runner") {
-              runnerTotal += shift.count;
+              runnerDayDriveTotal += shift.counts.dayDrive;
+              runnerDayBackTotal += shift.counts.dayBack;
+              runnerNightDriveTotal += shift.counts.nightDrive;
+              runnerNightBackTotal += shift.counts.nightBack;
             } else {
-              flyerTotal += shift.count;
+              flyerDayDriveTotal += shift.counts.dayDrive;
+              flyerDayBackTotal += shift.counts.dayBack;
+              flyerNightDriveTotal += shift.counts.nightDrive;
+              flyerNightBackTotal += shift.counts.nightBack;
             }
           }
         }
       }
-      const flyerAvg = flyerTotal / result.length;
-      const runnerAvg = runnerTotal / result.length;
-      const rescuepumpAvg = rescuepumpTotal / result.length;
-      const salvageAvg = salvageTotal / rescueFirefighters;
-      const brontoAvg = brontoTotal / aerialFirefighters;
+      const flyerDayDriveAvg = flyerDayDriveTotal / result.length;
+      const flyerDayBackAvg = flyerDayBackTotal / result.length;
+      const flyerNightDriveAvg = flyerNightDriveTotal / result.length;
+      const flyerNightBackAvg = flyerNightBackTotal / result.length;
+      const runnerDayDriveAvg = runnerDayDriveTotal / result.length;
+      const runnerDayBackAvg = runnerDayBackTotal / result.length;
+      const runnerNightDriveAvg = runnerNightDriveTotal / result.length;
+      const runnerNightBackAvg = runnerNightBackTotal / result.length;
+      const rescuepumpDayDriveAvg = rescuepumpDayDriveTotal / result.length;
+      const rescuepumpDayBackAvg = rescuepumpDayBackTotal / result.length;
+      const rescuepumpNightDriveAvg = rescuepumpNightDriveTotal / result.length;
+      const rescuepumpNightBackAvg = rescuepumpNightBackTotal / result.length;
+      const salvageDayDriveAvg = salvageDayDriveTotal / result.length;
+      const salvageDayBackAvg = salvageDayBackTotal / result.length;
+      const salvageNightDriveAvg = salvageNightDriveTotal / result.length;
+      const salvageNightBackAvg = salvageNightBackTotal / result.length;
+      const brontoDayDriveAvg = brontoDayDriveTotal / result.length;
+      const brontoDayBackAvg = brontoDayBackTotal / result.length;
+      const brontoNightDriveAvg = brontoNightDriveTotal / result.length;
+      const brontoNightBackAvg = brontoNightBackTotal / result.length;
 
       const averages = {
-        flyer: flyerAvg,
-        runner: runnerAvg,
-        rescuepump: rescuepumpAvg,
-        salvage: salvageAvg,
-        bronto: brontoAvg
+        flyer: {
+          dayDrive: flyerDayDriveAvg,
+          dayBack: flyerDayBackAvg,
+          nightDrive: flyerNightDriveAvg,
+          nightBack: flyerNightBackAvg
+        },
+        runner: {
+          dayDrive: runnerDayDriveAvg,
+          dayBack: runnerDayBackAvg,
+          nightDrive: runnerNightDriveAvg,
+          nightBack: runnerNightBackAvg
+        },
+        rescuepump: {
+          dayDrive: rescuepumpDayDriveAvg,
+          dayBack: rescuepumpDayBackAvg,
+          nightDrive: rescuepumpNightDriveAvg,
+          nightBack: rescuepumpNightBackAvg
+        },
+        salvage: {
+          dayDrive: salvageDayDriveAvg,
+          dayBack: salvageDayBackAvg,
+          nightDrive: salvageNightDriveAvg,
+          nightBack: salvageNightBackAvg
+        },
+        bronto: {
+          dayDrive: brontoDayDriveAvg,
+          dayBack: brontoDayBackAvg,
+          nightDrive: brontoNightDriveAvg,
+          nightBack: brontoNightBackAvg
+        }
       };
       return {
         firefighters: result,

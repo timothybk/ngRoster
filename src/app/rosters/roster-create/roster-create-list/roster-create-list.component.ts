@@ -15,6 +15,8 @@ import * as FirefighterActions from '../../../firefighters/store/firefighters.ac
 })
 export class RosterCreateListComponent implements OnInit {
   rostersState: Observable<fromFirefighters.State>;
+  dayMode: boolean;
+  driverMode: boolean;
 
   constructor(private store: Store<fromApp.AppState>) {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
@@ -22,6 +24,16 @@ export class RosterCreateListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dayMode = true;
+    this.driverMode = false;
+  }
+
+  dayModeSwitch() {
+    this.dayMode = !this.dayMode;
+  }
+
+  driverModeSwitch() {
+    this.driverMode = !this.driverMode;
   }
 
 }
