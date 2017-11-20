@@ -31,6 +31,7 @@ router.get("/pumps", (req, res) => {
 router.get("/firefighters", (req, res) => {
   FireFighter.find({})
     .populate("qualifications")
+    .sort('-rank number')
     .then(firefighters => {
       return Promise.all(
         firefighters.map(firefighter => {
