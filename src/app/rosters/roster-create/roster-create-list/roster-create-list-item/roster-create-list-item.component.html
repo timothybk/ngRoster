@@ -2,8 +2,8 @@
   <div class="pull-left">
     <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
     <div class="row">
-      <div class="col" *ngFor='let pump of firefighter.shifts'>
-        <button class="btn btn-primary btn-block"
+      <div class="col-sm" *ngFor='let pump of firefighter.shifts'>
+        <button class="btn btn-primary btn-sm btn-block"
         (click)='sendToBuilder(pump)'
         [ngClass]="getClass(pump)">
           {{pump.pump}}: {{getDisplayNumber(pump) | round}}%
