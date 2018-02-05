@@ -1,3 +1,4 @@
+import { Pump } from './../../shared/pump.model';
 import { Shifts } from './../../shared/shifts.model';
 import { Action } from '@ngrx/store';
 
@@ -6,6 +7,8 @@ export const UPDATE_N2 = 'UPDATE_N2';
 export const ROSTERS_ERROR = 'ROSTERS_ERROR';
 export const FETCH_SHIFTS = 'FETCH_SHIFTS';
 export const SET_SHIFTS = 'SET_SHIFTS';
+export const FETCH_PUMPS = 'FETCH_PUMPS';
+export const SET_PUMPS = 'SET_PUMPS';
 
 export class UpdateBuilder implements Action {
   readonly type = UPDATE_BUILDER;
@@ -35,10 +38,22 @@ export class SetShifts implements Action {
   constructor(public payload: Shifts[]) {}
 }
 
+export class FetchPumps implements Action {
+  readonly type = FETCH_PUMPS;
+}
+
+export class SetPumps implements Action {
+  readonly type = SET_PUMPS;
+
+  constructor(public payload: Pump[]) {}
+}
+
 
 export type RostersActions =
 UpdateBuilder |
 UpdateN2 |
 RostersError|
 FetchShifts|
-SetShifts;
+SetShifts |
+FetchPumps |
+SetPumps;

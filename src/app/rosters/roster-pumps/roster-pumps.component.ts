@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { Pump } from './../pump.model';
 import { Component, OnInit } from '@angular/core';
 import * as fromApp from '../../store/app.reducer';
 import * as fromRosters from '../store/rosters.reducers';

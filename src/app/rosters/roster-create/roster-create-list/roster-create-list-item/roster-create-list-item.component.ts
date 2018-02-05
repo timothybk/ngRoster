@@ -23,6 +23,8 @@ export class RosterCreateListItemComponent implements OnInit {
   @Input() driverMode: boolean;
   @Input() shifts: ShiftInstance[];
 
+  rostersState: Observable<fromRosters.State>;
+
   displayNumber: number;
 
   flyerAvgs: PumpCounts;
@@ -31,7 +33,9 @@ export class RosterCreateListItemComponent implements OnInit {
   salvageAvgs: PumpCounts;
   brontoAvgs: PumpCounts;
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>) {
+    this.rostersState = this.store.select('rosters');
+   }
 
   ngOnInit() {
     this.shifts = [];

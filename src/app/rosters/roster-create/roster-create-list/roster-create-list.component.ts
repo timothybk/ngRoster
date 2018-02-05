@@ -2,14 +2,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { Shifts } from './../../../shared/shifts.model';
 import { Observable } from 'rxjs/Rx';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import * as fromApp from '../../../store/app.reducer';
 import * as fromRosters from '../../store/rosters.reducers';
 import * as fromFirefighters from '../../../firefighters/store/firefighters.reducers';
 import * as RostersActions from '../../store/rosters.actions';
 import * as FirefighterActions from '../../../firefighters/store/firefighters.actions';
-import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+
 
 @Component({
   selector: 'app-roster-create-list',
@@ -26,6 +26,7 @@ export class RosterCreateListComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
     this.store.dispatch(new RostersActions.FetchShifts());
+    this.store.dispatch(new RostersActions.FetchPumps());
     this.firefightersState = this.store.select('firefighters');
   }
 
@@ -43,10 +44,7 @@ export class RosterCreateListComponent implements OnInit, OnDestroy {
   shifts(firefighterNumber: number) {
     for (const firefighter of this.firefightersShifts) {
       if (firefighter.firefighter === firefighterNumber) {
-        console.log(firefighter.firefighter);
         return firefighter.shifts;
-      } else {
-        console.log('fuck');
       }
     }
   }

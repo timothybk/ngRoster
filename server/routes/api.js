@@ -15,18 +15,6 @@ router.get("/", (req, res) => {
   res.send("api works");
 });
 
-// get all pumps
-router.get("/pumps", (req, res) => {
-  Appliance.find()
-    .populate("qualifications")
-    .then(result => {
-      res.status(200).json(result);
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
-});
-
 // Get all firefighters
 router.get("/firefighters", (req, res) => {
   FireFighter.find({})
@@ -65,6 +53,33 @@ router.get("/shifts", (req, res) => {
       res.status(500).send(err);
     })
 })
+
+// Get all firefighters
+router.get("/pumps", (req, res) => {
+  Appliance.find({})
+    .populate("qualifications", "name")
+    .then(
+      (result) => {
+        const newPumpArray = [];
+        for(const pump of result) {
+          if (pump.qualifications.length > 0) {
+            for (let i = 0; i < pump.qualifications.length; i++) {
+              pump.qualifications[i] = pump.qualifications[i].name;
+            }
+          }
+          newPumpArray.push(pump)
+        }
+        return newPumpArray;
+      }
+    )
+    .then(result => {
+      res.status(200).json(result);
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send(err);
+    });
+});
 
 // control post actions for nightduties
 router.post("/nightduty", (req, res, next) => {

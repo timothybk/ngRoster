@@ -2,14 +2,16 @@
   <div class="pull-left">
     <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
     <div class="row">
-        <button class="btn btn-primary btn-sm btn-block">{{shifts.length}}</button>
-      <!-- <div class="col-sm" *ngFor='let pump of firefighter.shifts'>
-        <button class="btn btn-primary btn-sm btn-block"
-        (click)='sendToBuilder(pump)'
+        <!-- <button class="btn btn-primary btn-sm btn-block">{{shifts.length}}</button> -->
+      <div class="col-sm" *ngFor='let pump of (rostersState | async).pumps'>
+        <button class="btn btn-primary btn-sm btn-block">
+          {{pump.name}}
+        </button>
+        <!-- (click)='sendToBuilder(pump)'
         [ngClass]="getClass(pump)">
           {{pump.pump}}: {{getDisplayNumber(pump) | round}}%
-        </button>
-      </div> -->
+        </button> -->
+      </div>
     </div>
   </div>
 </a>

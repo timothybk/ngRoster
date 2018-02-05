@@ -1,3 +1,4 @@
+import { Pump } from './../../shared/pump.model';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
@@ -40,6 +41,19 @@ export class RostersEffects {
       .map((data: ShiftInstance[]) => {
         return {
           type: RostersActions.SET_SHIFTS,
+          payload: data
+        };
+      });
+
+    @Effect()
+    pumpsFetch = this.actions$
+      .ofType(RostersActions.FETCH_PUMPS)
+      .switchMap((action: RostersActions.FetchPumps) => {
+        return this.httpClient.get<Pump[]>('/api/pumps');
+      })
+      .map((data: Pump[]) => {
+        return {
+          type: RostersActions.SET_PUMPS,
           payload: data
         };
       });

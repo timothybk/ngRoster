@@ -1,5 +1,5 @@
+import { Pump } from './../shared/pump.model';
 import { Subject } from 'rxjs/Subject';
-import { Pump } from './pump.model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
