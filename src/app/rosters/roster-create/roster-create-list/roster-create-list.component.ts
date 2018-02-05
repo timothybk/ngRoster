@@ -14,13 +14,14 @@ import * as FirefighterActions from '../../../firefighters/store/firefighters.ac
   styleUrls: ['./roster-create-list.component.css']
 })
 export class RosterCreateListComponent implements OnInit {
-  rostersState: Observable<fromFirefighters.State>;
+  firefightersState: Observable<fromFirefighters.State>;
   dayMode: boolean;
   driverMode: boolean;
 
   constructor(private store: Store<fromApp.AppState>) {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
-    this.rostersState = this.store.select('firefighters');
+    this.store.dispatch(new RostersActions.FetchShifts);
+    this.firefightersState = this.store.select('firefighters');
   }
 
   ngOnInit() {

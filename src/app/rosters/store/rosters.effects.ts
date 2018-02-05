@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 
 import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
+import { ShiftInstance } from '../../shared/shift-instance.model';
 
 @Injectable()
 export class RostersEffects {
@@ -29,6 +30,19 @@ export class RostersEffects {
       );
       return this.httpClient.request(req);
     });
+
+    @Effect()
+    rostersFetch = this.actions$
+      .ofType(RostersActions.FETCH_SHIFTS)
+      .switchMap((action: RostersActions.FetchShifts) => {
+        return this.httpClient.get<ShiftInstance[]>('/api/shifts');
+      })
+      .map((data: ShiftInstance[]) => {
+        return {
+          type: RostersActions.SET_SHIFTS,
+          payload: data
+        };
+      });
 
   constructor(
     private actions$: Actions,

@@ -12,7 +12,7 @@
 </div>
 <div class="row">
   <div class="col-12">
-      <app-roster-create-list-item *ngFor="let firefighter of (rostersState | async).firefighters"
+      <app-roster-create-list-item *ngFor="let firefighter of (firefightersState | async).firefighters"
       [firefighter]='firefighter'
       [dayMode]='dayMode'
       [driverMode]='driverMode'

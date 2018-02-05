@@ -40,6 +40,32 @@ router.get("/firefighters", (req, res) => {
     });
 });
 
+// Get all shifts
+router.get("/shifts", (req, res) => {
+  FireFighter.find({})
+    .then(firefighters => {
+      return Promise.all(
+        firefighters.map(firefighter => {
+          return ShiftInstance.find({firefighter : firefighter._id})
+            .then(result => {
+              return {
+                ff: firefighter.number,
+                shifts: result
+              }
+            })
+        })
+      )
+    })
+    .then(result => {
+      console.log('yay')
+      res.status(200).json(result);
+    })
+    .catch(err => {
+      console.log('fuck')
+      res.status(500).send(err);
+    })
+})
+
 // control post actions for nightduties
 router.post("/nightduty", (req, res, next) => {
   console.log("received");

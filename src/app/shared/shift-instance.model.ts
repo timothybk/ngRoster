@@ -1,6 +1,8 @@
-import { PumpCounts } from './pump-counts.model';
 
 export interface ShiftInstance {
+  date: Date;
+  firefighter: string;
   pump: string;
-  counts: PumpCounts;
+  shift: String;
+  md: Boolean;
 }
