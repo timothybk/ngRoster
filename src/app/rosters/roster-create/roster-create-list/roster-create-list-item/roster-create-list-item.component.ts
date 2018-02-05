@@ -1,3 +1,4 @@
+import { Shifts } from './../../../../shared/shifts.model';
 import { ShiftBuilder } from './../../../../shared/shift-builder.model';
 import { PumpCounts } from './../../../../shared/pump-counts.model';
 import { ShiftInstance } from './../../../../shared/shift-instance.model';
@@ -9,6 +10,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import * as fromApp from './../../../../store/app.reducer';
 import * as RostersActions from './../../../store/rosters.actions';
 import * as fromFirefighters from './../../../../firefighters/store/firefighters.reducers';
+import * as fromRosters from './../../../store/rosters.reducers';
 
 @Component({
   selector: 'app-roster-create-list-item',
@@ -19,6 +21,7 @@ export class RosterCreateListItemComponent implements OnInit {
   @Input() firefighter: Firefighter;
   @Input() dayMode: boolean;
   @Input() driverMode: boolean;
+  @Input() shifts: ShiftInstance[];
 
   displayNumber: number;
 
@@ -28,10 +31,11 @@ export class RosterCreateListItemComponent implements OnInit {
   salvageAvgs: PumpCounts;
   brontoAvgs: PumpCounts;
 
-  constructor(private store: Store<fromApp.AppState>) {
-  }
+  constructor(private store: Store<fromApp.AppState>) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.shifts = [];
+  }
 
   // getDisplayNumber(pump: ShiftInstance) {
   //   if (this.dayMode) {

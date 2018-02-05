@@ -49,7 +49,7 @@ router.get("/shifts", (req, res) => {
           return ShiftInstance.find({firefighter : firefighter._id})
             .then(result => {
               return {
-                ff: firefighter.number,
+                firefighter: firefighter.number,
                 shifts: result
               }
             })
