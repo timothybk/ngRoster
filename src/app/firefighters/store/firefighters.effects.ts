@@ -1,12 +1,11 @@
-import { FfApiResponse } from './../../shared/ff-api-response.model';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
+import { Store } from "@ngrx/store";
 import {
   AngularFirestore,
   AngularFirestoreCollection
-} from 'angularfire2/firestore';
-import { Injectable } from '@angular/core';
+} from "angularfire2/firestore";
+import { Injectable } from "@angular/core";
 import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Effect, Actions } from '@ngrx/effects';
@@ -30,20 +29,13 @@ export class FirefighterEffects {
   firefightersFetch = this.actions$
     .ofType(firefighterActions.FETCH_FIREFIGHTERS)
     .switchMap((action: firefighterActions.FetchFirefighters) => {
-      return this.httpClient.get<FfApiResponse>('/api/firefighters');
+      return this.httpClient.get<Firefighter>('/api/firefighters');
     })
-    .mergeMap(
-      (data: FfApiResponse) => {
-      return [
-        {
-          type: firefighterActions.SET_FIREFIGHTERS,
-          payload: data.firefighters
-        },
-        {
-          type: firefighterActions.STORE_AVERAGES,
-          payload: data.averages
-        }
-      ];
+    .map((data: Firefighter) => {
+      return {
+        type: firefighterActions.SET_FIREFIGHTERS,
+        payload: data
+      };
     });
 
   @Effect({ dispatch: false })
