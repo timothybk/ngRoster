@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
 router.get("/firefighters", (req, res) => {
   FireFighter.find({})
     .populate("qualifications")
-    .sort('-rank number')
+    .sort("-rank number")
     .then(result => {
       res.status(200).json(result);
     })
@@ -30,53 +30,79 @@ router.get("/firefighters", (req, res) => {
 
 // Get all shifts
 router.get("/shifts", (req, res) => {
-  FireFighter.find({})
-    .then(firefighters => {
-      return Promise.all(
-        firefighters.map(firefighter => {
-          return ShiftInstance.find({firefighter : firefighter._id})
-            .then(result => {
-              return {
-                firefighter: firefighter.number,
-                shifts: result
-              }
-            })
-        })
-      )
+  promiseA = Appliance.find({}, "name").then(result => {
+    return result;
+  });
+
+  promiseB = FireFighter.find({}).then(firefighters => {
+    return Promise.all(
+      firefighters.map(firefighter => {
+        return ShiftInstance.find({ firefighter: firefighter._id })
+        .populate('pump')
+        .then(result => {
+            return {
+              firefighter: firefighter.number,
+              shifts: result
+            };
+          });
+      })
+    );
+  });
+
+  Promise.all([promiseA, promiseB])
+    .then(([appliances, firefighterShifts]) => {
+      const formattedTotal = [];
+      for (const firefighter of firefighterShifts) {
+        const formattedResult = {
+          firefighter: firefighter.firefighter,
+          allShifts: []
+        }
+        for (const pump of appliances) {
+          const formattedResultShifts = {
+            pump: pump.name,
+            shifts: []
+          };
+          for (const shiftInstance of firefighter.shifts) {
+            if (pump.id === shiftInstance.pump.id) {
+              formattedResultShifts.shifts.push(shiftInstance);
+            }
+          }
+          formattedResult.allShifts.push(formattedResultShifts);
+        }
+        formattedTotal.push(formattedResult);
+      }
+      return formattedTotal;
     })
     .then(result => {
-      console.log('yay')
       res.status(200).json(result);
     })
     .catch(err => {
-      console.log('fuck')
+      console.log("fuck");
       res.status(500).send(err);
-    })
-})
+    });
+});
 
 // Get all firefighters
 router.get("/pumps", (req, res) => {
   Appliance.find({})
     .populate("qualifications", "name")
-    .then(
-      (result) => {
-        const newPumpArray = [];
-        for(const pump of result) {
-          if (pump.qualifications.length > 0) {
-            for (let i = 0; i < pump.qualifications.length; i++) {
-              pump.qualifications[i] = pump.qualifications[i].name;
-            }
+    .then(result => {
+      const newPumpArray = [];
+      for (const pump of result) {
+        if (pump.qualifications.length > 0) {
+          for (let i = 0; i < pump.qualifications.length; i++) {
+            pump.qualifications[i] = pump.qualifications[i].name;
           }
-          newPumpArray.push(pump)
         }
-        return newPumpArray;
+        newPumpArray.push(pump);
       }
-    )
+      return newPumpArray;
+    })
     .then(result => {
       res.status(200).json(result);
     })
     .catch(err => {
-      console.log(err)
+      console.log(err);
       res.status(500).send(err);
     });
 });
@@ -86,28 +112,20 @@ router.post("/nightduty", (req, res, next) => {
   console.log("received");
   req.checkBody("firefighter", "Firefighter must not be empty").notEmpty();
   req.checkBody("date", "Invalid date").notEmpty();
-  req.checkBody("type", "type must not be empty").notEmpty();
 
   req.sanitize("firefighter").escape();
   req.sanitize("date").toDate();
-  req.sanitize("type").escape();
 
   req.sanitize("firefighter").trim();
-  req.sanitize("type").trim();
 
-  const nightduty = new Nightduty({
-    firefighter: req.body.firefighter,
-    date: req.body.date,
-    type: req.body.type
-  });
+  const n2FF = { name: req.body.firefighter };
+  const n2Date =  { n2: req.body.date };
 
   const errors = req.validationErrors();
   if (errors) {
     res.status(500).send(errors);
   } else {
-    nightduty.save().then(() => {
-      res.status(200);
-    });
+    FireFighter.findOneAndUpdate(n2FF, n2Date, () => res.status(200));
   }
 });
 

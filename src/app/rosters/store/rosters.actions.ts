@@ -19,7 +19,7 @@ export class UpdateBuilder implements Action {
 export class UpdateN2 implements Action {
   readonly type = UPDATE_N2;
 
-  constructor(public payload: {firefighter: string, type: string, date: Date}) {}
+  constructor(public payload: {firefighter: string, date: Date}) {}
 }
 
 export class RostersError implements Action {

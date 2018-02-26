@@ -30,11 +30,15 @@ export class RosterN2ItemComponent implements OnInit {
     this.model = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
   }
 
-  onSubmit(type: string, f: NgForm) {
-    const id = this.firefighter._id;
+  trimDate(date: Date) {
+    return date.toString().slice(0, 10);
+  }
+
+  onSubmit(f: NgForm) {
+    const id = this.firefighter.name;
     const formDate = f.value.datePick;
     const date = this.ngbDateParserFormatter.format(formDate);
 
-    this.store.dispatch(new RosterActions.UpdateN2( {firefighter: id, date: new Date(date), type: type} ));
+    this.store.dispatch(new RosterActions.UpdateN2( {firefighter: id, date: new Date(date)} ));
   }
 }

@@ -5,12 +5,8 @@
         <!-- <button class="btn btn-primary btn-sm btn-block">{{shifts.length}}</button> -->
       <div class="col-sm" *ngFor='let pump of (rostersState | async).pumps'>
         <button class="btn btn-primary btn-sm btn-block">
-          {{pump.name}}
+          {{pump.name}} {{getDisplayNumber(pump.name)}}
         </button>
-        <!-- (click)='sendToBuilder(pump)'
-        [ngClass]="getClass(pump)">
-          {{pump.pump}}: {{getDisplayNumber(pump) | round}}%
-        </button> -->
       </div>
     </div>
   </div>

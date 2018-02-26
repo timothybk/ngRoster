@@ -44,7 +44,7 @@ export class RosterCreateListComponent implements OnInit, OnDestroy {
   shifts(firefighterNumber: number) {
     for (const firefighter of this.firefightersShifts) {
       if (firefighter.firefighter === firefighterNumber) {
-        return firefighter.shifts;
+        return firefighter.allShifts;
       }
     }
   }

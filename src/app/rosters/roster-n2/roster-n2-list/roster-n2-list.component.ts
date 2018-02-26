@@ -1,3 +1,4 @@
+import { Firefighter } from './../../../shared/firefighter.model';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
@@ -14,17 +15,24 @@ import * as RostersActions from '../../store/rosters.actions';
   styleUrls: ['./roster-n2-list.component.css']
 })
 export class RosterN2ListComponent implements OnInit {
-
-  rostersState: Observable<fromFirefighters.State>;
-  sotedByN2: Observable<any>;
+  sortedList: Firefighter[];
 
   constructor(private store: Store<fromApp.AppState>) {
     this.store.dispatch(new FirefighterActions.FetchFirefighters());
-    this.rostersState = this.store.select('firefighters');
+
+    this.store
+      .select('firefighters')
+      .subscribe((data: fromFirefighters.State) => {
+        const unsortedArray: Firefighter[] = data.firefighters;
+        this.sortedList = unsortedArray.sort(function(a, b) {
+          const aInt = new Date(a.n2).getTime();
+          const bInt = new Date(b.n2).getTime();
+
+          console.log(aInt, bInt);
+          return aInt - bInt;
+        });
+      });
   }
 
-  ngOnInit() {
-
-  }
-
+  ngOnInit() {}
 }

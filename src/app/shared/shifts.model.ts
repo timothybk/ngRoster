@@ -1,6 +1,6 @@
-import { ShiftInstance } from './shift-instance.model';
+import { AllshiftArray } from './allshift-array.model';
 
 export interface Shifts {
   firefighter: number;
-  shifts: ShiftInstance[];
+  allShifts: AllshiftArray[];
 }

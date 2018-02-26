@@ -6,7 +6,8 @@ var FireFighterSchema = Schema({
     number: Number,
     rank: String,
     name: String,
-    qualifications: [{type: Schema.ObjectId, ref: 'Qualification'}]
+    qualifications: [{type: Schema.ObjectId, ref: 'Qualification'}],
+    n2: Date
 });
 
 //virtual for ff's full title

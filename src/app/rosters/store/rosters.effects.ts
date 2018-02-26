@@ -1,3 +1,4 @@
+import { Shifts } from './../../shared/shifts.model';
 import { Pump } from './../../shared/pump.model';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
@@ -36,9 +37,10 @@ export class RostersEffects {
     rostersFetch = this.actions$
       .ofType(RostersActions.FETCH_SHIFTS)
       .switchMap((action: RostersActions.FetchShifts) => {
-        return this.httpClient.get<ShiftInstance[]>('/api/shifts');
+        return this.httpClient.get<Shifts[]>('/api/shifts');
       })
-      .map((data: ShiftInstance[]) => {
+      .map((data: Shifts[]) => {
+        console.log(data)
         return {
           type: RostersActions.SET_SHIFTS,
           payload: data

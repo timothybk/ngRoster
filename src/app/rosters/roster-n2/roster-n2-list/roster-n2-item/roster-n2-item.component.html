@@ -1,11 +1,7 @@
 <div class="row justify-content-between">
   <div class="col-auto mr-auto">
-    <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
-    <ul class="list-group-item-text">
-      <li *ngFor='let duty of firefighter.nightduties; let i = index'>
-        {{duty.date}}
-      </li>
-    </ul>
+    <h4> {{firefighter.name}} </h4>
+    <h1> {{trimDate(firefighter.n2)}} </h1>
   </div>
   <div class="col-auto">
     <div class="row">
@@ -19,11 +15,11 @@
           <ngb-datepicker #dp name='datePick' [(ngModel)]='model' (navigate)="date = $event.next" required></ngb-datepicker>
           <div class="row">
             <div class="col-auto mr-auto">
-              <button class="btn btn-primary" (click)='onSubmit("N2", f)'>Roster N2</button>
+              <button class="btn btn-primary" (click)='onSubmit(f)'>Roster N2</button>
             </div>
-            <div class="col-auto">
+            <!-- <div class="col-auto">
               <button class="btn btn-warning" (click)='onSubmit("PN2", f)'>Penalty N2</button>
-            </div>
+            </div> -->
           </div>
         </form>
       </div>
