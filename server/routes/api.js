@@ -39,11 +39,17 @@ router.post("/firefighter", (req, res, next) => {
   req.sanitize("name").escape();
   req.sanitize("name").trim();
 
+  const qualArray = [];
+
+  for (const qual in req.body.qualifications) {
+    qualArray.push(qual.name);
+  }
+
   const newFirefighter = new FireFighter ({
     number: req.body.number,
     rank: req.body.rank,
     name: req.body.name,
-    qualifications: req.body.qualifications,
+    qualifications: qualArray,
     n2: req.body.n2
   });
 
