@@ -1,11 +1,11 @@
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
-import { Store } from "@ngrx/store";
+import { HttpClient, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import {
   AngularFirestore,
   AngularFirestoreCollection
-} from "angularfire2/firestore";
-import { Injectable } from "@angular/core";
+} from 'angularfire2/firestore';
+import { Injectable } from '@angular/core';
 import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Effect, Actions } from '@ngrx/effects';
@@ -35,6 +35,24 @@ export class FirefighterEffects {
       return {
         type: firefighterActions.SET_FIREFIGHTERS,
         payload: data
+      };
+    });
+
+  @Effect()
+  firefightersDelete = this.actions$
+    .ofType(firefighterActions.DELETE_FIREFIGHTER)
+    .map((action: firefighterActions.DeleteFirefighter) => {
+      return action.payload;
+    })
+    .switchMap(data => {
+      const req = new HttpRequest('POST', '/api/deletefirefighter', data, {
+        reportProgress: true
+      });
+      return this.httpClient.request(req);
+    })
+    .map(() => {
+      return {
+        type: firefighterActions.FETCH_FIREFIGHTERS
       };
     });
 

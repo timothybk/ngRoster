@@ -41,7 +41,7 @@ export class FirefighterDetailComponent implements OnInit {
   }
 
   onDeleteFirefighter() {
-    this.store.dispatch(new FirefighterActions.DeleteFirefighter(this.id));
+    this.store.dispatch(new FirefighterActions.DeleteFirefighter(this.firefighter.number));
     this.router.navigate(['firefighters']);
   }
 

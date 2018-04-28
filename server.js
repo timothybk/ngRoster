@@ -11,6 +11,10 @@ const api = require('./server/routes/api');
 
 const app = express();
 // mongoose set up
+//localhost uri
+// const mongodbUri = 'mongodb://localhost/ngRoster'
+
+//mlab uri
 const mongodbUri = 'mongodb://tim:fred@ds133281.mlab.com:33281/station_training_program'
 mongoose.Promise = global.Promise;
 mongoose.connect(mongodbUri);

@@ -129,6 +129,25 @@ router.post("/nightduty", (req, res, next) => {
   }
 });
 
+// delete firefighter post
+router.post("/deletefirefighter", (req, res, next) => {
+  console.log('begin delete');
+  req.checkBody("data", "number must not be empty").notEmpty();
+
+  req.sanitize("data").escape();
+  req.sanitize("data").trim();
+
+  const errors = req.validationErrors();
+
+  if (errors) {
+    console.log(errors)
+    res.status(500).send(errors);
+  } else {
+  FireFighter.findOneAndRemove({number: req.body.data}, () => res.status(200));
+  }
+
+})
+
 // find shifts n2
 // .then(firefighters => {
 //   return Promise.all(
