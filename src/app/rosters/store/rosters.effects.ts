@@ -40,7 +40,7 @@ export class RostersEffects {
         return this.httpClient.get<Shifts[]>('/api/shifts');
       })
       .map((data: Shifts[]) => {
-        console.log(data)
+        console.log(data);
         return {
           type: RostersActions.SET_SHIFTS,
           payload: data

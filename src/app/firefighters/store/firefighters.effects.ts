@@ -62,11 +62,16 @@ export class FirefighterEffects {
     .map((action: firefighterActions.StoreFirefighter) => {
       return action.payload;
     })
-    .map(firefighter => {
-      const firefighterCollection = this.afs.collection<Firefighter>(
-        'firefighters'
+    .switchMap(data => {
+      const req = new HttpRequest(
+        'POST',
+        '/api/firefighter',
+        data,
+        {
+          reportProgress: true
+        }
       );
-      firefighterCollection.add(firefighter);
+      return this.httpClient.request(req);
     });
 
   constructor(

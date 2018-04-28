@@ -28,6 +28,41 @@ router.get("/firefighters", (req, res) => {
     });
 });
 
+// Add new firefighter
+router.post("/firefighter", (req, res, next) => {
+  console.log("received");
+  req.checkBody("rank", "rank must not be empty").notEmpty();
+  req.checkBody("name", "name must not be empty").notEmpty();
+
+  req.sanitize("rank").escape();
+  req.sanitize("rank").trim();
+  req.sanitize("name").escape();
+  req.sanitize("name").trim();
+
+  const newFirefighter = new FireFighter ({
+    number: req.body.number,
+    rank: req.body.rank,
+    name: req.body.name,
+    qualifications: req.body.qualifications,
+    n2: req.body.n2
+  });
+
+  const errors = req.validationErrors();
+  if (errors) {
+    res.status(500).send(errors);
+  } else {
+    newFirefighter.save()
+      .then(firefighter => {
+        console.log(firefighter);
+        res.status(200).send(firefighter);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send(err);
+      })
+  }
+});
+
 // Get all shifts
 router.get("/shifts", (req, res) => {
   promiseA = Appliance.find({}, "name").then(result => {
