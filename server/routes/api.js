@@ -18,38 +18,32 @@ router.get("/", (req, res) => {
 // Get all firefighters
 router.get("/firefighters", (req, res) => {
   FireFighter.find({})
-    .populate("qualifications")
     .sort("-rank number")
     .then(result => {
       res.status(200).json(result);
     })
     .catch(err => {
       res.status(500).send(err);
+      console.log(err)
     });
 });
 
 // Add new firefighter
 router.post("/firefighter", (req, res, next) => {
-  console.log("received");
-  req.checkBody("rank", "rank must not be empty").notEmpty();
-  req.checkBody("name", "name must not be empty").notEmpty();
 
-  req.sanitize("rank").escape();
-  req.sanitize("rank").trim();
-  req.sanitize("name").escape();
-  req.sanitize("name").trim();
+    req.check('rank', 'Rank must not be empty.').notEmpty();
+    req.check('name', 'Name must not be empty.').notEmpty();
 
-  const qualArray = [];
-
-  for (const qual in req.body.qualifications) {
-    qualArray.push(qual.name);
-  }
+    req.sanitize('rank').escape();
+    req.sanitize('name').escape();
+    req.sanitize('rank').trim();
+    req.sanitize('name').trim();
 
   const newFirefighter = new FireFighter ({
     number: req.body.number,
     rank: req.body.rank,
     name: req.body.name,
-    qualifications: qualArray,
+    qualifications: req.body.qualifications,
     n2: req.body.n2
   });
 

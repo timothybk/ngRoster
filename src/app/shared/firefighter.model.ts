@@ -5,6 +5,6 @@ export interface Firefighter {
   number: number;
   rank: string;
   name: string;
-  qualifications?: Qualification[];
+  qualifications?: string[];
   n2: Date;
 }

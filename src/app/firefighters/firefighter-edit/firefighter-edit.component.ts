@@ -58,7 +58,7 @@ export class FirefighterEditComponent implements OnInit {
           ffRank = firefighter.rank;
           ffName = firefighter.name;
           for (const qual of firefighter.qualifications) {
-            switch (qual.name) {
+            switch (qual) {
               case 'md':
                 ffMd = true;
                 break;
@@ -91,14 +91,14 @@ export class FirefighterEditComponent implements OnInit {
     if (this.editMode) {
       this.store.dispatch(new FirefighterActions.UpdateDbFirefighter({ key: this.key, firefighter: this.firefighterForm.value }));
     } else {
-      const quals: Qualification[] = [];
+      const quals: string[] = [];
       const formQuals: any[] = [
         { value: this.firefighterForm.value.md, name: 'md' },
         { value: this.firefighterForm.value.rescue, name: 'rescue' },
         { value: this.firefighterForm.value.aerial, name: 'aerial' }];
       for (const qual of formQuals) {
         if (qual.value) {
-          quals.push({name: qual.name});
+          quals.push(qual.name);
         }
       }
       const intialN2: Nightduty = {
