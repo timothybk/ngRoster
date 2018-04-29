@@ -63,6 +63,25 @@ router.post("/firefighter", (req, res, next) => {
   }
 });
 
+// delete firefighter post
+router.post("/deletefirefighter", (req, res, next) => {
+  console.log('begin delete');
+  req.check("name", "name must not be empty").exists();
+
+  req.sanitize("name").escape();
+  req.sanitize("name").trim();
+
+  const errors = req.validationErrors();
+
+  if (errors) {
+    console.log(errors)
+    res.status(500).send(errors);
+  } else {
+  FireFighter.findOneAndRemove({name: req.body.name}, () => res.status(200));
+  }
+
+})
+
 // Get all shifts
 router.get("/shifts", (req, res) => {
   promiseA = Appliance.find({}, "name").then(result => {
@@ -117,7 +136,7 @@ router.get("/shifts", (req, res) => {
     });
 });
 
-// Get all firefighters
+// Get all pumps
 router.get("/pumps", (req, res) => {
   Appliance.find({})
     .populate("qualifications", "name")
@@ -163,25 +182,6 @@ router.post("/nightduty", (req, res, next) => {
     FireFighter.findOneAndUpdate(n2FF, n2Date, () => res.status(200));
   }
 });
-
-// delete firefighter post
-router.post("/deletefirefighter", (req, res, next) => {
-  console.log('begin delete');
-  req.checkBody("data", "number must not be empty").notEmpty();
-
-  req.sanitize("data").escape();
-  req.sanitize("data").trim();
-
-  const errors = req.validationErrors();
-
-  if (errors) {
-    console.log(errors)
-    res.status(500).send(errors);
-  } else {
-  FireFighter.findOneAndRemove({number: req.body.data}, () => res.status(200));
-  }
-
-})
 
 // find shifts n2
 // .then(firefighters => {

@@ -40,10 +40,15 @@ export class FirefighterEffects {
     .map((action: firefighterActions.DeleteFirefighter) => {
       return action.payload;
     })
-    .switchMap(data => {
-      const req = new HttpRequest('POST', '/api/deletefirefighter', data, {
+    .switchMap(ffNumber => {
+      const req = new HttpRequest(
+        'POST',
+        '/api/deletefirefighter',
+        ffNumber,
+        {
         reportProgress: true
-      });
+        }
+      );
       return this.httpClient.request(req);
     })
     .map(() => {

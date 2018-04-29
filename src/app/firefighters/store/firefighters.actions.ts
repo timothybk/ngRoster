@@ -32,7 +32,7 @@ export class UpdateFirefighter implements Action {
 export class DeleteFirefighter implements Action {
   readonly type = DELETE_FIREFIGHTER;
 
-  constructor(public payload: number) {}
+  constructor(public payload: {name: string}) {}
 }
 
 export class StoreFirefighter implements Action {
