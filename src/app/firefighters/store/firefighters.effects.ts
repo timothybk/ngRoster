@@ -52,7 +52,7 @@ export class FirefighterEffects {
       };
     });
 
-  @Effect({ dispatch: false })
+  @Effect()
   firefighterStore = this.actions$
     .ofType(firefighterActions.STORE_FIREFIGHTER)
     .map((action: firefighterActions.StoreFirefighter) => {
@@ -68,6 +68,11 @@ export class FirefighterEffects {
         }
       );
       return this.httpClient.request(req);
+    })
+    .map(() => {
+      return {
+        type: firefighterActions.FETCH_FIREFIGHTERS
+      };
     });
 
   constructor(
