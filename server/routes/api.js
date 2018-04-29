@@ -214,7 +214,21 @@ router.post("/nightduty", (req, res, next) => {
   if (errors) {
     res.status(500).send(errors);
   } else {
-    FireFighter.findOneAndUpdate(n2FF, n2Date, () => res.status(200));
+
+    var promise = FireFighter.findByIdAndUpdate(req.body.firefighter,
+      n2Date,
+      {
+        new: true
+      })
+      .then(firefighter => {
+        res.status(200).send(firefighter);
+        console.log(firefighter);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send(err);
+      })
+
   }
 });
 

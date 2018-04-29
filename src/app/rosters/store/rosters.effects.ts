@@ -11,11 +11,12 @@ import 'rxjs/add/operator/map';
 
 import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
+import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import { ShiftInstance } from '../../shared/shift-instance.model';
 
 @Injectable()
 export class RostersEffects {
-  @Effect({ dispatch: false })
+  @Effect()
   updateN2 = this.actions$
     .ofType(RostersActions.UPDATE_N2)
     .map((action: RostersActions.UpdateN2) => {
@@ -31,6 +32,11 @@ export class RostersEffects {
         }
       );
       return this.httpClient.request(req);
+    })
+    .map(() => {
+      return {
+        type: FirefighterActions.FETCH_FIREFIGHTERS
+      };
     });
 
     @Effect()

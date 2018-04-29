@@ -23,12 +23,11 @@ export class RosterN2ListComponent implements OnInit {
     this.store
       .select('firefighters')
       .subscribe((data: fromFirefighters.State) => {
+        // order firefighters by n2 timestamp
         const unsortedArray: Firefighter[] = data.firefighters;
         this.sortedList = unsortedArray.sort(function(a, b) {
           const aInt = new Date(a.n2).getTime();
           const bInt = new Date(b.n2).getTime();
-
-          console.log(aInt, bInt);
           return aInt - bInt;
         });
       });

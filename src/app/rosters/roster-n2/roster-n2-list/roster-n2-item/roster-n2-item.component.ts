@@ -35,7 +35,7 @@ export class RosterN2ItemComponent implements OnInit {
   }
 
   onSubmit(f: NgForm) {
-    const id = this.firefighter.name;
+    const id = this.firefighter._id;
     const formDate = f.value.datePick;
     const date = this.ngbDateParserFormatter.format(formDate);
 
