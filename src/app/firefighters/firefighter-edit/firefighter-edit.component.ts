@@ -24,20 +24,18 @@ export class FirefighterEditComponent implements OnInit {
   key: string;
   firefighter: Firefighter;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private store: Store<fromApp.AppState>
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.route.params
-      .subscribe(
-      (params: Params) => {
-        this.id = +params['id'];
-        this.editMode = params['id'] != null;
-        this.initForm();
-      }
-      );
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params['id'];
+      this.editMode = params['id'] != null;
+      this.initForm();
+    });
   }
 
   private initForm() {
@@ -49,10 +47,10 @@ export class FirefighterEditComponent implements OnInit {
     let ffAerial = false;
 
     if (this.editMode) {
-      this.store.select('firefighters')
+      this.store
+        .select('firefighters')
         .take(1)
-        .subscribe(
-        (firefightersState: fromFirefighter.State) => {
+        .subscribe((firefightersState: fromFirefighter.State) => {
           this.firefighter = firefightersState.firefighters[this.id];
           this.key = this.firefighter._id;
           ffNumber = this.firefighter.number;
@@ -73,33 +71,32 @@ export class FirefighterEditComponent implements OnInit {
                 break;
             }
           }
-        }
-        );
-
+        });
     }
 
     this.firefighterForm = new FormGroup({
-      'number': new FormControl(ffNumber, Validators.required),
-      'rank': new FormControl(ffRank, Validators.required),
-      'name': new FormControl(ffName, Validators.required),
-      'md': new FormControl(ffMd, Validators.required),
-      'rescue': new FormControl(ffRescue, Validators.required),
-      'aerial': new FormControl(ffAerial, Validators.required)
+      number: new FormControl(ffNumber, Validators.required),
+      rank: new FormControl(ffRank, Validators.required),
+      name: new FormControl(ffName, Validators.required),
+      md: new FormControl(ffMd, Validators.required),
+      rescue: new FormControl(ffRescue, Validators.required),
+      aerial: new FormControl(ffAerial, Validators.required)
     });
   }
 
   onSubmit() {
-    if (this.editMode) {
-      const quals: string[] = [];
-      const formQuals: any[] = [
-        { value: this.firefighterForm.value.md, name: 'md' },
-        { value: this.firefighterForm.value.rescue, name: 'rescue' },
-        { value: this.firefighterForm.value.aerial, name: 'aerial' }];
-      for (const qual of formQuals) {
-        if (qual.value) {
-          quals.push(qual.name);
-        }
+    const quals: string[] = [];
+    const formQuals: any[] = [
+      { value: this.firefighterForm.value.md, name: 'md' },
+      { value: this.firefighterForm.value.rescue, name: 'rescue' },
+      { value: this.firefighterForm.value.aerial, name: 'aerial' }
+    ];
+    for (const qual of formQuals) {
+      if (qual.value) {
+        quals.push(qual.name);
       }
+    }
+    if (this.editMode) {
       const toDispatchFirefighter: Firefighter = {
         ...this.firefighter,
         number: this.firefighterForm.value.number,
@@ -110,21 +107,16 @@ export class FirefighterEditComponent implements OnInit {
 
       console.log(toDispatchFirefighter);
       // does not return to ff screen. if ff list order changes screen remains on incorrect ff
-      this.store.dispatch(new FirefighterActions.UpdateDbFirefighter({ key: this.key, firefighter: toDispatchFirefighter }));
+      this.store.dispatch(
+        new FirefighterActions.UpdateDbFirefighter({
+          key: this.key,
+          firefighter: toDispatchFirefighter
+        })
+      );
     } else {
-      const quals: string[] = [];
-      const formQuals: any[] = [
-        { value: this.firefighterForm.value.md, name: 'md' },
-        { value: this.firefighterForm.value.rescue, name: 'rescue' },
-        { value: this.firefighterForm.value.aerial, name: 'aerial' }];
-      for (const qual of formQuals) {
-        if (qual.value) {
-          quals.push(qual.name);
-        }
-      }
       const intialN2: Nightduty = {
-          date: new Date(),
-          type: 'n2'
+        date: new Date(),
+        type: 'n2'
       };
       const dispatchedFirefighter = {
         number: this.firefighterForm.value.number,
@@ -134,7 +126,9 @@ export class FirefighterEditComponent implements OnInit {
         qualifications: quals,
         shifts: []
       };
-      this.store.dispatch(new FirefighterActions.StoreFirefighter(dispatchedFirefighter));
+      this.store.dispatch(
+        new FirefighterActions.StoreFirefighter(dispatchedFirefighter)
+      );
     }
     this.onCancel();
   }
