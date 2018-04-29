@@ -63,6 +63,41 @@ router.post("/firefighter", (req, res, next) => {
   }
 });
 
+// update firefighter
+router.post("/updatefirefighter", (req, res, next) => {
+
+  req.check('firefighter.rank', 'Rank must not be empty.').notEmpty();
+  req.check('firefighter.name', 'Name must not be empty.').notEmpty();
+
+  req.sanitize('firefighter.rank').escape();
+  req.sanitize('firefighter.name').escape();
+  req.sanitize('firefighter.rank').trim();
+  req.sanitize('firefighter.name').trim();
+
+const errors = req.validationErrors();
+if (errors) {
+  console.log(errors);
+  res.status(500).send(errors);
+} else {
+  var promise = FireFighter.findByIdAndUpdate(req.body.key, {
+    number: req.body.firefighter.number,
+    rank: req.body.firefighter.rank,
+    name: req.body.firefighter.name,
+    qualifications: req.body.firefighter.qualifications
+  }, {new: true})
+    .exec()
+
+    promise.then(firefighter => {
+      res.status(200).send(firefighter);
+      console.log(firefighter);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send(err);
+    })
+}
+});
+
 // delete firefighter post
 router.post("/deletefirefighter", (req, res, next) => {
   console.log('begin delete');

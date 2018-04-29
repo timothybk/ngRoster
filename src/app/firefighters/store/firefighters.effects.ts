@@ -80,6 +80,29 @@ export class FirefighterEffects {
       };
     });
 
+    @Effect()
+  firefighterUpdate = this.actions$
+    .ofType(firefighterActions.UPDATEDB_FIREFIGHTER)
+    .map((action: firefighterActions.UpdateDbFirefighter) => {
+      return action.payload;
+    })
+    .switchMap(data => {
+      const req = new HttpRequest(
+        'POST',
+        '/api/updatefirefighter',
+        data,
+        {
+          reportProgress: true
+        }
+      );
+      return this.httpClient.request(req);
+    })
+    .map(() => {
+      return {
+        type: firefighterActions.FETCH_FIREFIGHTERS
+      };
+    });
+
   constructor(
     private actions$: Actions,
     private store: Store<fromApp.AppState>,

@@ -22,6 +22,7 @@ export class FirefighterEditComponent implements OnInit {
   editMode = false;
   firefighterForm: FormGroup;
   key: string;
+  firefighter: Firefighter;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -52,12 +53,12 @@ export class FirefighterEditComponent implements OnInit {
         .take(1)
         .subscribe(
         (firefightersState: fromFirefighter.State) => {
-          const firefighter = firefightersState.firefighters[this.id];
-          this.key = firefighter._id;
-          ffNumber = firefighter.number;
-          ffRank = firefighter.rank;
-          ffName = firefighter.name;
-          for (const qual of firefighter.qualifications) {
+          this.firefighter = firefightersState.firefighters[this.id];
+          this.key = this.firefighter._id;
+          ffNumber = this.firefighter.number;
+          ffRank = this.firefighter.rank;
+          ffName = this.firefighter.name;
+          for (const qual of this.firefighter.qualifications) {
             switch (qual) {
               case 'md':
                 ffMd = true;
@@ -89,7 +90,27 @@ export class FirefighterEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.store.dispatch(new FirefighterActions.UpdateDbFirefighter({ key: this.key, firefighter: this.firefighterForm.value }));
+      const quals: string[] = [];
+      const formQuals: any[] = [
+        { value: this.firefighterForm.value.md, name: 'md' },
+        { value: this.firefighterForm.value.rescue, name: 'rescue' },
+        { value: this.firefighterForm.value.aerial, name: 'aerial' }];
+      for (const qual of formQuals) {
+        if (qual.value) {
+          quals.push(qual.name);
+        }
+      }
+      const toDispatchFirefighter: Firefighter = {
+        ...this.firefighter,
+        number: this.firefighterForm.value.number,
+        rank: this.firefighterForm.value.rank,
+        name: this.firefighterForm.value.name,
+        qualifications: quals
+      };
+
+      console.log(toDispatchFirefighter);
+      // does not return to ff screen. if ff list order changes screen remains on incorrect ff
+      this.store.dispatch(new FirefighterActions.UpdateDbFirefighter({ key: this.key, firefighter: toDispatchFirefighter }));
     } else {
       const quals: string[] = [];
       const formQuals: any[] = [
