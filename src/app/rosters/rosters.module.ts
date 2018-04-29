@@ -1,4 +1,3 @@
-import { AuthGuard } from './../auth/auth-guard.service';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -46,7 +45,7 @@ import { RosterCreateBuilderComponent } from './roster-create/roster-create-buil
     RostersRoutingModule
   ],
   providers: [
-    RostersService, AuthGuard
+    RostersService
   ]
 })
 export class RostersModule {}
