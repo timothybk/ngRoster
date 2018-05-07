@@ -11,11 +11,13 @@ router.post('/register', (req, res, next) => {
   });
   user.save((err, result) => {
     if(err) {
+      console.log(err);
       return res.status(500).json({
         title: "error occured",
         error: err
       });
     }
+    console.log(result)
     res.status(201).json({
       message: 'user created',
       obj: result

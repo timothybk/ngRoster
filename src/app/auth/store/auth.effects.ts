@@ -16,7 +16,6 @@ export class AuthEffects {
   authRegister = this.actions$
     .ofType(authActions.REGISTER_USER)
     .map((action: authActions.RegisterUser) => {
-      console.log('at effect');
       return action.payload;
     })
     .switchMap(data => {
@@ -28,7 +27,6 @@ export class AuthEffects {
           reportProgress: true
         }
       );
-      console.log('sent');
       return this.httpClient.request(req);
     });
 
