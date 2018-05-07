@@ -33,7 +33,7 @@ app.use(expressValidator());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
-app.use('/api', isLoggedIn, api);
+app.use('/api', api);
 
 // Set user routes
 // app.use('/user', user);
