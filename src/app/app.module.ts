@@ -16,6 +16,8 @@ import { RostersModule } from './rosters/rosters.module';
 import { AppRoutingModule } from './app.routing';
 import { environment } from './../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AuthModule } from './auth/auth.module';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -28,9 +30,10 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     FirefightersModule,
     CoreModule,
     SharedModule,
+    AuthModule,
     NgbModule.forRoot(),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([FirefighterEffects, RostersEffects]),
+    EffectsModule.forRoot([FirefighterEffects, RostersEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 10
     }),

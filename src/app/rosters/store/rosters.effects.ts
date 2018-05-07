@@ -16,7 +16,7 @@ import { ShiftInstance } from '../../shared/shift-instance.model';
 
 @Injectable()
 export class RostersEffects {
-  @Effect()
+  @Effect({dispatch: false})
   updateN2 = this.actions$
     .ofType(RostersActions.UPDATE_N2)
     .map((action: RostersActions.UpdateN2) => {
@@ -32,11 +32,6 @@ export class RostersEffects {
         }
       );
       return this.httpClient.request(req);
-    })
-    .map(() => {
-      return {
-        type: FirefighterActions.FETCH_FIREFIGHTERS
-      };
     });
 
     @Effect()
