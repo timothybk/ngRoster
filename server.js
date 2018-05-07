@@ -27,19 +27,7 @@ mongoose.connect(mongodbUri);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(require('express-session')({
-  secret: 'Pia is the best and cutest cat in the world',
-  resave: false,
-  saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(expressValidator());
-
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -54,16 +42,6 @@ app.use('/api', isLoggedIn, api);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
-
-// logged in middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    console.log('success');
-    return next();
-  }
-  console.log('failed');
-  return next();
-}
 
 /**
  * Get port from environment and store in Express.
