@@ -6,7 +6,7 @@ export interface State {
 }
 
 const initialState: State = {
-  user: new User(null, 'GUEST')
+  user: {username: 'GUEST', password: 'password'}
 };
 
 /// Reducer function

@@ -28,6 +28,9 @@ export class AuthEffects {
         }
       );
       return this.httpClient.request(req);
+    })
+    .map((res) => {
+      console.log(res);
     });
 
   constructor(
