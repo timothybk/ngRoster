@@ -1,16 +1,27 @@
 const express = require("express"),
       router  = express.Router(),
       User    = require('../models/user');
+      bcrypt  = require('bcryptjs');
 
 // handle signup
 router.post('/register', (req, res, next) => {
-  res.send('arrived at server');
-  // User.register(new User({username: req.body.username}), req.body.password, function (err, user) {
-  //     if (err) {
-  //         console.log(err);
-  //     }
-  //     passport.authenticate('local')(req, res, function () {
-  //         console.log('success')
-  //     })
-  // })
+  const user = new User({
+    password: bcrypt.hashSync(req.body.password, 10),
+    username: req.body.username
+  });
+  user.save((err, result) => {
+    if(err) {
+      return res.status(500).json({
+        title: "error occured",
+        error: err
+      });
+    }
+    res.status(201).json({
+      message: 'user created',
+      obj: result
+    });
+
+  })
 });
+
+module.exports = router;
