@@ -9,21 +9,25 @@ router.post('/register', (req, res, next) => {
     password: bcrypt.hashSync(req.body.password, 10),
     username: req.body.username
   });
-  user.save((err, result) => {
-    if(err) {
+  user.save()
+    .then(user => {
+      console.log(user)
+      res.status(201).json({
+        message: 'user created',
+        obj: user
+    });
+    })
+    .catch(err => {
       console.log(err);
       return res.status(500).json({
         title: "error occured",
         error: err
-      });
-    }
-    console.log(result)
-    res.status(201).json({
-      message: 'user created',
-      obj: result
-    });
-
-  })
+      })
+    })
 });
+
+// router.post('/signin', (req, res, next) => {
+//   User.findOne({username: req.body.username});
+// })
 
 module.exports = router;
