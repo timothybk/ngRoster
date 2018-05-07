@@ -1,10 +1,14 @@
 // Get dependencies
-const express = require('express');
-const path = require('path');
-const http = require('http');
-const bodyParser = require('body-parser');
-const expressValidator = require('express-validator');
-const mongoose = require('mongoose');
+const express           = require('express'),
+  path                  = require('path'),
+  http                  = require('http'),
+  bodyParser            = require('body-parser'),
+  User                  = require('./server/models/user'),
+  expressValidator      = require('express-validator'),
+  mongoose              = require('mongoose'),
+  passport              = require('passport'),
+  LocalStrategy         = require('passport-local'),
+  passportLocalMongoose = require('passport-local-mongoose');
 
 // Get our API routes
 const api = require('./server/routes/api');
@@ -21,19 +25,42 @@ mongoose.connect(mongodbUri);
 
 // Parsers for POST data
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(require('express-session')({
+  secret: 'Pia is the best and cutest cat in the world',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(expressValidator());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
-app.use('/api', api);
+app.use('/api', isLoggedIn, api);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
+
+// logged in middleware
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    console.log('success');
+    return next();
+  }
+  console.log('failed');
+  return next();
+}
 
 /**
  * Get port from environment and store in Express.
