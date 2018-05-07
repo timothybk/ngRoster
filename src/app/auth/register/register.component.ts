@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from './../../store/app.reducer';
 import * as AuthActions from './../store/auth.actions';
+import { User } from '../user.model';
 
 @Component({
   selector: 'app-register',
@@ -18,15 +19,13 @@ export class RegisterComponent implements OnInit {
   }
 
   onSignup(form: NgForm) {
-    const email = form.value.email;
-    const password = form.value.password;
+    const user: User = {
+      username: form.value.email,
+      password: form.value.password
+    };
+
     this.store.dispatch(
-      new AuthActions.RegisterUser(
-        {
-          username: email,
-          password: password
-        }
-      )
+      new AuthActions.RegisterUser(user)
     );
   }
 

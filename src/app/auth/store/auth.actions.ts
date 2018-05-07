@@ -6,7 +6,7 @@ export const AUTH_ERROR             = 'AUTH_ERROR';
 
 export class RegisterUser implements Action {
   readonly type = REGISTER_USER;
-  constructor(public payload: {username: string, password: string}) {}
+  constructor(public payload: User) {}
 }
 
 export class AuthError implements Action {
