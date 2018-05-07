@@ -33,6 +33,26 @@ export class AuthEffects {
       console.log(res);
     });
 
+    @Effect()
+    authSignin = this.actions$
+      .ofType(authActions.SIGNIN)
+      .map((action: authActions.Signin) => {
+        return action.payload;
+      })
+      .switchMap(data => {
+        const req = new HttpRequest(
+          'POST',
+          '/user/signin',
+          data
+        );
+        return this.httpClient.request(req);
+      })
+      .map((data) => {
+        console.log(data);
+      });
+
+
+
   constructor(
     private actions$: Actions,
     private store: Store<fromApp.AppState>,
