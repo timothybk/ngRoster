@@ -5,13 +5,13 @@ const express           = require('express'),
   bodyParser            = require('body-parser'),
   User                  = require('./server/models/user'),
   expressValidator      = require('express-validator'),
-  mongoose              = require('mongoose'),
-  passport              = require('passport'),
-  LocalStrategy         = require('passport-local'),
-  passportLocalMongoose = require('passport-local-mongoose');
+  mongoose              = require('mongoose');
 
 // Get our API routes
 const api = require('./server/routes/api');
+
+// Get user routes
+const user = require('./server/routes/user');
 
 const app = express();
 // mongoose set up
@@ -46,6 +46,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
 app.use('/api', isLoggedIn, api);
+
+// Set user routes
+// app.use('/user', user);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
