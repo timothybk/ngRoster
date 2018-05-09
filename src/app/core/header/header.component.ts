@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 
 import * as fromApp from '../../store/app.reducer';
+import * as fromAuth from '../../auth/store/auth.reducers';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import * as RostersActions from '../../rosters/store/rosters.actions';
 
@@ -14,12 +15,14 @@ import * as RostersActions from '../../rosters/store/rosters.actions';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
+  authState: Observable<fromAuth.State>;
   navbarCollapsed = true;
 
   constructor(private router: Router,
               private store: Store<fromApp.AppState>,
-              ) {}
+              ) {
+                this.authState = this.store.select('auth');
+              }
 
   ngOnInit() {
   }

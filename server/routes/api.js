@@ -5,6 +5,7 @@ const Qualification = require("./../models/qualification");
 const Appliance = require("../models/appliance");
 const ShiftInstance = require("../models/shiftinstance");
 const Nightduty = require("./../models/night-duty");
+const jwt = require('jsonwebtoken');
 
 // // declare axios for making http requests
 // const axios = require('axios');
@@ -14,6 +15,18 @@ const Nightduty = require("./../models/night-duty");
 router.get("/", (req, res) => {
   res.send("api works");
 });
+
+router.use('/', (req, res, next) => {
+  jwt.verify(req.headers.authorization, 'Pia is the cutest!', (err, decoded) => {
+    if (err) {
+      return res.status(401).json({
+        title: 'Not logged in',
+        error: err
+      });
+    }
+    next();
+  })
+})
 
 // Get all firefighters
 router.get("/firefighters", (req, res) => {

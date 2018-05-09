@@ -48,17 +48,21 @@ export class AuthEffects {
         );
         return this.httpClient.request(req);
       })
-      .map((event => {
+      .mergeMap((event => {
         let token;
         if (event.type === HttpEventType.Response) {
           token = event.body['token'];
         }
-        return {
-          type: authActions.SET_TOKEN,
-          payload: token
-        };
-      })
-      );
+        return [
+          {
+            type: authActions.SIGNIN
+          },
+          {
+            type: authActions.SET_TOKEN,
+            payload: token
+          }
+        ];
+      }));
 
 
 

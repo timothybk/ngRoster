@@ -42,5 +42,7 @@ export class Logout implements Action {
 export type AuthActions =
 TrySignUp
 | TrySignIn
+| SignUp
+| SignIn
 | Logout
 | SetToken;

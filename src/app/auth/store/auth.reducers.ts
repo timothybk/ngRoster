@@ -10,7 +10,7 @@ export interface State {
 
 const initialState: State = {
   isAuthenticated: false,
-  token: null,
+  token: 'empty',
   user: null,
   errorMessage: null
 };
@@ -18,17 +18,22 @@ const initialState: State = {
 /// Reducer function
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
+    case AuthActions.SIGNUP:
+    case AuthActions.SIGNIN:
+      return {
+        ...state,
+        isAuthenticated: true
+        };
     case AuthActions.LOGOUT:
       return {
         ...state,
-        token: null,
+        token: 'empty',
         isAuthenticated: false
         };
     case AuthActions.SET_TOKEN:
       return {
         ...state,
-        token: action.payload,
-        isAuthenticated: true
+        token: action.payload
       };
     default:
       return {

@@ -16,13 +16,13 @@
         <a class="nav-link" [routerLink]="['/rostering']" (click)="navbarCollapsed = true">Rostering</a>
       </li>
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/register']" (click)="navbarCollapsed = true">Register</a>
+        <a class="nav-link" *ngIf="!(authState | async).isAuthenticated" [routerLink]="['/register']" (click)="navbarCollapsed = true">Register</a>
       </li>
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/signin']" (click)="navbarCollapsed = true">signin</a>
+        <a class="nav-link" *ngIf="!(authState | async).isAuthenticated" [routerLink]="['/signin']" (click)="navbarCollapsed = true">signin</a>
       </li>
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/logout']" (click)="navbarCollapsed = true">logout</a>
+        <a class="nav-link" *ngIf="(authState | async).isAuthenticated" [routerLink]="['/logout']" (click)="navbarCollapsed = true">logout</a>
       </li>
     </ul>
   </div>
