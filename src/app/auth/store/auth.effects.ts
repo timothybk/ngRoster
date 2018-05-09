@@ -16,7 +16,7 @@ export class AuthEffects {
   @Effect({dispatch: false})
   authRegister = this.actions$
     .ofType(authActions.TRY_SIGNUP)
-    .map((action: authActions.TrySignup) => {
+    .map((action: authActions.TrySignUp) => {
       return action.payload;
     })
     .switchMap(data => {

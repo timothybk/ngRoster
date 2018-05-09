@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
     };
 
     this.store.dispatch(
-      new AuthActions.TrySignup(user)
+      new AuthActions.TrySignUp(user)
     );
   }
 
