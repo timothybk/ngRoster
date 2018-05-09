@@ -3,6 +3,7 @@ import { User } from '../user.model';
 
 export const REGISTER_USER          = 'REGISTER_USER';
 export const SIGNIN                 = 'SIGNIN';
+export const SET_TOKEN              = 'SET_TOKEN';
 export const LOGOUT                 = 'LOGOUT';
 
 export class RegisterUser implements Action {
@@ -15,6 +16,11 @@ export class Signin implements Action {
   constructor(public payload: User) {}
 }
 
+export class SetToken implements Action {
+  readonly type = SET_TOKEN;
+  constructor(public payload: string) {}
+}
+
 export class Logout implements Action {
   readonly type = LOGOUT;
   constructor() {}
@@ -24,4 +30,5 @@ export class Logout implements Action {
 export type AuthActions =
 RegisterUser
 | Signin
-| Logout;
+| Logout
+| SetToken;

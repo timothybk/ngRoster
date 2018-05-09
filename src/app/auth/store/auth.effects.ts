@@ -34,7 +34,7 @@ export class AuthEffects {
       console.log(res);
     });
 
-    @Effect({dispatch: false})
+    @Effect()
     authSignin = this.actions$
       .ofType(authActions.SIGNIN)
       .map((action: authActions.Signin) => {
@@ -49,11 +49,14 @@ export class AuthEffects {
         return this.httpClient.request(req);
       })
       .map((event => {
+        let token;
         if (event.type === HttpEventType.Response) {
-          localStorage.setItem('token', event.body['token']);
-          localStorage.setItem('userId', event.body['userId']);
-          this.router.navigateByUrl('/');
+          token = event.body['token'];
         }
+        return {
+          type: authActions.SET_TOKEN,
+          payload: token
+        };
       })
       );
 

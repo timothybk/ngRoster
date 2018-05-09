@@ -4,11 +4,13 @@ import { User } from '../user.model';
 export interface State {
   isAuthenticated: boolean;
   user: User | null;
+  token: string;
   errorMessage: string | null;
 }
 
 const initialState: State = {
   isAuthenticated: false,
+  token: null,
   user: null,
   errorMessage: null
 };
@@ -17,10 +19,15 @@ const initialState: State = {
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
     case AuthActions.LOGOUT:
-      localStorage.clear();
       return {
-        ...state
+        ...state,
+        token: null
         };
+    case AuthActions.SET_TOKEN:
+      return {
+        ...state,
+        token: action.payload
+      };
     default:
       return {
         ...state
