@@ -15,8 +15,8 @@ import * as authActions from './auth.actions';
 export class AuthEffects {
   @Effect({dispatch: false})
   authRegister = this.actions$
-    .ofType(authActions.REGISTER_USER)
-    .map((action: authActions.RegisterUser) => {
+    .ofType(authActions.TRY_SIGNUP)
+    .map((action: authActions.TrySignup) => {
       return action.payload;
     })
     .switchMap(data => {
@@ -36,8 +36,8 @@ export class AuthEffects {
 
     @Effect()
     authSignin = this.actions$
-      .ofType(authActions.SIGNIN)
-      .map((action: authActions.Signin) => {
+      .ofType(authActions.TRY_SIGNIN)
+      .map((action: authActions.TrySignIn) => {
         return action.payload;
       })
       .switchMap(data => {

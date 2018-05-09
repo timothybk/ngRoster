@@ -1,18 +1,18 @@
 import { Action } from '@ngrx/store';
 import { User } from '../user.model';
 
-export const REGISTER_USER          = 'REGISTER_USER';
-export const SIGNIN                 = 'SIGNIN';
+export const TRY_SIGNUP             = 'TRY_SIGNUP';
+export const TRY_SIGNIN                 = 'SIGNIN';
 export const SET_TOKEN              = 'SET_TOKEN';
 export const LOGOUT                 = 'LOGOUT';
 
-export class RegisterUser implements Action {
-  readonly type = REGISTER_USER;
+export class TrySignup implements Action {
+  readonly type = TRY_SIGNUP;
   constructor(public payload: User) {}
 }
 
-export class Signin implements Action {
-  readonly type = SIGNIN;
+export class TrySignIn implements Action {
+  readonly type = TRY_SIGNIN;
   constructor(public payload: User) {}
 }
 
@@ -28,7 +28,7 @@ export class Logout implements Action {
 
 
 export type AuthActions =
-RegisterUser
-| Signin
+TrySignup
+| TrySignIn
 | Logout
 | SetToken;

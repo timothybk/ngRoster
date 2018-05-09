@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import * as fromApp from './../../store/app.reducer';
 import * as AuthActions from './../store/auth.actions';
 import { User } from '../user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -13,7 +14,7 @@ import { User } from '../user.model';
 })
 export class SigninComponent implements OnInit {
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>, private router: Router) { }
 
   ngOnInit() {
   }
@@ -25,8 +26,10 @@ export class SigninComponent implements OnInit {
     };
 
     this.store.dispatch(
-      new AuthActions.Signin(user)
+      new AuthActions.TrySignIn(user)
     );
+
+    this.router.navigateByUrl('/');
   }
 
 }
