@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { User } from './../user.model';
 
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import * as fromApp from './../../store/app.reducer';
@@ -66,7 +67,12 @@ export class AuthEffects {
         ];
       }));
 
-
+    @Effect({dispatch: false})
+      authLogout = this.actions$
+        .ofType(authActions.LOGOUT)
+        .do(() => {
+          this.router.navigate(['/signin']);
+        });
 
   constructor(
     private actions$: Actions,

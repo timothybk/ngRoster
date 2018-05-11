@@ -20,7 +20,6 @@ export class LogoutComponent implements OnInit {
 
   onClick() {
     this.store.dispatch(new AuthActions.Logout());
-    this.router.navigateByUrl('/signin');
   }
 
 }
