@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import * as fromApp from './../../store/app.reducer';
 import * as AuthActions from './../store/auth.actions';
 import { User } from '../user.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -14,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
 
-  constructor(private store: Store<fromApp.AppState>, private router: Router) { }
+  constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
   }
