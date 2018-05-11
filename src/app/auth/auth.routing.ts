@@ -5,7 +5,7 @@ import { SigninComponent } from './signin/signin.component';
 import { LogoutComponent } from './logout/logout.component';
 
 const authRoutes: Routes = [
-  { path: 'register', component: RegisterComponent },
+  // { path: 'register', component: RegisterComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'logout', component: LogoutComponent }
 ];

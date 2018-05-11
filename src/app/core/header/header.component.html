@@ -15,9 +15,9 @@
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link" [routerLink]="['/rostering']" (click)="navbarCollapsed = true">Rostering</a>
       </li>
-      <li class="nav-item" [routerLinkActive]="['active']">
+      <!-- <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link" *ngIf="!(authState | async).isAuthenticated" [routerLink]="['/register']" (click)="navbarCollapsed = true">Register</a>
-      </li>
+      </li> -->
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link" *ngIf="!(authState | async).isAuthenticated" [routerLink]="['/signin']" (click)="navbarCollapsed = true">signin</a>
       </li>
