@@ -1,42 +1,48 @@
 import { Action } from '@ngrx/store';
 import { User } from '../user.model';
-export const GET_USER               = 'GET_USER';
-export const AUTHENTICATED          = 'AUTHENTICATED';
-export const NOT_AUTHENTICATED      = 'NOT_AUTHENTICATED';
-export const GOOGLE_LOGIN           = 'GOOGLE_LOGIN';
+
+export const TRY_SIGNUP             = 'TRY_SIGNUP';
+export const TRY_SIGNIN             = 'TRY_SIGNIN';
+export const SIGNUP                 = 'SIGNUP';
+export const SIGNIN                 = 'SIGNIN';
+export const SET_TOKEN              = 'SET_TOKEN';
 export const LOGOUT                 = 'LOGOUT';
-export const AUTH_ERROR             = 'AUTH_ERROR';
-/// Get User AuthState
-export class GetUser implements Action {
-    readonly type = GET_USER;
-    constructor(public payload?: any) {}
+
+export class TrySignUp implements Action {
+  readonly type = TRY_SIGNUP;
+  constructor(public payload: User) {}
 }
-export class Authenticated implements Action {
-    readonly type = AUTHENTICATED;
-    constructor(public payload?: any) {}
+
+export class TrySignIn implements Action {
+  readonly type = TRY_SIGNIN;
+  constructor(public payload: User) {}
 }
-export class NotAuthenticated implements Action {
-    readonly type = NOT_AUTHENTICATED;
-    constructor(public payload?: any) {}
+
+export class SignUp implements Action {
+  readonly type = SIGNUP;
+  constructor() {}
 }
-export class AuthError implements Action {
-    readonly type = AUTH_ERROR;
-    constructor(public payload?: any) {}
+
+export class SignIn implements Action {
+  readonly type = SIGNIN;
+  constructor() {}
 }
-/// Google Login Actions
-export class GoogleLogin implements Action {
-    readonly type = GOOGLE_LOGIN;
-    constructor(public payload?: any) {}
+
+export class SetToken implements Action {
+  readonly type = SET_TOKEN;
+  constructor(public payload: string) {}
 }
-/// Logout Actions
+
 export class Logout implements Action {
-    readonly type = LOGOUT;
-    constructor(public payload?: any) {}
+  readonly type = LOGOUT;
+  constructor() {}
 }
+
+
 export type AuthActions =
-GetUser
-| Authenticated
-| NotAuthenticated
-| GoogleLogin
-| AuthError
-| Logout;
+TrySignUp
+| TrySignIn
+| SignUp
+| SignIn
+| Logout
+| SetToken;

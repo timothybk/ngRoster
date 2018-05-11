@@ -1,4 +1,3 @@
-import { AuthGuard } from './../auth/auth-guard.service';
 import { RosterListComponent } from './roster-list/roster-list.component';
 import { RosterPumpsComponent } from './roster-pumps/roster-pumps.component';
 import { RosterN2Component } from './roster-n2/roster-n2.component';
@@ -7,6 +6,7 @@ import { RosterEditComponent } from './roster-edit/roster-edit.component';
 import { RostersComponent } from './rosters.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from '../auth/auth-guard.service';
 
 const rostersRoutes: Routes = [
   { path: 'rostering', component: RostersComponent, canActivate: [AuthGuard], children: [

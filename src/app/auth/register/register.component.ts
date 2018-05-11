@@ -7,25 +7,25 @@ import * as AuthActions from './../store/auth.actions';
 import { User } from '../user.model';
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class SigninComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
   }
 
-  onSignin(form: NgForm) {
+  onSignup(form: NgForm) {
     const user: User = {
       username: form.value.email,
       password: form.value.password
     };
 
     this.store.dispatch(
-      new AuthActions.TrySignIn(user)
+      new AuthActions.TrySignUp(user)
     );
   }
 

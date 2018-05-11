@@ -2,48 +2,38 @@ import * as AuthActions from './auth.actions';
 import { User } from '../user.model';
 
 export interface State {
-  user: User;
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string;
+  errorMessage: string | null;
 }
-const initialState: State = {
-  user: new User(null, 'GUEST')
-};
 
+const initialState: State = {
+  isAuthenticated: false,
+  token: 'empty',
+  user: null,
+  errorMessage: null
+};
 
 /// Reducer function
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
-    case AuthActions.GET_USER:
-        return {
-          ...state,
-          loading: true
-        };
-    case AuthActions.AUTHENTICATED:
-        return {
-          ...state,
-          user: {...action.payload},
-          loading: false
-        };
-    case AuthActions.NOT_AUTHENTICATED:
-        return {
-          ...state,
-          user: {...initialState},
-          loading: false
-        };
-    case AuthActions.GOOGLE_LOGIN:
+    case AuthActions.SIGNUP:
+    case AuthActions.SIGNIN:
       return {
         ...state,
-        loading: true
-      };
-    case AuthActions.AUTH_ERROR:
-      return {
-        ...state,
-        error: {...action.payload},
-        loading: false
-      };
+        isAuthenticated: true
+        };
     case AuthActions.LOGOUT:
       return {
         ...state,
-        loading: true
+        token: 'empty',
+        isAuthenticated: false
+        };
+    case AuthActions.SET_TOKEN:
+      return {
+        ...state,
+        token: action.payload
       };
     default:
       return {

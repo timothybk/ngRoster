@@ -1,4 +1,3 @@
-import { AuthGuard } from './../auth/auth-guard.service';
 import { FirefighterStartComponent } from './firefighter-start/firefighter-start.component';
 import { FirefighterDetailComponent } from './firefighter-detail/firefighter-detail.component';
 import { FirefighterEditComponent } from './firefighter-edit/firefighter-edit.component';
@@ -6,6 +5,7 @@ import { FirefighterListComponent } from './firefighter-list/firefighter-list.co
 import { FirefightersComponent } from './firefighters.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from '../auth/auth-guard.service';
 
 const firefighterRoutes: Routes = [
   {

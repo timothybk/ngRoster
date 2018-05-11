@@ -1,10 +1,6 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection
-} from 'angularfire2/firestore';
 import { Injectable } from '@angular/core';
 import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
@@ -44,10 +40,15 @@ export class FirefighterEffects {
     .map((action: firefighterActions.DeleteFirefighter) => {
       return action.payload;
     })
-    .switchMap(data => {
-      const req = new HttpRequest('POST', '/api/deletefirefighter', data, {
+    .switchMap(ffNumber => {
+      const req = new HttpRequest(
+        'POST',
+        '/api/deletefirefighter',
+        ffNumber,
+        {
         reportProgress: true
-      });
+        }
+      );
       return this.httpClient.request(req);
     })
     .map(() => {
@@ -56,7 +57,7 @@ export class FirefighterEffects {
       };
     });
 
-  @Effect({ dispatch: false })
+  @Effect()
   firefighterStore = this.actions$
     .ofType(firefighterActions.STORE_FIREFIGHTER)
     .map((action: firefighterActions.StoreFirefighter) => {
@@ -72,10 +73,37 @@ export class FirefighterEffects {
         }
       );
       return this.httpClient.request(req);
+    })
+    .map(() => {
+      return {
+        type: firefighterActions.FETCH_FIREFIGHTERS
+      };
+    });
+
+    @Effect()
+  firefighterUpdate = this.actions$
+    .ofType(firefighterActions.UPDATEDB_FIREFIGHTER)
+    .map((action: firefighterActions.UpdateDbFirefighter) => {
+      return action.payload;
+    })
+    .switchMap(data => {
+      const req = new HttpRequest(
+        'POST',
+        '/api/updatefirefighter',
+        data,
+        {
+          reportProgress: true
+        }
+      );
+      return this.httpClient.request(req);
+    })
+    .map(() => {
+      return {
+        type: firefighterActions.FETCH_FIREFIGHTERS
+      };
     });
 
   constructor(
-    private afs: AngularFirestore,
     private actions$: Actions,
     private store: Store<fromApp.AppState>,
     private httpClient: HttpClient

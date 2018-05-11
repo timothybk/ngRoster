@@ -1,96 +1,83 @@
 import { Store } from '@ngrx/store';
-import { User } from './../user.model';
-import { Effect, Actions } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase';
+import { User } from './../user.model';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/switchMap';
 
-import * as AuthActions from './auth.actions';
-import * as fromApp from '../../store/app.reducer';
+import * as fromApp from './../../store/app.reducer';
+import * as authActions from './auth.actions';
 
 @Injectable()
 export class AuthEffects {
-
-  @Effect()
-  getUser: Observable<AuthActions.AuthActions> = this.actions$
-    .ofType(AuthActions.GET_USER)
-    .map(
-    (action: AuthActions.GetUser) => {
+  @Effect({dispatch: false})
+  authRegister = this.actions$
+    .ofType(authActions.TRY_SIGNUP)
+    .map((action: authActions.TrySignUp) => {
       return action.payload;
-    }
-    )
-    .switchMap(
-    payload => {
-      return this.afAuth.authState;
-    }
-    )
-    .map(
-    authData => {
-      if (authData) {
-        const user = new User(authData.uid, authData.displayName);
-        return new AuthActions.Authenticated(user);
-      } else {
-        return new AuthActions.NotAuthenticated();
-      }
+    })
+    .switchMap(data => {
+      const req = new HttpRequest(
+        'POST',
+        '/user/register',
+        data,
+        {
+          reportProgress: true
+        }
+      );
+      return this.httpClient.request(req);
+    })
+    .map((res) => {
+      this.router.navigate(['/']);
     });
 
-  @Effect()
-  login: Observable<AuthActions.AuthActions> = this.actions$
-    .ofType(AuthActions.GOOGLE_LOGIN)
-    .map(
-      (action: AuthActions.GoogleLogin) => {
+    @Effect()
+    authSignin = this.actions$
+      .ofType(authActions.TRY_SIGNIN)
+      .map((action: authActions.TrySignIn) => {
         return action.payload;
-      }
-    )
-    .switchMap(
-      payload => {
-        return Observable.fromPromise(this.googleLogin());
-      }
-    )
-    .map(
-      credential => {
-        return new AuthActions.GetUser();
-      }
-    );
+      })
+      .switchMap(data => {
+        const req = new HttpRequest(
+          'POST',
+          '/user/signin',
+          data
+        );
+        return this.httpClient.request(req);
+      })
+      .mergeMap((event => {
+        let token;
+        if (event.type === HttpEventType.Response) {
+          token = event.body['token'];
+        }
+        this.router.navigate(['/']);
+        return [
+          {
+            type: authActions.SIGNIN
+          },
+          {
+            type: authActions.SET_TOKEN,
+            payload: token
+          }
+        ];
+      }));
 
-  @Effect()
-  logout: Observable<AuthActions.AuthActions> = this.actions$
-  .ofType(AuthActions.LOGOUT)
-  .map(
-    (action: AuthActions.Logout) => {
-      return action.payload;
-    }
-  )
-  .switchMap(
-    payload => {
-      return Observable.of(this.afAuth.auth.signOut());
-    }
-  )
-  .map(
-    authData => {
-      return new AuthActions.NotAuthenticated();
-    }
-  );
+    @Effect({dispatch: false})
+      authLogout = this.actions$
+        .ofType(authActions.LOGOUT)
+        .do(() => {
+          this.router.navigate(['/signin']);
+        });
 
-
-
-  private googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    return this.afAuth.auth.signInWithPopup(provider);
-  }
   constructor(
     private actions$: Actions,
-    private afAuth: AngularFireAuth,
-    private store: Store<fromApp.AppState>) { }
+    private store: Store<fromApp.AppState>,
+    private httpClient: HttpClient,
+    private router: Router
+  ) {}
 }

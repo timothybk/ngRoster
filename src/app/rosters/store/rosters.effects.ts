@@ -11,11 +11,12 @@ import 'rxjs/add/operator/map';
 
 import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
+import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import { ShiftInstance } from '../../shared/shift-instance.model';
 
 @Injectable()
 export class RostersEffects {
-  @Effect({ dispatch: false })
+  @Effect({dispatch: false})
   updateN2 = this.actions$
     .ofType(RostersActions.UPDATE_N2)
     .map((action: RostersActions.UpdateN2) => {
