@@ -21,12 +21,12 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     console.log('intercepted!', req);
     return this.store.select('auth')
-    // this is causing the trouble
+    .take(1)
       .switchMap((authState: fromAuth.State) => {
         const copiedReq = req.clone({headers: req.headers.set('Authorization', authState.token)});
+        console.log(copiedReq);
         return next.handle(copiedReq);
       });
-      // =========
   }
 
   constructor(private store: Store<fromApp.AppState>) {}
