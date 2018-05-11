@@ -1,9 +1,10 @@
 import { Store } from '@ngrx/store';
-import { User } from './../user.model';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
+
+import { User } from './../user.model';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
@@ -31,7 +32,7 @@ export class AuthEffects {
       return this.httpClient.request(req);
     })
     .map((res) => {
-      console.log(res);
+      this.router.navigate(['/']);
     });
 
     @Effect()
@@ -53,6 +54,7 @@ export class AuthEffects {
         if (event.type === HttpEventType.Response) {
           token = event.body['token'];
         }
+        this.router.navigate(['/']);
         return [
           {
             type: authActions.SIGNIN

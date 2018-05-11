@@ -28,8 +28,6 @@ export class SigninComponent implements OnInit {
     this.store.dispatch(
       new AuthActions.TrySignIn(user)
     );
-
-    this.router.navigateByUrl('/');
   }
 
 }
