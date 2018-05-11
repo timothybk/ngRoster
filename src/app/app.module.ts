@@ -18,6 +18,7 @@ import { environment } from './../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthModule } from './auth/auth.module';
 import { AuthEffects } from './auth/store/auth.effects';
+import { AuthGuard } from './auth/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     }),
     AppRoutingModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,10 +5,11 @@ import { FirefighterListComponent } from './firefighter-list/firefighter-list.co
 import { FirefightersComponent } from './firefighters.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from '../auth/auth-guard.service';
 
 const firefighterRoutes: Routes = [
   {
-    path: 'firefighters', component: FirefightersComponent, children: [
+    path: 'firefighters', component: FirefightersComponent, canActivate: [AuthGuard], children: [
       { path: '', component: FirefighterStartComponent },
       { path: 'new', component: FirefighterEditComponent },
       { path: ':id', component: FirefighterDetailComponent },
