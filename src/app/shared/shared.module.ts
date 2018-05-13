@@ -11,7 +11,8 @@ import {MatButtonModule,
         MatMenuModule,
         MatExpansionModule,
         MatDatepickerModule,
-        MatNativeDateModule} from '@angular/material';
+        MatNativeDateModule,
+        MatTabsModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {MatButtonModule,
     MatMenuModule,
     MatExpansionModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTabsModule
   ]
 })
 export class SharedModule {}
