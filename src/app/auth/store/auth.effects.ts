@@ -6,9 +6,9 @@ import { Router } from '@angular/router';
 
 import { User } from './../user.model';
 
-
-
-
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/switchMap';
 
 import * as fromApp from './../../store/app.reducer';
 import * as authActions from './auth.actions';

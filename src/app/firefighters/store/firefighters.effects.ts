@@ -11,6 +11,14 @@ import * as firefighterActions from './firefighters.actions';
 import * as fromApp from '../../store/app.reducer';
 import * as fromFirefighters from '../store/firefighters.reducers';
 
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
+
 @Injectable()
 export class FirefighterEffects {
   @Effect()
