@@ -1,28 +1,12 @@
-<div class="row justify-content-between">
-  <div class="col-auto mr-auto">
-    <h4> {{firefighter.name}} </h4>
-    <h1> {{trimDate(firefighter.n2)}} </h1>
-  </div>
-  <div class="col-auto">
-    <div class="row">
-      <div class="col-auto ml-auto">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <form #f='ngForm' validate>
-            <mat-form-field>
-                <input matInput [matDatepicker]="picker" placeholder="Choose a date" name='datePick' [(ngModel)]='model'>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-          <div class="row">
-            <div class="col-auto mr-auto">
-              <button mat-button (click)='onSubmit(f)'>Roster N2</button>
-            </div>
-          </div>
-        </form>
-      </div>
+<form #f='ngForm' validate>
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" placeholder="Choose a date" name='datePick' [(ngModel)]='model'>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <div class="row">
+    <div class="col-auto mr-auto">
+      <button mat-button (click)='onSubmit(f)'>Roster N2</button>
     </div>
   </div>
-
+</form>
