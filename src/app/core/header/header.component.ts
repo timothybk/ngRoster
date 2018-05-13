@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';

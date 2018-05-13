@@ -2,12 +2,12 @@ import { Shifts } from './../../shared/shifts.model';
 import { Pump } from './../../shared/pump.model';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/map';
+
+
 
 import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';

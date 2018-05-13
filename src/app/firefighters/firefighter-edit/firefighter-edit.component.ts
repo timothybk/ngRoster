@@ -1,7 +1,7 @@
 import { Nightduty } from '../../shared/night-duty.model';
 import { Qualification } from './../../shared/qualification.model';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
@@ -10,7 +10,7 @@ import { Firefighter } from './../../shared/firefighter.model';
 import * as FirefighterActions from '../store/firefighters.actions';
 import * as fromApp from '../../store/app.reducer';
 import * as fromFirefighter from '../store/firefighters.reducers';
-import 'rxjs/add/operator/take';
+
 
 @Component({
   selector: 'app-firefighter-edit',

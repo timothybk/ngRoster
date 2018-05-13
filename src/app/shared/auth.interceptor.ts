@@ -5,10 +5,10 @@ import {
   HttpEvent,
   HttpHeaders
 } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/switchMap';
+
 
 import * as fromApp from '../store/app.reducer';
 import * as fromAuth from '../auth/store/auth.reducers';

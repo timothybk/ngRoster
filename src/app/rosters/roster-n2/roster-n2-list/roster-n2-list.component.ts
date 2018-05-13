@@ -1,5 +1,5 @@
 import { Firefighter } from './../../../shared/firefighter.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 
