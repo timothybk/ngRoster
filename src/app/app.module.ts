@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
 import { RostersEffects } from './rosters/store/rosters.effects';
@@ -26,6 +27,7 @@ import { AuthGuard } from './auth/auth-guard.service';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     RostersModule,
     FirefightersModule,
