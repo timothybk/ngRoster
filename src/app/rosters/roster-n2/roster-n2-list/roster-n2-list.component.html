@@ -1,17 +1,13 @@
-<div class="row">
-  <div class="col col-md-12">
-    <mat-accordion>
-      <mat-expansion-panel *ngFor='let firefighterEl of sortedList; let i = index'>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-              {{firefighterEl.name}}
-          </mat-panel-title>
-          <mat-panel-description>
-              {{trimDate(firefighterEl.n2)}}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <app-roster-n2-item [firefighter]='firefighterEl' [index]='i'></app-roster-n2-item>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-</div>
+<mat-accordion>
+  <mat-expansion-panel *ngFor='let firefighterEl of sortedList; let i = index'>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{firefighterEl.name}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{trimDate(firefighterEl.n2)}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-roster-n2-item [firefighter]='firefighterEl' [index]='i'></app-roster-n2-item>
+  </mat-expansion-panel>
+</mat-accordion>
