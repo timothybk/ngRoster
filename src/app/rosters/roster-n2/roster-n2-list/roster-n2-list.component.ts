@@ -32,6 +32,9 @@ export class RosterN2ListComponent implements OnInit {
         });
       });
   }
+  trimDate(date: Date) {
+    return date.toString().slice(0, 10);
+  }
 
   ngOnInit() {}
 }

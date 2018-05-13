@@ -211,7 +211,7 @@ router.get("/pumps", (req, res) => {
 
 // control post actions for nightduties
 router.post("/nightduty", (req, res, next) => {
-  console.log("received");
+  console.log("received", req.body.date);
   req.checkBody("firefighter", "Firefighter must not be empty").notEmpty();
   req.checkBody("date", "Invalid date").notEmpty();
 
@@ -220,8 +220,10 @@ router.post("/nightduty", (req, res, next) => {
 
   req.sanitize("firefighter").trim();
 
+  const changeDate = req.body.date.setHours(req.body.date.getHours()+11)
   const n2FF = { name: req.body.firefighter };
   const n2Date =  { n2: req.body.date };
+  console.log(n2Date)
 
   const errors = req.validationErrors();
   if (errors) {

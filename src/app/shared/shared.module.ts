@@ -3,7 +3,15 @@ import { KeysPipe } from './keys.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule, MatToolbarModule, MatMenuModule} from '@angular/material';
+import {MatButtonModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatExpansionModule,
+        MatDatepickerModule,
+        MatNativeDateModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -20,7 +28,10 @@ import {MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule, 
     MatInputModule,
     MatFormFieldModule,
     MatToolbarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class SharedModule {}
