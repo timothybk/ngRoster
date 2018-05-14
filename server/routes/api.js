@@ -169,8 +169,58 @@ router.get("/ffpumptotals", (req, res) => {
       total: 1
     })
     .sort("pump total")
-    .then(result => {
-      res.status(200).json(result);
+    .then(resultList => {
+      const curatedResult = [
+        {
+          pump: "flyer",
+          counts: []
+        },
+        {
+          pump: "runner",
+          counts: []
+        },
+        {
+          pump: "rescuepump",
+          counts: []
+        },
+        {
+          pump: "salvage",
+          counts: []
+        },
+        {
+          pump: "bronto",
+          counts: []
+        }
+      ];
+      for (resultEl of resultList) {
+        const ffCountObj = {
+          firefighter: resultEl.firefighter,
+          count: resultEl.total
+        };
+        switch (resultEl.pump) {
+          case "flyer":
+            curatedResult[0].counts.push(ffCountObj);
+            break;
+          case "runner":
+            curatedResult[1].counts.push(ffCountObj);
+            break;
+          case "rescuepump":
+            curatedResult[2].counts.push(ffCountObj);
+            break;
+          case "salvage":
+            curatedResult[3].counts.push(ffCountObj);
+            break;
+          case "bronto":
+            curatedResult[4].counts.push(ffCountObj);
+            break;
+
+          default:
+            console.log("default", resultEl.pump);
+            break;
+        }
+      }
+      console.log(curatedResult)
+      res.status(200).json(curatedResult);
     })
     .catch(err => {
       console.log("fuck");

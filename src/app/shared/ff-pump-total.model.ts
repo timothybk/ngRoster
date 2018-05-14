@@ -1,5 +1,6 @@
+import { FfCount } from "./ff-count.model";
+
 export interface FfPumpTotal {
-  firefighter: string;
-  pump: string;
-  total: number;
+  pump: string,
+  counts: FfCount[]
 }

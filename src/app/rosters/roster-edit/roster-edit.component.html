@@ -1,1 +1,35 @@
-<button mat-button (click)="onClick()">test</button>
+<mat-horizontal-stepper #stepper>
+  <mat-step [stepControl]="flyerFormGroup">
+    <form [formGroup]="flyerFormGroup" *ngFor="let pump of (rostersState | async).ffPumpTotals">
+      <ng-template matStepLabel>Flyer</ng-template>
+      <mat-form-field>
+        <mat-select placeholder="Firefighters" formControlName="firstCtrl" multiple>
+          <mat-option *ngFor="let firefighter of pump.counts" [value]="firefighter.firefighter">{{firefighter.firefighter}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="runnerFormGroup">
+    <form [formGroup]="runnerFormGroup">
+      <ng-template matStepLabel>Runner</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Address" formControlName="secondCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
