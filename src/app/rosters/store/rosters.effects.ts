@@ -14,6 +14,7 @@ import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import { ShiftInstance } from '../../shared/shift-instance.model';
+import { FfPumpTotal } from '../../shared/ff-pump-total.model';
 
 @Injectable()
 export class RostersEffects {
@@ -36,15 +37,15 @@ export class RostersEffects {
     });
 
     @Effect()
-    rostersFetch = this.actions$
-      .ofType(RostersActions.FETCH_SHIFTS)
-      .switchMap((action: RostersActions.FetchShifts) => {
-        return this.httpClient.get<Shifts[]>('/api/shifts');
+    rostersFetchFfPumpTotals = this.actions$
+      .ofType(RostersActions.FETCH_FF_PUMP_TOTALS)
+      .switchMap((action: RostersActions.FetchFfPumpTotals) => {
+        return this.httpClient.get<FfPumpTotal[]>('/api/ffpumptotals');
       })
-      .map((data: Shifts[]) => {
+      .map((data: FfPumpTotal[]) => {
         console.log(data);
         return {
-          type: RostersActions.SET_SHIFTS,
+          type: RostersActions.SET_FF_PUMP_TOTALS,
           payload: data
         };
       });
