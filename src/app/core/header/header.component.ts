@@ -16,7 +16,6 @@ import * as RostersActions from '../../rosters/store/rosters.actions';
 })
 export class HeaderComponent implements OnInit {
   authState: Observable<fromAuth.State>;
-  navbarCollapsed = true;
 
   constructor(private router: Router,
               private store: Store<fromApp.AppState>,
