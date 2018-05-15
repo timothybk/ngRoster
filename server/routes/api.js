@@ -146,6 +146,18 @@ router.get("/ffpumptotals", (req, res) => {
       total: { $sum: 1 }
     })
     .lookup({
+      from: "shiftinstances",
+      localField: "_id.firefighter",
+      foreignField: "firefighter",
+      as: "allFfShifts"
+    })
+    .lookup({
+      from: "shiftinstances",
+      localField: "_id.pump",
+      foreignField: "pump",
+      as: "allPumpShifts"
+    })
+    .lookup({
       from: "firefighters",
       localField: "_id.firefighter",
       foreignField: "_id",
@@ -161,15 +173,56 @@ router.get("/ffpumptotals", (req, res) => {
       _id: 0,
       ff: { $arrayElemAt: ["$_id.firefighter", 0] },
       pump: { $arrayElemAt: ["$_id.pump", 0] },
-      total: 1
+      total: 1,
+      allFfShifts: { $size: "$allFfShifts" },
+      allPumpShifts: { $size: "$allPumpShifts"},
+      // ++++++++++++
+      // for below
+      // estimated seats per pump(eseatspp): 3.2
+      // total seats(tsea): 16
+      // estimated shifts per pump total(eshiftpp): 7.5
+      // total shifts(tshifts): 203
+      // expected percent of ff shifts = (eseatpp / tsea) * 100
+      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
+      ExpectedPercentageofFFShifts: 20,
+      ExpectedPercentageofPumpShifts: 3.7
     })
     .project({
       firefighter: "$ff.name",
       pump: "$pump.name",
-      total: 1
+      total: 1,
+      allFfShifts: "$allFfShifts",
+      allPumpShifts: "$allPumpShifts",
+      fractionOfFfTotal: { $divide: ["$total", "$allFfShifts"]},
+      fractionOfPumpTotal: { $divide: ["$total", "$allPumpShifts"]}
     })
-    .sort("pump total")
+    .project({
+      firefighter: "$firefighter",
+      pump: "$pump",
+      total: 1,
+      allFfShifts: "$allFfShifts",
+      allPumpShifts: "$allPumpShifts",
+      percentageOfFfTotal: { $multiply: [ "$fractionOfFfTotal", 100 ] },
+      percentageOfPumpTotal: { $multiply: [ "$fractionOfPumpTotal", 100 ] },
+      // ++++++++++++
+      // for below
+      // estimated seats per pump(eseatspp): 3.2
+      // total seats(tsea): 16
+      // estimated shifts per pump total(eshiftpp): 7.5
+      // total shifts(tshifts): 203
+      // expected percent of ff shifts = (eseatpp / tsea) * 100
+      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
+      ExpectedPercentageofFFShifts: { $literal: 20},
+      ExpectedPercentageofPumpShifts: { $literal: 3.7}
+    })
+    .project({
+      firefighter: "$firefighter",
+      pump: "$pump",
+      weightedResult: {$add: [-3.2, "$percentageOfFfTotal", -20, "$percentageOfPumpTotal"]}
+    })
+    .sort("pump weightedResult")
     .then(resultList => {
+      console.log(resultList)
       const curatedResult = [
         {
           pump: "flyer",
@@ -195,7 +248,7 @@ router.get("/ffpumptotals", (req, res) => {
       for (resultEl of resultList) {
         const ffCountObj = {
           firefighter: resultEl.firefighter,
-          count: resultEl.total
+          count: resultEl.weightedResult
         };
         switch (resultEl.pump) {
           case "flyer":
@@ -219,11 +272,10 @@ router.get("/ffpumptotals", (req, res) => {
             break;
         }
       }
-      console.log(curatedResult)
       res.status(200).json(curatedResult);
     })
     .catch(err => {
-      console.log("fuck");
+      console.log(err);
       res.status(500).send(err);
     });
 });
