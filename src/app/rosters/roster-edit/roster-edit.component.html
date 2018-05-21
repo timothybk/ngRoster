@@ -1,22 +1,73 @@
 <mat-horizontal-stepper #stepper>
   <mat-step [stepControl]="flyerFormGroup">
-    <form [formGroup]="flyerFormGroup" *ngFor="let pump of (rostersState | async).ffPumpTotals">
-      <ng-template matStepLabel>Flyer</ng-template>
-      <mat-form-field>
-        <mat-select placeholder="Firefighters" formControlName="firstCtrl" multiple>
-          <mat-option *ngFor="let firefighter of pump.counts" [value]="firefighter.firefighter">{{firefighter.firefighter}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Next</button>
+    <div class="row">
+      <div class="col">
+        <form [formGroup]="flyerFormGroup">
+          <ng-template matStepLabel>Flyer</ng-template>
+          <mat-form-field>
+            <mat-select placeholder="Firefighters" formControlName="firstCtrl" multiple [(value)]="selected">
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).flyerWeighted" value="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
       </div>
-    </form>
+      <div class="col">
+        <h1>{{selected}}</h1>
+      </div>
+    </div>
   </mat-step>
   <mat-step [stepControl]="runnerFormGroup">
     <form [formGroup]="runnerFormGroup">
       <ng-template matStepLabel>Runner</ng-template>
       <mat-form-field>
-        <input matInput placeholder="Address" formControlName="secondCtrl" required>
+        <mat-select placeholder="Firefighters" formControlName="secondCtrl" multiple>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).runnerWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="rescuePumpFormGroup">
+    <form [formGroup]="rescuePumpFormGroup">
+      <ng-template matStepLabel>Rescue Pump</ng-template>
+      <mat-form-field>
+        <mat-select placeholder="Firefighters" formControlName="thirdCtrl" multiple>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).rescuepumpWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="salvageFormGroup">
+    <form [formGroup]="salvageFormGroup">
+      <ng-template matStepLabel>Salvage</ng-template>
+      <mat-form-field>
+        <mat-select placeholder="Firefighters" formControlName="fourthCtrl" multiple>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).salvageWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="brontoFormGroup">
+    <form [formGroup]="brontoFormGroup">
+      <ng-template matStepLabel>Bronto</ng-template>
+      <mat-form-field>
+        <mat-select placeholder="Firefighters" formControlName="fifthCtrl" multiple>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).brontoWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+        </mat-select>
       </mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Back</button>

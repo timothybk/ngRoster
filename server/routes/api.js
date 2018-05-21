@@ -222,28 +222,12 @@ router.get("/ffpumptotals", (req, res) => {
     })
     .sort("pump weightedResult")
     .then(resultList => {
-      console.log(resultList)
       const curatedResult = [
-        {
-          pump: "flyer",
-          counts: []
-        },
-        {
-          pump: "runner",
-          counts: []
-        },
-        {
-          pump: "rescuepump",
-          counts: []
-        },
-        {
-          pump: "salvage",
-          counts: []
-        },
-        {
-          pump: "bronto",
-          counts: []
-        }
+        [],
+        [],
+        [],
+        [],
+        []
       ];
       for (resultEl of resultList) {
         const ffCountObj = {
@@ -252,19 +236,19 @@ router.get("/ffpumptotals", (req, res) => {
         };
         switch (resultEl.pump) {
           case "flyer":
-            curatedResult[0].counts.push(ffCountObj);
+            curatedResult[0].push(ffCountObj);
             break;
           case "runner":
-            curatedResult[1].counts.push(ffCountObj);
+            curatedResult[1].push(ffCountObj);
             break;
           case "rescuepump":
-            curatedResult[2].counts.push(ffCountObj);
+            curatedResult[2].push(ffCountObj);
             break;
           case "salvage":
-            curatedResult[3].counts.push(ffCountObj);
+            curatedResult[3].push(ffCountObj);
             break;
           case "bronto":
-            curatedResult[4].counts.push(ffCountObj);
+            curatedResult[4].push(ffCountObj);
             break;
 
           default:

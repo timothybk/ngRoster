@@ -3,17 +3,26 @@ import { Shifts } from "./../../shared/shifts.model";
 import { ShiftBuilder } from "./../../shared/shift-builder.model";
 import * as RostersActions from "../store/rosters.actions";
 import { FfPumpTotal } from "../../shared/ff-pump-total.model";
+import { FfCount } from "../../shared/ff-count.model";
 
 export interface State {
   allShifts: Shifts[];
   pumps: Pump[];
-  ffPumpTotals: FfPumpTotal[];
+  flyerWeighted: FfCount[];
+  runnerWeighted: FfCount[];
+  rescuepumpWeighted: FfCount[];
+  salvageWeighted: FfCount[];
+  brontoWeighted: FfCount[];
 }
 
 const initialState: State = {
   allShifts: [],
   pumps: [{ name: "test", seats: ["one", "two"], qualifications: ["nil"] }],
-  ffPumpTotals: []
+  flyerWeighted: [],
+  runnerWeighted: [],
+  rescuepumpWeighted: [],
+  salvageWeighted: [],
+  brontoWeighted: [],
 };
 
 export function rostersReducer(
@@ -34,7 +43,11 @@ export function rostersReducer(
     case RostersActions.SET_FF_PUMP_TOTALS:
       return {
         ...state,
-        ffPumpTotals: [ ...action.payload ]
+        flyerWeighted: [ ...action.payload[0] ],
+        runnerWeighted: [ ...action.payload[1] ],
+        rescuepumpWeighted: [ ...action.payload[2] ],
+        salvageWeighted: [ ...action.payload[3] ],
+        brontoWeighted: [ ...action.payload[4] ],
       };
     case RostersActions.ROSTERS_ERROR:
     default:

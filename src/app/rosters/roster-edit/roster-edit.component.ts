@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl, FormArray} from '@angular/forms';
 
 import * as fromApp from './../../store/app.reducer';
 import * as fromRosters from './../store/rosters.reducers';
@@ -19,6 +19,8 @@ export class RosterEditComponent implements OnInit {
   salvageFormGroup: FormGroup;
   brontoFormGroup: FormGroup;
 
+  selected = ['test']
+
   rostersState: Observable<fromRosters.State>
 
   toppingList = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
@@ -33,6 +35,15 @@ export class RosterEditComponent implements OnInit {
     });
     this.runnerFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
+    });
+    this.rescuePumpFormGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required]
+    });
+    this.salvageFormGroup = this._formBuilder.group({
+      fourthCtrl: ['', Validators.required]
+    });
+    this.brontoFormGroup = this._formBuilder.group({
+      fifthCtrl: ['', Validators.required]
     });
     this.store.dispatch(new RostersActions.FetchFfPumpTotals());
   }

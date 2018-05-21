@@ -2,6 +2,7 @@ import { Pump } from './../../shared/pump.model';
 import { Shifts } from './../../shared/shifts.model';
 import { Action } from '@ngrx/store';
 import { FfPumpTotal } from '../../shared/ff-pump-total.model';
+import { FfCount } from '../../shared/ff-count.model';
 
 export const UPDATE_BUILDER = 'UPDATE_BUILDER';
 export const UPDATE_N2 = 'UPDATE_N2';
@@ -40,7 +41,7 @@ export class FetchFfPumpTotals implements Action {
 export class SetFfPumpTotals implements Action {
   readonly type = SET_FF_PUMP_TOTALS;
 
-  constructor(public payload: FfPumpTotal[]) {}
+  constructor(public payload: FfCount[][]) {}
 }
 
 export class FetchShifts implements Action {
