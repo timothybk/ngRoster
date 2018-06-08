@@ -15,70 +15,63 @@ import * as authActions from './auth.actions';
 
 @Injectable()
 export class AuthEffects {
+
   @Effect({dispatch: false})
-  authRegister = this.actions$
-    .ofType(authActions.TRY_SIGNUP)
-    .map((action: authActions.TrySignUp) => {
-      return action.payload;
-    })
-    .switchMap(data => {
-      const req = new HttpRequest(
-        'POST',
-        '/user/register',
-        data,
-        {
-          reportProgress: true
-        }
-      );
-      return this.httpClient.request(req);
-    })
-    .map((res) => {
+  authSignin = this.actions$
+  .ofType(authActions.TRY_SIGNIN)
+  .map((action: authActions.TrySignIn) => {
+    return action.payload;
+  })
+  .switchMap(data => {
+    const req = new HttpRequest(
+      'POST',
+      '/user/signin',
+      data
+    );
+    return this.httpClient.request(req);
+  })
+  .map((event => {
+    let token;
+    if (event.type === HttpEventType.Response) {
+      token = event.body['token'];
+
+      localStorage.setItem('token', token);
+
       this.router.navigate(['/']);
-    });
+    }
+  }));
 
-    @Effect()
-    authSignin = this.actions$
-      .ofType(authActions.TRY_SIGNIN)
-      .map((action: authActions.TrySignIn) => {
-        return action.payload;
-      })
-      .switchMap(data => {
-        const req = new HttpRequest(
-          'POST',
-          '/user/signin',
-          data
-        );
-        return this.httpClient.request(req);
-      })
-      .map((event => {
-        let token;
-        if (event.type === HttpEventType.Response) {
-          token = event.body['token'];
+  @Effect({dispatch: false})
+  authLogout = this.actions$
+  .ofType(authActions.LOGOUT)
+  .do(() => {
+    localStorage.removeItem('token');
+    this.router.navigate(['/signin']);
+  });
 
-        localStorage.setItem('token', token);
+  // ======old sign up=======
+  // there is no sign up now
 
-        this.router.navigate(['/']);
-        return {
-            type: authActions.SIGNIN_SUCCESS
-          }
-      } else {
-        return {
-          type: authActions.AUTH_ERROR,
-          payload: {
-             message: "response type is ",
-             errorType: event.type
-          }
-        }
-      }
-      }));
-
-    @Effect({dispatch: false})
-      authLogout = this.actions$
-        .ofType(authActions.LOGOUT)
-        .do(() => {
-          localStorage.removeItem('token');
-          this.router.navigate(['/signin']);
-        });
+  // @Effect({dispatch: false})
+  // authRegister = this.actions$
+  //   .ofType(authActions.TRY_SIGNUP)
+  //   .map((action: authActions.TrySignUp) => {
+  //     return action.payload;
+  //   })
+  //   .switchMap(data => {
+  //     const req = new HttpRequest(
+  //       'POST',
+  //       '/user/register',
+  //       data,
+  //       {
+  //         reportProgress: true
+  //       }
+  //     );
+  //     return this.httpClient.request(req);
+  //   })
+  //   .map((res) => {
+  //     this.router.navigate(['/']);
+  //   });
 
   constructor(
     private actions$: Actions,
