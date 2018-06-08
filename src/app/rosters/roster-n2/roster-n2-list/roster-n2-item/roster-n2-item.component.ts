@@ -5,8 +5,6 @@ import { NgForm } from '@angular/forms';
 import * as fromApp from './../../../../store/app.reducer';
 import * as RosterActions from './../../../store/rosters.actions';
 
-const now = new Date();
-
 @Component({
   selector: 'app-roster-n2-item',
   templateUrl: './roster-n2-item.component.html',

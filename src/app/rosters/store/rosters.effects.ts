@@ -15,10 +15,11 @@ import * as RostersActions from './rosters.actions';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import { ShiftInstance } from '../../shared/shift-instance.model';
 import { FfPumpTotal } from '../../shared/ff-pump-total.model';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class RostersEffects {
-  @Effect({dispatch: false})
+  @Effect()
   updateN2 = this.actions$
     .ofType(RostersActions.UPDATE_N2)
     .map((action: RostersActions.UpdateN2) => {
@@ -28,13 +29,15 @@ export class RostersEffects {
       const req = new HttpRequest(
         'POST',
         '/api/nightduty',
-        data,
-        {
-          reportProgress: true
-        }
+        data
       );
       return this.httpClient.request(req);
-    });
+    })
+    .map(() => {
+      return {
+        type: FirefighterActions.FETCH_FIREFIGHTERS
+      }
+    })
 
     @Effect()
     rostersFetchFfPumpTotals = this.actions$
@@ -65,6 +68,7 @@ export class RostersEffects {
   constructor(
     private actions$: Actions,
     private httpClient: HttpClient,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private router: Router
   ) {}
 }

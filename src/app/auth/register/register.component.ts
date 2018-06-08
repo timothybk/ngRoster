@@ -24,9 +24,10 @@ export class RegisterComponent implements OnInit {
       password: form.value.password
     };
 
-    this.store.dispatch(
-      new AuthActions.TrySignUp(user)
-    );
+    // ====there is no signup=====
+    // this.store.dispatch(
+    //   new AuthActions.TrySignUp(user)
+    // );
   }
 
 }
