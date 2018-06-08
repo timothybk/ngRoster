@@ -19,7 +19,7 @@ const initialState: State = {
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
     case AuthActions.SIGNUP:
-    case AuthActions.SIGNIN:
+    case AuthActions.SIGNIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true
@@ -35,6 +35,8 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         ...state,
         token: action.payload
       };
+    case AuthActions.AUTH_ERROR:
+      console.log("Auth Error: ", action.payload.message, action.payload.errorType);
     default:
       return {
         ...state

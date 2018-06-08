@@ -4,9 +4,10 @@ import { User } from '../user.model';
 export const TRY_SIGNUP             = 'TRY_SIGNUP';
 export const TRY_SIGNIN             = 'TRY_SIGNIN';
 export const SIGNUP                 = 'SIGNUP';
-export const SIGNIN                 = 'SIGNIN';
+export const SIGNIN_SUCCESS         = 'SIGNIN_SUCCESS';
 export const SET_TOKEN              = 'SET_TOKEN';
 export const LOGOUT                 = 'LOGOUT';
+export const AUTH_ERROR             = 'AUTH_ERROR';
 
 export class TrySignUp implements Action {
   readonly type = TRY_SIGNUP;
@@ -23,8 +24,8 @@ export class SignUp implements Action {
   constructor() {}
 }
 
-export class SignIn implements Action {
-  readonly type = SIGNIN;
+export class SignInSuccess implements Action {
+  readonly type = SIGNIN_SUCCESS;
   constructor() {}
 }
 
@@ -38,11 +39,17 @@ export class Logout implements Action {
   constructor() {}
 }
 
+export class AuthError implements Action {
+  readonly type = AUTH_ERROR;
+  constructor(public payload?: any) {}
+}
+
 
 export type AuthActions =
 TrySignUp
 | TrySignIn
 | SignUp
-| SignIn
+| SignInSuccess
 | Logout
-| SetToken;
+| SetToken
+| AuthError;

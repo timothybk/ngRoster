@@ -15,13 +15,10 @@ import * as RostersActions from '../../rosters/store/rosters.actions';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  authState: Observable<fromAuth.State>;
 
-  constructor(private router: Router,
-              private store: Store<fromApp.AppState>,
-              ) {
-                this.authState = this.store.select('auth');
-              }
+  checkAuth() {
+    return localStorage.getItem('token') !== null;
+  }
 
   ngOnInit() {
   }

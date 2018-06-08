@@ -50,27 +50,33 @@ export class AuthEffects {
         );
         return this.httpClient.request(req);
       })
-      .mergeMap((event => {
+      .map((event => {
         let token;
         if (event.type === HttpEventType.Response) {
           token = event.body['token'];
-        }
+
+        localStorage.setItem('token', token);
+
         this.router.navigate(['/']);
-        return [
-          {
-            type: authActions.SIGNIN
-          },
-          {
-            type: authActions.SET_TOKEN,
-            payload: token
+        return {
+            type: authActions.SIGNIN_SUCCESS
           }
-        ];
+      } else {
+        return {
+          type: authActions.AUTH_ERROR,
+          payload: {
+             message: "response type is ",
+             errorType: event.type
+          }
+        }
+      }
       }));
 
     @Effect({dispatch: false})
       authLogout = this.actions$
         .ofType(authActions.LOGOUT)
         .do(() => {
+          localStorage.removeItem('token');
           this.router.navigate(['/signin']);
         });
 
