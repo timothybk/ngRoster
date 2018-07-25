@@ -2,10 +2,11 @@ import { Shifts } from './../../shared/shifts.model';
 import { Pump } from './../../shared/pump.model';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
+
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 
@@ -13,10 +14,12 @@ import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
 import { ShiftInstance } from '../../shared/shift-instance.model';
+import { FfPumpTotal } from '../../shared/ff-pump-total.model';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class RostersEffects {
-  @Effect({dispatch: false})
+  @Effect()
   updateN2 = this.actions$
     .ofType(RostersActions.UPDATE_N2)
     .map((action: RostersActions.UpdateN2) => {
@@ -26,24 +29,25 @@ export class RostersEffects {
       const req = new HttpRequest(
         'POST',
         '/api/nightduty',
-        data,
-        {
-          reportProgress: true
-        }
+        data
       );
       return this.httpClient.request(req);
-    });
+    })
+    .map(() => {
+      return {
+        type: FirefighterActions.FETCH_FIREFIGHTERS
+      }
+    })
 
     @Effect()
-    rostersFetch = this.actions$
-      .ofType(RostersActions.FETCH_SHIFTS)
-      .switchMap((action: RostersActions.FetchShifts) => {
-        return this.httpClient.get<Shifts[]>('/api/shifts');
+    rostersFetchFfPumpTotals = this.actions$
+      .ofType(RostersActions.FETCH_FF_PUMP_TOTALS)
+      .switchMap((action: RostersActions.FetchFfPumpTotals) => {
+        return this.httpClient.get<FfPumpTotal[]>('/api/ffpumptotals');
       })
-      .map((data: Shifts[]) => {
-        console.log(data);
+      .map((data: FfPumpTotal[]) => {
         return {
-          type: RostersActions.SET_SHIFTS,
+          type: RostersActions.SET_FF_PUMP_TOTALS,
           payload: data
         };
       });
@@ -64,6 +68,7 @@ export class RostersEffects {
   constructor(
     private actions$: Actions,
     private httpClient: HttpClient,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private router: Router
   ) {}
 }

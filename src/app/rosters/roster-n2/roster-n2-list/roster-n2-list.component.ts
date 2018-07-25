@@ -1,5 +1,5 @@
 import { Firefighter } from './../../../shared/firefighter.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 
@@ -31,6 +31,9 @@ export class RosterN2ListComponent implements OnInit {
           return aInt - bInt;
         });
       });
+  }
+  trimDate(date: Date) {
+    return date.toString().slice(0, 10);
   }
 
   ngOnInit() {}

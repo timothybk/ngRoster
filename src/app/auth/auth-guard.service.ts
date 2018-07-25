@@ -11,14 +11,23 @@ export class AuthGuard implements CanActivate {
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.store.select('auth')
-      .take(1)
-      .map((authState: fromAuth.State) => {
-        if (authState.isAuthenticated) {
-          return true;
-        } else {
-          this.router.navigate(['/signin']);
-        }
-      });
+    // =====using localStorage====
+    if (localStorage.getItem('token') !== null){
+      return true;
+    } else {
+      this.router.navigate(['/signin']);
+      return false;
+    }
+
+    // =====using store=======
+    // return this.store.select('auth')
+    //   .take(1)
+    //   .map((authState: fromAuth.State) => {
+    //     if (authState.isAuthenticated) {
+    //       return true;
+    //     } else {
+    //       this.router.navigate(['/signin']);
+    //     }
+    //   });
   }
 }

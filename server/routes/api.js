@@ -5,7 +5,7 @@ const Qualification = require("./../models/qualification");
 const Appliance = require("../models/appliance");
 const ShiftInstance = require("../models/shiftinstance");
 const Nightduty = require("./../models/night-duty");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 // // declare axios for making http requests
 // const axios = require('axios');
@@ -16,17 +16,21 @@ router.get("/", (req, res) => {
   res.send("api works");
 });
 
-router.use('/', (req, res, next) => {
-  jwt.verify(req.headers.authorization, 'Pia is the cutest!', (err, decoded) => {
-    if (err) {
-      return res.status(401).json({
-        title: 'Not logged in',
-        error: err
-      });
+router.use("/", (req, res, next) => {
+  jwt.verify(
+    req.headers.authorization,
+    "Pia is the cutest!",
+    (err, decoded) => {
+      if (err) {
+        return res.status(401).json({
+          title: "Not logged in",
+          error: err
+        });
+      }
+      next();
     }
-    next();
-  })
-})
+  );
+});
 
 // Get all firefighters
 router.get("/firefighters", (req, res) => {
@@ -37,22 +41,21 @@ router.get("/firefighters", (req, res) => {
     })
     .catch(err => {
       res.status(500).send(err);
-      console.log(err)
+      console.log(err);
     });
 });
 
 // Add new firefighter
 router.post("/firefighter", (req, res, next) => {
+  req.check("rank", "Rank must not be empty.").notEmpty();
+  req.check("name", "Name must not be empty.").notEmpty();
 
-    req.check('rank', 'Rank must not be empty.').notEmpty();
-    req.check('name', 'Name must not be empty.').notEmpty();
+  req.sanitize("rank").escape();
+  req.sanitize("name").escape();
+  req.sanitize("rank").trim();
+  req.sanitize("name").trim();
 
-    req.sanitize('rank').escape();
-    req.sanitize('name').escape();
-    req.sanitize('rank').trim();
-    req.sanitize('name').trim();
-
-  const newFirefighter = new FireFighter ({
+  const newFirefighter = new FireFighter({
     number: req.body.number,
     rank: req.body.rank,
     name: req.body.name,
@@ -64,7 +67,8 @@ router.post("/firefighter", (req, res, next) => {
   if (errors) {
     res.status(500).send(errors);
   } else {
-    newFirefighter.save()
+    newFirefighter
+      .save()
       .then(firefighter => {
         console.log(firefighter);
         res.status(200).send(firefighter);
@@ -72,48 +76,51 @@ router.post("/firefighter", (req, res, next) => {
       .catch(err => {
         console.log(err);
         res.status(500).send(err);
-      })
+      });
   }
 });
 
 // update firefighter
 router.post("/updatefirefighter", (req, res, next) => {
+  req.check("firefighter.rank", "Rank must not be empty.").notEmpty();
+  req.check("firefighter.name", "Name must not be empty.").notEmpty();
 
-  req.check('firefighter.rank', 'Rank must not be empty.').notEmpty();
-  req.check('firefighter.name', 'Name must not be empty.').notEmpty();
+  req.sanitize("firefighter.rank").escape();
+  req.sanitize("firefighter.name").escape();
+  req.sanitize("firefighter.rank").trim();
+  req.sanitize("firefighter.name").trim();
 
-  req.sanitize('firefighter.rank').escape();
-  req.sanitize('firefighter.name').escape();
-  req.sanitize('firefighter.rank').trim();
-  req.sanitize('firefighter.name').trim();
+  const errors = req.validationErrors();
+  if (errors) {
+    console.log(errors);
+    res.status(500).send(errors);
+  } else {
+    var promise = FireFighter.findByIdAndUpdate(
+      req.body.key,
+      {
+        number: req.body.firefighter.number,
+        rank: req.body.firefighter.rank,
+        name: req.body.firefighter.name,
+        qualifications: req.body.firefighter.qualifications
+      },
+      { new: true }
+    ).exec();
 
-const errors = req.validationErrors();
-if (errors) {
-  console.log(errors);
-  res.status(500).send(errors);
-} else {
-  var promise = FireFighter.findByIdAndUpdate(req.body.key, {
-    number: req.body.firefighter.number,
-    rank: req.body.firefighter.rank,
-    name: req.body.firefighter.name,
-    qualifications: req.body.firefighter.qualifications
-  }, {new: true})
-    .exec()
-
-    promise.then(firefighter => {
-      res.status(200).send(firefighter);
-      console.log(firefighter);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send(err);
-    })
-}
+    promise
+      .then(firefighter => {
+        res.status(200).send(firefighter);
+        console.log(firefighter);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send(err);
+      });
+  }
 });
 
 // delete firefighter post
 router.post("/deletefirefighter", (req, res, next) => {
-  console.log('begin delete');
+  console.log("begin delete");
   req.check("name", "name must not be empty").exists();
 
   req.sanitize("name").escape();
@@ -122,64 +129,137 @@ router.post("/deletefirefighter", (req, res, next) => {
   const errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors)
+    console.log(errors);
     res.status(500).send(errors);
   } else {
-  FireFighter.findOneAndRemove({name: req.body.name}, () => res.status(200));
+    FireFighter.findOneAndRemove({ name: req.body.name }, () =>
+      res.status(200)
+    );
   }
-
-})
+});
 
 // Get all shifts
-router.get("/shifts", (req, res) => {
-  promiseA = Appliance.find({}, "name").then(result => {
-    return result;
-  });
-
-  promiseB = FireFighter.find({}).then(firefighters => {
-    return Promise.all(
-      firefighters.map(firefighter => {
-        return ShiftInstance.find({ firefighter: firefighter._id })
-        .populate('pump')
-        .then(result => {
-            return {
-              firefighter: firefighter.number,
-              shifts: result
-            };
-          });
-      })
-    );
-  });
-
-  Promise.all([promiseA, promiseB])
-    .then(([appliances, firefighterShifts]) => {
-      const formattedTotal = [];
-      for (const firefighter of firefighterShifts) {
-        const formattedResult = {
-          firefighter: firefighter.firefighter,
-          allShifts: []
-        }
-        for (const pump of appliances) {
-          const formattedResultShifts = {
-            pump: pump.name,
-            shifts: []
-          };
-          for (const shiftInstance of firefighter.shifts) {
-            if (pump.id === shiftInstance.pump.id) {
-              formattedResultShifts.shifts.push(shiftInstance);
-            }
-          }
-          formattedResult.allShifts.push(formattedResultShifts);
-        }
-        formattedTotal.push(formattedResult);
-      }
-      return formattedTotal;
+router.get("/ffpumptotals", (req, res) => {
+  ShiftInstance.aggregate()
+    .group({
+      _id: { firefighter: "$firefighter", pump: "$pump" },
+      total: { $sum: 1 }
     })
-    .then(result => {
-      res.status(200).json(result);
+    .lookup({
+      from: "shiftinstances",
+      localField: "_id.firefighter",
+      foreignField: "firefighter",
+      as: "allFfShifts"
+    })
+    .lookup({
+      from: "shiftinstances",
+      localField: "_id.pump",
+      foreignField: "pump",
+      as: "allPumpShifts"
+    })
+    .lookup({
+      from: "firefighters",
+      localField: "_id.firefighter",
+      foreignField: "_id",
+      as: "_id.firefighter"
+    })
+    .lookup({
+      from: "appliances",
+      localField: "_id.pump",
+      foreignField: "_id",
+      as: "_id.pump"
+    })
+    .project({
+      _id: 0,
+      ff: { $arrayElemAt: ["$_id.firefighter", 0] },
+      pump: { $arrayElemAt: ["$_id.pump", 0] },
+      total: 1,
+      allFfShifts: { $size: "$allFfShifts" },
+      allPumpShifts: { $size: "$allPumpShifts"},
+      // ++++++++++++
+      // for below
+      // estimated seats per pump(eseatspp): 3.2
+      // total seats(tsea): 16
+      // estimated shifts per pump total(eshiftpp): 7.5
+      // total shifts(tshifts): 203
+      // expected percent of ff shifts = (eseatpp / tsea) * 100
+      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
+      ExpectedPercentageofFFShifts: 20,
+      ExpectedPercentageofPumpShifts: 3.7
+    })
+    .project({
+      firefighter: "$ff.name",
+      pump: "$pump.name",
+      total: 1,
+      allFfShifts: "$allFfShifts",
+      allPumpShifts: "$allPumpShifts",
+      fractionOfFfTotal: { $divide: ["$total", "$allFfShifts"]},
+      fractionOfPumpTotal: { $divide: ["$total", "$allPumpShifts"]}
+    })
+    .project({
+      firefighter: "$firefighter",
+      pump: "$pump",
+      total: 1,
+      allFfShifts: "$allFfShifts",
+      allPumpShifts: "$allPumpShifts",
+      percentageOfFfTotal: { $multiply: [ "$fractionOfFfTotal", 100 ] },
+      percentageOfPumpTotal: { $multiply: [ "$fractionOfPumpTotal", 100 ] },
+      // ++++++++++++
+      // for below
+      // estimated seats per pump(eseatspp): 3.2
+      // total seats(tsea): 16
+      // estimated shifts per pump total(eshiftpp): 7.5
+      // total shifts(tshifts): 203
+      // expected percent of ff shifts = (eseatpp / tsea) * 100
+      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
+      ExpectedPercentageofFFShifts: { $literal: 20},
+      ExpectedPercentageofPumpShifts: { $literal: 3.7}
+    })
+    .project({
+      firefighter: "$firefighter",
+      pump: "$pump",
+      weightedResult: {$add: [-3.2, "$percentageOfFfTotal", -20, "$percentageOfPumpTotal"]}
+    })
+    .sort("pump weightedResult")
+    .then(resultList => {
+      const curatedResult = [
+        [],
+        [],
+        [],
+        [],
+        []
+      ];
+      for (resultEl of resultList) {
+        const ffCountObj = {
+          firefighter: resultEl.firefighter,
+          count: resultEl.weightedResult
+        };
+        switch (resultEl.pump) {
+          case "flyer":
+            curatedResult[0].push(ffCountObj);
+            break;
+          case "runner":
+            curatedResult[1].push(ffCountObj);
+            break;
+          case "rescuepump":
+            curatedResult[2].push(ffCountObj);
+            break;
+          case "salvage":
+            curatedResult[3].push(ffCountObj);
+            break;
+          case "bronto":
+            curatedResult[4].push(ffCountObj);
+            break;
+
+          default:
+            console.log("default", resultEl.pump);
+            break;
+        }
+      }
+      res.status(200).json(curatedResult);
     })
     .catch(err => {
-      console.log("fuck");
+      console.log(err);
       res.status(500).send(err);
     });
 });
@@ -211,7 +291,7 @@ router.get("/pumps", (req, res) => {
 
 // control post actions for nightduties
 router.post("/nightduty", (req, res, next) => {
-  console.log("received");
+  console.log("received", req.body.date);
   req.checkBody("firefighter", "Firefighter must not be empty").notEmpty();
   req.checkBody("date", "Invalid date").notEmpty();
 
@@ -220,19 +300,18 @@ router.post("/nightduty", (req, res, next) => {
 
   req.sanitize("firefighter").trim();
 
+  const changeDate = req.body.date.setHours(req.body.date.getHours() + 11);
   const n2FF = { name: req.body.firefighter };
-  const n2Date =  { n2: req.body.date };
+  const n2Date = { n2: req.body.date };
+  console.log(n2Date);
 
   const errors = req.validationErrors();
   if (errors) {
     res.status(500).send(errors);
   } else {
-
-    var promise = FireFighter.findByIdAndUpdate(req.body.firefighter,
-      n2Date,
-      {
-        new: true
-      })
+    var promise = FireFighter.findByIdAndUpdate(req.body.firefighter, n2Date, {
+      new: true
+    })
       .then(firefighter => {
         res.status(200).send(firefighter);
         console.log(firefighter);
@@ -240,8 +319,7 @@ router.post("/nightduty", (req, res, next) => {
       .catch(err => {
         console.log(err);
         res.status(500).send(err);
-      })
-
+      });
   }
 });
 
@@ -530,5 +608,22 @@ router.post("/nightduty", (req, res, next) => {
 //     averages: averages
 //   };
 // })
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// delete shift instances with no firefighter
+
+// ShiftInstance.find()
+//     .then( shifts => {
+//       shifts.map( shift => {
+//         FireFighter.find()
+//           .where('_id', shift.firefighter)
+//           .then( result => {
+//             if (!result.length) {
+//               ShiftInstance.deleteMany({firefighter: shift.firefighter}).then(console.log('gone'))
+//             }
+//           })
+//       })
+//     })
+// ++++++++++++++++++++++++++++++++++++++++++++++
 
 module.exports = router;

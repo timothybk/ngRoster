@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
@@ -15,14 +15,10 @@ import * as RostersActions from '../../rosters/store/rosters.actions';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  authState: Observable<fromAuth.State>;
-  navbarCollapsed = true;
 
-  constructor(private router: Router,
-              private store: Store<fromApp.AppState>,
-              ) {
-                this.authState = this.store.select('auth');
-              }
+  checkAuth() {
+    return localStorage.getItem('token') !== null;
+  }
 
   ngOnInit() {
   }

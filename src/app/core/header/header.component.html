@@ -1,49 +1,14 @@
-<header class="navbar navbar-light navbar-fixed-top navbar-expand-lg">
-
-  <a class="navbar-brand" [routerLink]="['/']" (click)="navbarCollapsed = true">C Platoon Tools</a>
-
-  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed" [attr.aria-expanded]="!navbarCollapsed"
-    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-  <div class="navbar-collapse" [ngbCollapse]="navbarCollapsed" id="navbarContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/firefighters']" (click)="navbarCollapsed = true">Firefighters</a>
-      </li>
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/rostering']" (click)="navbarCollapsed = true">Rostering</a>
-      </li>
-      <!-- <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" *ngIf="!(authState | async).isAuthenticated" [routerLink]="['/register']" (click)="navbarCollapsed = true">Register</a>
-      </li> -->
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" *ngIf="!(authState | async).isAuthenticated" [routerLink]="['/signin']" (click)="navbarCollapsed = true">signin</a>
-      </li>
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" *ngIf="(authState | async).isAuthenticated" [routerLink]="['/logout']" (click)="navbarCollapsed = true">logout</a>
-      </li>
-    </ul>
-  </div>
-</header>
-
-
-
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a routerLink="/" class="navbar-brand"></a>
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse">
-    <div class="navbar-nav">
-        <div ngbDropdown class="d-inline-block">
-      <a routerLink=""></a>
-      <a routerLink=""></a>
-
-    </div>
-  </div>
-  </div>
-</nav> -->
+<mat-toolbar>
+  <span>C Platoon Tools</span>
+  <span class="example-fill-remaining-space"></span>
+  <span>
+    <button mat-button [matMenuTriggerFor]='menu'>Menu</button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="['/']">Home</button>
+      <button mat-menu-item [routerLink]="['/firefighters']">Firefighters</button>
+      <button mat-menu-item [routerLink]="['/rostering']">Rosters</button>
+      <button mat-menu-item [routerLink]="['/signin']" *ngIf="!checkAuth()">Sign In</button>
+      <button mat-menu-item [routerLink]="['/logout']" *ngIf="checkAuth()">Sign Out</button>
+    </mat-menu>
+  </span>
+</mat-toolbar>
