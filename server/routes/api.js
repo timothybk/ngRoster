@@ -140,7 +140,9 @@ router.post("/deletefirefighter", (req, res, next) => {
 
 // Get all shifts
 router.get("/ffpumptotals", (req, res) => {
-  const promiseFirefighters = FireFighter.find().exec();
+  const promiseFirefighters = FireFighter.find()
+  .where('name').nin(['Seeney', 'Ruaro'])
+  .exec();
 
   const promiseAppliances = Appliance.find().exec();
 
@@ -161,15 +163,12 @@ router.get("/ffpumptotals", (req, res) => {
               };
             });
         })
-      )
-      .then(
-        result => {
-          return {
-            firefighter: firefighter.name,
-            pumps: result
-          }
-        }
-      )
+      ).then(result => {
+        return {
+          firefighter: firefighter.name,
+          pumps: result
+        };
+      });
     };
 
     const fnTallyandFormat = rawResult => {
@@ -181,42 +180,42 @@ router.get("/ffpumptotals", (req, res) => {
       for (const pump of rawResult.pumps) {
         tallyResult.pumps.push({
           name: pump.pump,
-          count: pump.count})
+          count: pump.count
+        });
         tallyResult.total += pump.count;
       }
 
       return tallyResult;
     };
 
-    const fnFindPercentage = (tallyResult) => {
+    const fnFindPercentage = tallyResult => {
       const percentageResult = {
         firefighter: tallyResult.firefighter,
         pumps: []
-      }
+      };
 
       for (const pump of tallyResult.pumps) {
         percentageResult.pumps.push({
           name: pump.name,
-          percentage: pump.count / tallyResult.total * 100
-        })
+          percentage: (pump.count / tallyResult.total) * 100
+        });
       }
 
       return percentageResult;
-    }
+    };
 
-    const fnAssignPumps = (percentageResult) => {
+    const fnAssignPumps = percentageResult => {
+      const assignments = new Map();
 
-      const assignments = {};
-
-      // const fnSort = (pumpFfList, pumpName) => {
-      //   pumpFfList.sort((a, b) => {
-      //     return a.pumps[pumpname] - b.pumps[pumpName]
-      //   })
-      // }
+      const fnSort = (pumpFfList, pumpName) => {
+        return pumpFfList.sort((a, b) => {
+          return a.pumps[0].percentage - b.pumps[0].percentage;
+        });
+      };
 
       // get list of pumps
       for (const pump of appliances) {
-        assignments[pump.name] = [];
+        assignments.set(pump.name, []);
       }
 
       // first round of assignments
@@ -229,25 +228,28 @@ router.get("/ffpumptotals", (req, res) => {
             assignedPump = pump.name;
             lowestPercentage = pump.percentage;
             started = true;
-            console.log(assignedPump);
-          } else if (pump.percentage < lowestPercentage)  {
+            // console.log(assignedPump);
+          } else if (pump.percentage < lowestPercentage) {
             const oldPumpTemp = assignedPump;
             assignedPump = pump.name;
             lowestPercentage = pump.percentage;
-            console.log(assignedPump, ' from' , oldPumpTemp);
+            // console.log(assignedPump, ' from' , oldPumpTemp);
           }
         }
+        let oldAssignmentList = assignments.get(assignedPump);
+        // console.log(oldAssignmentList);
+        oldAssignmentList.push(firefighter);
+        assignments.set(assignedPump, oldAssignmentList)
+      });
 
-        assignments[assignedPump].push(firefighter)
-      })
-      // for (const pumpFfList of assignments) {
-      //   fnSort(pumpFfList)
-      // }
-
-      //
+      // iterate through assignments and send each ff list to be sorted
+      for (const pumpFfListWithKey of assignments) {
+          const pumpFfListSorted = fnSort(pumpFfListWithKey[1], pumpFfListWithKey[0]);
+          assignments.set(pumpFfListWithKey[0], pumpFfListSorted)
+      }
 
       return assignments;
-    }
+    };
 
     Promise.all(firefighters.map(fnGetShifts)).then(rawResults => {
       const tallyResult = rawResults.map(fnTallyandFormat);
@@ -255,7 +257,7 @@ router.get("/ffpumptotals", (req, res) => {
 
       const assignments = fnAssignPumps(percentageResult);
 
-      console.log(assignments);
+      console.log("final log", assignments);
     });
   });
 });
