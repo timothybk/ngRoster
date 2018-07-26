@@ -141,8 +141,9 @@ router.post("/deletefirefighter", (req, res, next) => {
 // Get all shifts
 router.get("/ffpumptotals", (req, res) => {
   const promiseFirefighters = FireFighter.find()
-  .where('name').nin(['Seeney', 'Ruaro'])
-  .exec();
+    .where("name")
+    .nin(["Seeney", "Ruaro"])
+    .exec();
 
   const promiseAppliances = Appliance.find().exec();
 
@@ -206,11 +207,20 @@ router.get("/ffpumptotals", (req, res) => {
 
     const fnAssignPumps = percentageResult => {
       const assignments = new Map();
+      const ffPool = [];
 
-      const fnSort = (pumpFfList, pumpName) => {
+      const fnSort = (pumpFfList, cycle) => {
         return pumpFfList.sort((a, b) => {
-          return a.pumps[0].percentage - b.pumps[0].percentage;
+          return a.pumps[cycle].percentage - b.pumps[cycle].percentage;
         });
+      };
+
+      const fnTrim = (pumpFfListSorted, pumpName) => {
+        const pumpValues = appliances.find(appliance => appliance.name === pumpName)
+        const indexToTrim = pumpValues.seats.length;
+
+        const pumpFfListTrimmees = pumpFfListSorted.splice(indexToTrim);
+        return [pumpFfListSorted, pumpFfListTrimmees];
       };
 
       // get list of pumps
@@ -218,34 +228,49 @@ router.get("/ffpumptotals", (req, res) => {
         assignments.set(pump.name, []);
       }
 
-      // first round of assignments
-      percentageResult.map(firefighter => {
-        let started = false;
-        let lowestPercentage;
-        let assignedPump;
-        for (const pump of firefighter.pumps) {
-          if (!started) {
-            assignedPump = pump.name;
-            lowestPercentage = pump.percentage;
-            started = true;
-            // console.log(assignedPump);
-          } else if (pump.percentage < lowestPercentage) {
-            const oldPumpTemp = assignedPump;
-            assignedPump = pump.name;
-            lowestPercentage = pump.percentage;
-            // console.log(assignedPump, ' from' , oldPumpTemp);
+      for (let i = 0; i < 4; i++) {
+        if (i === 0) {
+          // first round of assignments
+          percentageResult.map(firefighter => {
+            // sort ff pump list by percentage preference
+            const ffSortedPumps = firefighter.pumps.sort((a, b) => {
+              return a.percentage - b.percentage;
+            });
+            firefighter.pumps = ffSortedPumps;
+
+            // push firefighter to the assignment list of their first preference
+            let oldAssignmentList = assignments.get(firefighter.pumps[0].name);
+            oldAssignmentList.push(firefighter);
+            assignments.set(firefighter.pumps[0].name, oldAssignmentList);
+          });
+
+          // iterate through assignments and send each ff list to be sorted and trimmed
+          for (const pumpFfListWithKey of assignments) {
+            const pumpFfListSorted = fnSort(pumpFfListWithKey[1], 0);
+            const splitArr = fnTrim(pumpFfListSorted, pumpFfListWithKey[0]);
+            assignments.set(pumpFfListWithKey[0], splitArr[0]);
+            for (const failure of splitArr[1]) {
+              ffPool.push(failure);
+            }
+          }
+          // console.log(ffPool);
+        } else {
+          for (const failedFirefighter of ffPool) {
+            // push firefighter to the assignment list of their ith preference
+            let oldAssignmentList = assignments.get(failedFirefighter.pumps[i].name);
+            oldAssignmentList.push(failedFirefighter);
+            assignments.set(failedFirefighter.pumps[i].name, oldAssignmentList);
+
+          }
+          for (const pumpFfListWithKey of assignments) {
+            const splitArr = fnTrim(pumpFfListWithKey[1], pumpFfListWithKey[0]);
+            console.log(splitArr);
+            assignments.set(pumpFfListWithKey[0], splitArr[0]);
+            for (const failure of splitArr[1]) {
+              ffPool.push(failure);
+            }
           }
         }
-        let oldAssignmentList = assignments.get(assignedPump);
-        // console.log(oldAssignmentList);
-        oldAssignmentList.push(firefighter);
-        assignments.set(assignedPump, oldAssignmentList)
-      });
-
-      // iterate through assignments and send each ff list to be sorted
-      for (const pumpFfListWithKey of assignments) {
-          const pumpFfListSorted = fnSort(pumpFfListWithKey[1], pumpFfListWithKey[0]);
-          assignments.set(pumpFfListWithKey[0], pumpFfListSorted)
       }
 
       return assignments;
