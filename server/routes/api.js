@@ -140,128 +140,124 @@ router.post("/deletefirefighter", (req, res, next) => {
 
 // Get all shifts
 router.get("/ffpumptotals", (req, res) => {
-  ShiftInstance.aggregate()
-    .group({
-      _id: { firefighter: "$firefighter", pump: "$pump" },
-      total: { $sum: 1 }
-    })
-    .lookup({
-      from: "shiftinstances",
-      localField: "_id.firefighter",
-      foreignField: "firefighter",
-      as: "allFfShifts"
-    })
-    .lookup({
-      from: "shiftinstances",
-      localField: "_id.pump",
-      foreignField: "pump",
-      as: "allPumpShifts"
-    })
-    .lookup({
-      from: "firefighters",
-      localField: "_id.firefighter",
-      foreignField: "_id",
-      as: "_id.firefighter"
-    })
-    .lookup({
-      from: "appliances",
-      localField: "_id.pump",
-      foreignField: "_id",
-      as: "_id.pump"
-    })
-    .project({
-      _id: 0,
-      ff: { $arrayElemAt: ["$_id.firefighter", 0] },
-      pump: { $arrayElemAt: ["$_id.pump", 0] },
-      total: 1,
-      allFfShifts: { $size: "$allFfShifts" },
-      allPumpShifts: { $size: "$allPumpShifts"},
-      // ++++++++++++
-      // for below
-      // estimated seats per pump(eseatspp): 3.2
-      // total seats(tsea): 16
-      // estimated shifts per pump total(eshiftpp): 7.5
-      // total shifts(tshifts): 203
-      // expected percent of ff shifts = (eseatpp / tsea) * 100
-      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
-      ExpectedPercentageofFFShifts: 20,
-      ExpectedPercentageofPumpShifts: 3.7
-    })
-    .project({
-      firefighter: "$ff.name",
-      pump: "$pump.name",
-      total: 1,
-      allFfShifts: "$allFfShifts",
-      allPumpShifts: "$allPumpShifts",
-      fractionOfFfTotal: { $divide: ["$total", "$allFfShifts"]},
-      fractionOfPumpTotal: { $divide: ["$total", "$allPumpShifts"]}
-    })
-    .project({
-      firefighter: "$firefighter",
-      pump: "$pump",
-      total: 1,
-      allFfShifts: "$allFfShifts",
-      allPumpShifts: "$allPumpShifts",
-      percentageOfFfTotal: { $multiply: [ "$fractionOfFfTotal", 100 ] },
-      percentageOfPumpTotal: { $multiply: [ "$fractionOfPumpTotal", 100 ] },
-      // ++++++++++++
-      // for below
-      // estimated seats per pump(eseatspp): 3.2
-      // total seats(tsea): 16
-      // estimated shifts per pump total(eshiftpp): 7.5
-      // total shifts(tshifts): 203
-      // expected percent of ff shifts = (eseatpp / tsea) * 100
-      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
-      ExpectedPercentageofFFShifts: { $literal: 20},
-      ExpectedPercentageofPumpShifts: { $literal: 3.7}
-    })
-    .project({
-      firefighter: "$firefighter",
-      pump: "$pump",
-      weightedResult: {$add: [-3.2, "$percentageOfFfTotal", -20, "$percentageOfPumpTotal"]}
-    })
-    .sort("pump weightedResult")
-    .then(resultList => {
-      const curatedResult = [
-        [],
-        [],
-        [],
-        [],
-        []
-      ];
-      for (resultEl of resultList) {
-        const ffCountObj = {
-          firefighter: resultEl.firefighter,
-          count: resultEl.weightedResult
-        };
-        switch (resultEl.pump) {
-          case "flyer":
-            curatedResult[0].push(ffCountObj);
-            break;
-          case "runner":
-            curatedResult[1].push(ffCountObj);
-            break;
-          case "rescuepump":
-            curatedResult[2].push(ffCountObj);
-            break;
-          case "salvage":
-            curatedResult[3].push(ffCountObj);
-            break;
-          case "bronto":
-            curatedResult[4].push(ffCountObj);
-            break;
+  const promiseFirefighters = FireFighter.find().exec();
 
-          default:
-            console.log("default", resultEl.pump);
-            break;
+  const promiseAppliances = Appliance.find().exec();
+
+  Promise.all([promiseFirefighters, promiseAppliances]).then(ffsAndPumps => {
+    const firefighters = ffsAndPumps[0];
+    const appliances = ffsAndPumps[1];
+
+    const fnGetShifts = firefighter => {
+      return Promise.all(
+        appliances.map(appliance => {
+          return ShiftInstance.find({ firefighter: firefighter._id })
+            .where("pump")
+            .equals(appliance._id)
+            .then(result => {
+              return {
+                pump: appliance.name,
+                count: result.length
+              };
+            });
+        })
+      )
+      .then(
+        result => {
+          return {
+            firefighter: firefighter.name,
+            pumps: result
+          }
         }
+      )
+    };
+
+    const fnTallyandFormat = rawResult => {
+      const tallyResult = {};
+      tallyResult.firefighter = rawResult.firefighter;
+      tallyResult.total = 0;
+      tallyResult.pumps = [];
+
+      for (const pump of rawResult.pumps) {
+        tallyResult.pumps.push({
+          name: pump.pump,
+          count: pump.count})
+        tallyResult.total += pump.count;
       }
-      res.status(200).json(curatedResult);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send(err);
+
+      return tallyResult;
+    };
+
+    const fnFindPercentage = (tallyResult) => {
+      const percentageResult = {
+        firefighter: tallyResult.firefighter,
+        pumps: []
+      }
+
+      for (const pump of tallyResult.pumps) {
+        percentageResult.pumps.push({
+          name: pump.name,
+          percentage: pump.count / tallyResult.total * 100
+        })
+      }
+
+      return percentageResult;
+    }
+
+    const fnAssignPumps = (percentageResult) => {
+
+      const assignments = {};
+
+      // const fnSort = (pumpFfList, pumpName) => {
+      //   pumpFfList.sort((a, b) => {
+      //     return a.pumps[pumpname] - b.pumps[pumpName]
+      //   })
+      // }
+
+      // get list of pumps
+      for (const pump of appliances) {
+        assignments[pump.name] = [];
+      }
+
+      // first round of assignments
+      percentageResult.map(firefighter => {
+        let started = false;
+        let lowestPercentage;
+        let assignedPump;
+        for (const pump of firefighter.pumps) {
+          if (!started) {
+            assignedPump = pump.name;
+            lowestPercentage = pump.percentage;
+            started = true;
+            console.log(assignedPump);
+          } else if (pump.percentage < lowestPercentage)  {
+            const oldPumpTemp = assignedPump;
+            assignedPump = pump.name;
+            lowestPercentage = pump.percentage;
+            console.log(assignedPump, ' from' , oldPumpTemp);
+          }
+        }
+
+        assignments[assignedPump].push(firefighter)
+      })
+      // for (const pumpFfList of assignments) {
+      //   fnSort(pumpFfList)
+      // }
+
+      //
+
+      return assignments;
+    }
+
+    Promise.all(firefighters.map(fnGetShifts)).then(rawResults => {
+      const tallyResult = rawResults.map(fnTallyandFormat);
+      const percentageResult = tallyResult.map(fnFindPercentage);
+
+      const assignments = fnAssignPumps(percentageResult);
+
+      console.log(assignments);
     });
+  });
 });
 
 // Get all pumps
