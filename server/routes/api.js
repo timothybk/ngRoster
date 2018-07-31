@@ -228,7 +228,6 @@ router.get("/ffpumptotals", (req, res) => {
             while (i < ffQuals.length && passed === false) {
 
               const ffQual = ffQuals[i];
-              console.log(pumpName, firefighter.firefighter, ffQual, pumpQual);
               if (ffQual === pumpQual) {
                 newList.push(firefighter);
                 passed = true;
@@ -240,13 +239,11 @@ router.get("/ffpumptotals", (req, res) => {
             }
 
           }
-          console.log('exit pump has qualifications', newList);
           for (const failedFf of failList) {
             ffPool.push(failedFf);
           }
           return newList;
         } else {
-          console.log('exit pump has no qualifications');
           return pumpFfList;
         }
       }
