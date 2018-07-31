@@ -207,7 +207,7 @@ router.get("/ffpumptotals", (req, res) => {
 
     const fnAssignPumps = percentageResult => {
       const assignments = new Map();
-      const ffPool = [];
+      let ffPool = [];
 
       const fnSort = (pumpFfList, pumpName) => {
         return pumpFfList.sort((a, b) => {
@@ -223,6 +223,11 @@ router.get("/ffpumptotals", (req, res) => {
 
         const pumpFfListTrimmees = pumpFfListSorted.splice(indexToTrim);
         return [pumpFfListSorted, pumpFfListTrimmees];
+      };
+
+      const fnClearPool = () => {
+        ffPool = [];
+        return;
       };
 
       // get list of pumps
@@ -255,11 +260,10 @@ router.get("/ffpumptotals", (req, res) => {
               ffPool.push(failure);
             }
           }
-          // console.log(ffPool);
+
         } else {
-          const ffPoolCopy = [...ffPool]
-          ffpool = [];
-          console.log('??????????????????', ffPool, '????????????????')
+          let ffPoolCopy = ffPool
+          fnClearPool();
           for (const failedFirefighter of ffPoolCopy) {
             // push firefighter to the assignment list of their ith preference
             let oldAssignmentList = assignments.get(failedFirefighter.pumps[i].name);
@@ -267,14 +271,17 @@ router.get("/ffpumptotals", (req, res) => {
             assignments.set(failedFirefighter.pumps[i].name, oldAssignmentList);
 
           }
+
           for (const pumpFfListWithKey of assignments) {
             const pumpFfListSorted = fnSort(pumpFfListWithKey[1], pumpFfListWithKey[0]);
             const splitArr = fnTrim(pumpFfListSorted, pumpFfListWithKey[0]);
-            // console.log(splitArr);
+
             assignments.set(pumpFfListWithKey[0], splitArr[0]);
-            for (const failure of splitArr[1]) {
-              ffPool.push(failure);
-              console.log(ffpool)
+            if (splitArr[1].length > 0) {
+
+              for (const failure of splitArr[1]) {
+                ffPool.push(failure);
+              }
             }
           }
         }
