@@ -145,7 +145,10 @@ router.get("/ffpumptotals", (req, res) => {
     .nin(["Seeney", "Ruaro"])
     .exec();
 
-  const promiseAppliances = Appliance.find().exec();
+  const promiseAppliances = Appliance
+  .find()
+  .populate('qualifications')
+  .exec();
 
   Promise.all([promiseFirefighters, promiseAppliances]).then(ffsAndPumps => {
     const firefighters = ffsAndPumps[0];
@@ -209,6 +212,18 @@ router.get("/ffpumptotals", (req, res) => {
       const assignments = new Map();
       let ffPool = [];
 
+      const fnQualCheck = (pumpFfList, pumpName) => {
+        const pumpValues = appliances.find(appliance => appliance.name === pumpName);
+        const pumpQuals = pumpValues.qualifications;
+        if (pumpQuals.length > 0) {
+          console.log('exit pump has qualifications')
+          return pumpFfList;
+        } else {
+          console.log('exit pump has no qualifications');
+          return pumpFfList;
+        }
+      }
+
       const fnSort = (pumpFfList, pumpName) => {
         return pumpFfList.sort((a, b) => {
           const aIndex = a.pumps.findIndex(pump => pump.name === pumpName);
@@ -224,6 +239,27 @@ router.get("/ffpumptotals", (req, res) => {
         const pumpFfListTrimmees = pumpFfListSorted.splice(indexToTrim);
         return [pumpFfListSorted, pumpFfListTrimmees];
       };
+
+      const fnAssignToFfPreference = (firefighter, iteration) => {
+        let oldAssignmentList = assignments.get(firefighter.pumps[iteration].name);
+        oldAssignmentList.push(firefighter);
+        assignments.set(firefighter.pumps[iteration].name, oldAssignmentList);
+
+      };
+
+      const fnSortAndTrim = () => {
+        for (const pumpFfListWithKey of assignments) {
+          const pumpFfListQualCheck = fnQualCheck(pumpFfListWithKey[1], pumpFfListWithKey[0])
+          const pumpFfListSorted = fnSort(pumpFfListQualCheck, pumpFfListWithKey[0]);
+          const splitArr = fnTrim(pumpFfListSorted, pumpFfListWithKey[0]);
+          assignments.set(pumpFfListWithKey[0], splitArr[0]);
+          if (splitArr[1].length > 0) {
+            for (const failure of splitArr[1]) {
+              ffPool.push(failure);
+            }
+          }
+        };
+      }
 
       const fnClearPool = () => {
         ffPool = [];
@@ -246,44 +282,20 @@ router.get("/ffpumptotals", (req, res) => {
             firefighter.pumps = ffSortedPumps;
 
             // push firefighter to the assignment list of their first preference
-            let oldAssignmentList = assignments.get(firefighter.pumps[0].name);
-            oldAssignmentList.push(firefighter);
-            assignments.set(firefighter.pumps[0].name, oldAssignmentList);
+            fnAssignToFfPreference(firefighter, i);
           });
 
           // iterate through assignments and send each ff list to be sorted and trimmed
-          for (const pumpFfListWithKey of assignments) {
-            const pumpFfListSorted = fnSort(pumpFfListWithKey[1], pumpFfListWithKey[0]);
-            const splitArr = fnTrim(pumpFfListSorted, pumpFfListWithKey[0]);
-            assignments.set(pumpFfListWithKey[0], splitArr[0]);
-            for (const failure of splitArr[1]) {
-              ffPool.push(failure);
-            }
-          }
+          fnSortAndTrim();
 
         } else {
           let ffPoolCopy = ffPool
           fnClearPool();
           for (const failedFirefighter of ffPoolCopy) {
             // push firefighter to the assignment list of their ith preference
-            let oldAssignmentList = assignments.get(failedFirefighter.pumps[i].name);
-            oldAssignmentList.push(failedFirefighter);
-            assignments.set(failedFirefighter.pumps[i].name, oldAssignmentList);
-
+            fnAssignToFfPreference(failedFirefighter, i);
           }
-
-          for (const pumpFfListWithKey of assignments) {
-            const pumpFfListSorted = fnSort(pumpFfListWithKey[1], pumpFfListWithKey[0]);
-            const splitArr = fnTrim(pumpFfListSorted, pumpFfListWithKey[0]);
-
-            assignments.set(pumpFfListWithKey[0], splitArr[0]);
-            if (splitArr[1].length > 0) {
-
-              for (const failure of splitArr[1]) {
-                ffPool.push(failure);
-              }
-            }
-          }
+          fnSortAndTrim();
         }
       }
 
