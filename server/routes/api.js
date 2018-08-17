@@ -323,7 +323,7 @@ router.get("/ffpumptotals", (req, res) => {
         }
       }
 
-      return assignments;
+      return [assignments, ffPool];
     };
 
     Promise.all(firefighters.map(fnGetShifts)).then(rawResults => {
@@ -332,7 +332,8 @@ router.get("/ffpumptotals", (req, res) => {
 
       const assignments = fnAssignPumps(percentageResult);
 
-      console.log("final log", assignments);
+      console.log("final log", assignments[0]);
+      console.log("spares", assignments[1]);
     });
   });
 });
