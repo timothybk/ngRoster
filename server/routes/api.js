@@ -332,10 +332,6 @@ router.get("/ffpumptotals", (req, res) => {
         const checked = justSorted.map(fnQualCheckFf);
 
         return checked;
-        // const assignments = fnAssignPumps(percentageResult);
-
-        // console.log("final log", assignments[0]);
-        // console.log("spares", assignments[1]);
       }
     );
 
