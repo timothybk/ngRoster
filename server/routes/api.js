@@ -145,10 +145,9 @@ router.get("/ffpumptotals", (req, res) => {
     .nin(["Seeney", "Ruaro"])
     .exec();
 
-  const promiseAppliances = Appliance
-  .find()
-  .populate('qualifications')
-  .exec();
+  const promiseAppliances = Appliance.find()
+    .populate("qualifications")
+    .exec();
 
   Promise.all([promiseFirefighters, promiseAppliances]).then(ffsAndPumps => {
     const firefighters = ffsAndPumps[0];
@@ -179,14 +178,14 @@ router.get("/ffpumptotals", (req, res) => {
       return Promise.all(
         firefighters.map(firefighter => {
           return ShiftInstance.find({ pump: pump._id })
-          .where("firefighter")
-          .equals(firefighter._id)
-          .then(result => {
-            return {
-              firefighter: firefighter.name,
-              count: result.length
-            };
-          });
+            .where("firefighter")
+            .equals(firefighter._id)
+            .then(result => {
+              return {
+                firefighter: firefighter.name,
+                count: result.length
+              };
+            });
         })
       ).then(result => {
         return {
@@ -263,47 +262,44 @@ router.get("/ffpumptotals", (req, res) => {
     };
 
     const fnSortInFF = percentageResult => {
-
-     const pumps = percentageResult.pumps;
+      const pumps = percentageResult.pumps;
       const sorted = pumps.sort((a, b) => {
         return a.percentage - b.percentage;
       });
 
       const justNames = [];
 
-      for(const result of sorted) {
+      for (const result of sorted) {
         justNames.push(result.name);
-      };
+      }
 
       return [percentageResult.firefighter, justNames];
     };
 
     const fnSortInPump = percentageResult => {
-
       const firefighters = percentageResult.firefighters;
-       const sorted = firefighters.sort((a, b) => {
-         return a.percentage - b.percentage;
-       });
+      const sorted = firefighters.sort((a, b) => {
+        return a.percentage - b.percentage;
+      });
 
-       const justNames = [];
+      const justNames = [];
 
-       for(const result of sorted) {
-         justNames.push(result.name);
-       };
+      for (const result of sorted) {
+        justNames.push(result.name);
+      }
 
-       return [percentageResult.pump, justNames];
-     };
+      return [percentageResult.pump, justNames];
+    };
 
-     const fnQualCheckFf = pumpFfList => {
-
+    const fnQualCheckFf = pumpFfList => {
       const pumpTruthey = [];
 
-      for (const pumper of pumpFfList[1]){
+      for (const pumper of pumpFfList[1]) {
         const actualPump = appliances.find(pump => pump.name === pumper);
 
         const pumpQuals = actualPump.qualifications;
 
-        if (pumpQuals.length > 0)  {
+        if (pumpQuals.length > 0) {
           const actualFf = firefighters.find(ff => ff.name === pumpFfList[0]);
           const index = actualFf.qualifications.indexOf(pumpQuals[0].name);
 
@@ -315,11 +311,12 @@ router.get("/ffpumptotals", (req, res) => {
         }
       }
 
-      return[pumpFfList[0], pumpTruthey];
+      return [pumpFfList[0], pumpTruthey];
+    };
 
-    }
-
-    const promisePumpSorted = Promise.all(appliances.map(fnGetShiftByPump)).then(rawResults => {
+    const promisePumpSorted = Promise.all(
+      appliances.map(fnGetShiftByPump)
+    ).then(rawResults => {
       const tallyResult = rawResults.map(fnTallyandFormatPump);
       const percentageResult = tallyResult.map(fnFindPercentagePump);
       const justSorted = percentageResult.map(fnSortInPump);
@@ -327,26 +324,27 @@ router.get("/ffpumptotals", (req, res) => {
       return justSorted;
     });
 
-    const promiseFfSorted = Promise.all(firefighters.map(fnGetShifts)).then(rawResults => {
-      const tallyResult = rawResults.map(fnTallyandFormat);
-      const percentageResult = tallyResult.map(fnFindPercentage);
-      const justSorted = percentageResult.map(fnSortInFF);
-      const checked = justSorted.map(fnQualCheckFf);
+    const promiseFfSorted = Promise.all(firefighters.map(fnGetShifts)).then(
+      rawResults => {
+        const tallyResult = rawResults.map(fnTallyandFormat);
+        const percentageResult = tallyResult.map(fnFindPercentage);
+        const justSorted = percentageResult.map(fnSortInFF);
+        const checked = justSorted.map(fnQualCheckFf);
 
-      return checked;
-      // const assignments = fnAssignPumps(percentageResult);
+        return checked;
+        // const assignments = fnAssignPumps(percentageResult);
 
-      // console.log("final log", assignments[0]);
-      // console.log("spares", assignments[1]);
-    });
+        // console.log("final log", assignments[0]);
+        // console.log("spares", assignments[1]);
+      }
+    );
 
-    Promise.all([promisePumpSorted, promiseFfSorted])
-    .then(result => {
+    Promise.all([promisePumpSorted, promiseFfSorted]).then(result => {
       const pumpPreferences = result[0];
       const ffPreferences = result[1];
 
       console.log(pumpPreferences, ffPreferences);
-    })
+    });
   });
 });
 
