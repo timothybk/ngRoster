@@ -159,11 +159,20 @@ router.get("/ffpumptotals", (req, res) => {
           return ShiftInstance.find({ firefighter: firefighter._id })
             .where("pump")
             .equals(appliance._id)
+            .sort('date')
+            .limit(1)
             .then(result => {
-              return {
-                pump: appliance.name,
-                count: result.length
-              };
+              if (result.length) {
+                return {
+                  pump: appliance.name,
+                  date: result[0].date
+                };
+              } else {
+                return {
+                  pump: appliance.name,
+                  date: new Date()
+                }
+              }
             });
         })
       ).then(result => {
@@ -261,19 +270,19 @@ router.get("/ffpumptotals", (req, res) => {
       return percentageResult;
     };
 
-    const fnSortInFF = percentageResult => {
-      const pumps = percentageResult.pumps;
+    const fnSortInFF = rawResult => {
+      const pumps = rawResult.pumps;
       const sorted = pumps.sort((a, b) => {
-        return a.percentage - b.percentage;
+        return a.date - b.date;
       });
 
       const justNames = [];
 
       for (const result of sorted) {
-        justNames.push(result.name);
-      }
+        justNames.push(result.pump);
+      };
 
-      return [percentageResult.firefighter, justNames];
+      return [rawResult.firefighter, justNames];
     };
 
     const fnSortInPump = percentageResult => {
@@ -326,9 +335,7 @@ router.get("/ffpumptotals", (req, res) => {
 
     const promiseFfSorted = Promise.all(firefighters.map(fnGetShifts)).then(
       rawResults => {
-        const tallyResult = rawResults.map(fnTallyandFormat);
-        const percentageResult = tallyResult.map(fnFindPercentage);
-        const justSorted = percentageResult.map(fnSortInFF);
+        const justSorted = rawResults.map(fnSortInFF);
         const checked = justSorted.map(fnQualCheckFf);
 
         return checked;
@@ -418,7 +425,7 @@ router.get("/ffpumptotals", (req, res) => {
             fnSortSeatsArr(pumpIndex);
 
             console.log(preference, " now has ", pumpsSeatsArr[pumpIndex]);
-            console.log("faillist is now ", failList);
+            console.log("faillist now has", oldFFString);
             break;
           } else if (l === firefighter[1].length - 1) {
             failList.push(firefighter);
@@ -430,7 +437,7 @@ router.get("/ffpumptotals", (req, res) => {
               pumpRecipPref,
               " that was last preference"
             );
-            console.log("faillist is now ", failList);
+            console.log("faillist now has", firefighter);
           } else {
             console.log(
               preference,
@@ -444,10 +451,11 @@ router.get("/ffpumptotals", (req, res) => {
         }
       }
 
-      for (let i = 0; i < failList.length; i++) {
-        const failure = failList[i];
-        console.log(failure);
-      }
+      // iterate through fail list
+      // for (let i = 0; i < failList.length; i++) {
+      //   const failure = failList[i];
+      //   console.log(failure);
+      // }
 
       for (let i = 0; i < pumpsSeatsArr.length; i++) {
         const pumpString = pumpKey[i];
