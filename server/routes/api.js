@@ -506,7 +506,7 @@ router.get("/ffpumptotals", (req, res) => {
 
         //   console.log(pumpString, pumpsSeatsArr[i], ' all seats filled?', !fnCheckPumpNumber(i));
         // }
-        return pumpPreferences, pumpsSeatsArr, failList;
+        return [pumpPreferences, pumpsSeatsArr, failList];
         // console.log(pumpPreferences, ffPreferences);
       })
       .then(result => {
