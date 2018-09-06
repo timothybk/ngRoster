@@ -510,7 +510,7 @@ router.get("/ffpumptotals", (req, res) => {
         // console.log(pumpPreferences, ffPreferences);
       })
       .then(result => {
-        console.log("in the then", result);
+        console.log(result);
       });
   });
 });
