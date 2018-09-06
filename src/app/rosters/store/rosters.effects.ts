@@ -46,6 +46,7 @@ export class RostersEffects {
         return this.httpClient.get<FfPumpTotal[]>('/api/ffpumptotals');
       })
       .map((data: FfPumpTotal[]) => {
+        console.log(data);
         return {
           type: RostersActions.SET_FF_PUMP_TOTALS,
           payload: data
