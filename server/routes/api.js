@@ -353,7 +353,12 @@ router.get("/ffpumptotals", (req, res) => {
       const pumpsSeatsArr = [[], [], [], [], []];
 
       const fnCheckPumpNumber = pumpIndex => {
-        if (pumpsSeatsArr[pumpIndex].length <= 3) {
+
+        const actualPump = appliances[pumpIndex];
+
+        const pumpSeats = actualPump.seats;
+
+        if (pumpsSeatsArr[pumpIndex].length < pumpSeats.length) {
           return true;
         } else {
           return false;
