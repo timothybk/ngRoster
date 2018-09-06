@@ -353,7 +353,6 @@ router.get("/ffpumptotals", (req, res) => {
       const pumpsSeatsArr = [[], [], [], [], []];
 
       const fnCheckPumpNumber = pumpIndex => {
-
         const actualPump = appliances[pumpIndex];
 
         const pumpSeats = actualPump.seats;
