@@ -342,171 +342,176 @@ router.get("/ffpumptotals", (req, res) => {
       }
     );
 
-    Promise.all([promisePumpSorted, promiseFfSorted]).then(result => {
-      const pumpPreferences = result[0];
-      const ffPreferences = result[1];
-      const pumpKey = [];
-      const ffKey = [];
-      const failList = [];
-      let tempFailList = [];
+    Promise.all([promisePumpSorted, promiseFfSorted])
+      .then(result => {
+        const pumpPreferences = result[0];
+        const ffPreferences = result[1];
+        const pumpKey = [];
+        const ffKey = [];
+        const failList = [];
+        let tempFailList = [];
 
-      const pumpsSeatsArr = [[], [], [], [], []];
+        const pumpsSeatsArr = [[], [], [], [], []];
 
-      const fnCheckPumpNumber = pumpIndex => {
-        const actualPump = appliances[pumpIndex];
+        const fnCheckPumpNumber = pumpIndex => {
+          const actualPump = appliances[pumpIndex];
 
-        const pumpSeats = actualPump.seats;
+          const pumpSeats = actualPump.seats;
 
-        if (pumpsSeatsArr[pumpIndex].length < pumpSeats.length) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-
-      const fnGetPumpIndex = pumpString => {
-        return pumpKey.indexOf(pumpString);
-      };
-
-      const fnGetFfIndex = ffString => {
-        return ffKey.indexOf(ffString);
-      };
-
-      const fnSortSeatsArr = pumpIndex => {
-        pumpsSeatsArr[pumpIndex].sort(function(a, b) {
-          return a - b;
-        });
-        return;
-      };
-
-      const fnFfFromPumpRecipPref = (pumpIndex, pumpRecipPref) => {
-        // console.log(
-        //   "pumpIndex: ",
-        //   pumpIndex,
-        //   " pumpRecipPref: ",
-        //   pumpRecipPref
-        // );
-        return pumpPreferences[pumpIndex][1][pumpRecipPref];
-      };
-
-      const fnClearTempFailList = () => {
-        tempFailList = [];
-      };
-
-      const fnMarriageLogic = firefighter => {
-        for (let l = 0; l < firefighter[1].length; l++) {
-          const preference = firefighter[1][l];
-          // console.log(pumpIndex, pumpKey[pumpIndex], pumpRecipPref);
-
-          const pumpIndex = fnGetPumpIndex(preference);
-          const seatsAvailable = fnCheckPumpNumber(pumpIndex);
-          const pumpRecipPref = pumpPreferences[pumpIndex][1].indexOf(
-            firefighter[0]
-          );
-
-          if (seatsAvailable) {
-            pumpsSeatsArr[pumpIndex].push(pumpRecipPref);
-
-            fnSortSeatsArr(pumpIndex);
-
-            // console.log("added to ", preference, " there are still seats");
-
-            break;
-          } else if (pumpsSeatsArr[pumpIndex][3] > pumpRecipPref) {
-            // console.log(
-            //   preference,
-            //   " had ",
-            //   pumpsSeatsArr[pumpIndex],
-            //   " swaping ",
-            //   pumpRecipPref
-            // );
-            const oldFFString = fnFfFromPumpRecipPref(
-              pumpIndex,
-              pumpsSeatsArr[pumpIndex][3]
-            );
-            // console.log("old ff string: ", oldFFString);
-            const oldFFIndex = fnGetFfIndex(oldFFString);
-            // console.log("old ff index: ", oldFFIndex);
-            tempFailList.push(ffPreferences[oldFFIndex]);
-            pumpsSeatsArr[pumpIndex][3] = pumpRecipPref;
-            fnSortSeatsArr(pumpIndex);
-
-            // console.log(preference, " now has ", pumpsSeatsArr[pumpIndex]);
-            // console.log("tempFailList now has", oldFFString);
-            break;
-          } else if (l === firefighter[1].length - 1) {
-            failList.push(firefighter);
-            // console.log(
-            //   preference,
-            //   " has ",
-            //   pumpsSeatsArr[pumpIndex],
-            //   " ignoring ",
-            //   pumpRecipPref,
-            //   " that was last preference"
-            // );
-            // console.log("faillist now has", firefighter);
+          if (pumpsSeatsArr[pumpIndex].length < pumpSeats.length) {
+            return true;
           } else {
-            // console.log(
-            //   preference,
-            //   " has ",
-            //   pumpsSeatsArr[pumpIndex],
-            //   " ignoring ",
-            //   pumpRecipPref,
-            //   " trying next preference"
-            // );
+            return false;
           }
+        };
+
+        const fnGetPumpIndex = pumpString => {
+          return pumpKey.indexOf(pumpString);
+        };
+
+        const fnGetFfIndex = ffString => {
+          return ffKey.indexOf(ffString);
+        };
+
+        const fnSortSeatsArr = pumpIndex => {
+          pumpsSeatsArr[pumpIndex].sort(function(a, b) {
+            return a - b;
+          });
+          return;
+        };
+
+        const fnFfFromPumpRecipPref = (pumpIndex, pumpRecipPref) => {
+          // console.log(
+          //   "pumpIndex: ",
+          //   pumpIndex,
+          //   " pumpRecipPref: ",
+          //   pumpRecipPref
+          // );
+          return pumpPreferences[pumpIndex][1][pumpRecipPref];
+        };
+
+        const fnClearTempFailList = () => {
+          tempFailList = [];
+        };
+
+        const fnMarriageLogic = firefighter => {
+          for (let l = 0; l < firefighter[1].length; l++) {
+            const preference = firefighter[1][l];
+            // console.log(pumpIndex, pumpKey[pumpIndex], pumpRecipPref);
+
+            const pumpIndex = fnGetPumpIndex(preference);
+            const seatsAvailable = fnCheckPumpNumber(pumpIndex);
+            const pumpRecipPref = pumpPreferences[pumpIndex][1].indexOf(
+              firefighter[0]
+            );
+
+            if (seatsAvailable) {
+              pumpsSeatsArr[pumpIndex].push(pumpRecipPref);
+
+              fnSortSeatsArr(pumpIndex);
+
+              // console.log("added to ", preference, " there are still seats");
+
+              break;
+            } else if (pumpsSeatsArr[pumpIndex][3] > pumpRecipPref) {
+              // console.log(
+              //   preference,
+              //   " had ",
+              //   pumpsSeatsArr[pumpIndex],
+              //   " swaping ",
+              //   pumpRecipPref
+              // );
+              const oldFFString = fnFfFromPumpRecipPref(
+                pumpIndex,
+                pumpsSeatsArr[pumpIndex][3]
+              );
+              // console.log("old ff string: ", oldFFString);
+              const oldFFIndex = fnGetFfIndex(oldFFString);
+              // console.log("old ff index: ", oldFFIndex);
+              tempFailList.push(ffPreferences[oldFFIndex]);
+              pumpsSeatsArr[pumpIndex][3] = pumpRecipPref;
+              fnSortSeatsArr(pumpIndex);
+
+              // console.log(preference, " now has ", pumpsSeatsArr[pumpIndex]);
+              // console.log("tempFailList now has", oldFFString);
+              break;
+            } else if (l === firefighter[1].length - 1) {
+              failList.push(firefighter);
+              // console.log(
+              //   preference,
+              //   " has ",
+              //   pumpsSeatsArr[pumpIndex],
+              //   " ignoring ",
+              //   pumpRecipPref,
+              //   " that was last preference"
+              // );
+              // console.log("faillist now has", firefighter);
+            } else {
+              // console.log(
+              //   preference,
+              //   " has ",
+              //   pumpsSeatsArr[pumpIndex],
+              //   " ignoring ",
+              //   pumpRecipPref,
+              //   " trying next preference"
+              // );
+            }
+          }
+        };
+
+        for (const pump of pumpPreferences) {
+          pumpKey.push(pump[0]);
         }
-      };
 
-      for (const pump of pumpPreferences) {
-        pumpKey.push(pump[0]);
-      }
+        for (const ff of ffPreferences) {
+          ffKey.push(ff[0]);
+        }
 
-      for (const ff of ffPreferences) {
-        ffKey.push(ff[0]);
-      }
-
-      for (let k = 0; k < ffPreferences.length; k++) {
-        const firefighter = ffPreferences[k];
-        // console.log(firefighter[0]);
-        fnMarriageLogic(firefighter);
-      }
-
-      // iterate through temp fail list
-      while (tempFailList.length > 0) {
-        const copyTempFailList = [...tempFailList];
-        fnClearTempFailList();
-        for (let i = 0; i < copyTempFailList.length; i++) {
-          // console.log(copyTempFailList, tempFailList);
-          const firefighter = copyTempFailList[i];
+        for (let k = 0; k < ffPreferences.length; k++) {
+          const firefighter = ffPreferences[k];
+          // console.log(firefighter[0]);
           fnMarriageLogic(firefighter);
         }
-      }
 
-      // for (let i = 0; i < pumpsSeatsArr.length; i++) {
-      //   const pump = pumpsSeatsArr[i];
-      //   if (!fnCheckPumpNumber(i)) {
-      //     console.log(pumpPreferences[i])
-      //   }
-      // }
+        // iterate through temp fail list
+        while (tempFailList.length > 0) {
+          const copyTempFailList = [...tempFailList];
+          fnClearTempFailList();
+          for (let i = 0; i < copyTempFailList.length; i++) {
+            // console.log(copyTempFailList, tempFailList);
+            const firefighter = copyTempFailList[i];
+            fnMarriageLogic(firefighter);
+          }
+        }
 
-      // for (let i = 0; i < pumpsSeatsArr.length; i++) {
-      //   const pumpString = pumpKey[i];
-      //   const currentPumpPrefs = pumpPreferences[i][1];
-      //   for (let j = 0; j < pumpsSeatsArr[i].length; j++) {
-      //     const ffRecipIndex = pumpsSeatsArr[i][j];
-      //     const ffString = currentPumpPrefs[ffRecipIndex];
-      //     pumpsSeatsArr[i][j] = ffString;
-      //   }
+        //
+        // convert pref indexes to strings
+        //
 
-      //   console.log(pumpString, pumpsSeatsArr[i], ' all seats filled?', !fnCheckPumpNumber(i));
-      // }
-      return(pumpPreferences, pumpsSeatsArr, failList);
-      // console.log(pumpPreferences, ffPreferences);
-    })
-    .then(result => {
-      console.log('in the then', result);
-    })
+        // for (let i = 0; i < pumpsSeatsArr.length; i++) {
+        //   const pump = pumpsSeatsArr[i];
+        //   if (!fnCheckPumpNumber(i)) {
+        //     console.log(pumpPreferences[i])
+        //   }
+        // }
+
+        // for (let i = 0; i < pumpsSeatsArr.length; i++) {
+        //   const pumpString = pumpKey[i];
+        //   const currentPumpPrefs = pumpPreferences[i][1];
+        //   for (let j = 0; j < pumpsSeatsArr[i].length; j++) {
+        //     const ffRecipIndex = pumpsSeatsArr[i][j];
+        //     const ffString = currentPumpPrefs[ffRecipIndex];
+        //     pumpsSeatsArr[i][j] = ffString;
+        //   }
+
+        //   console.log(pumpString, pumpsSeatsArr[i], ' all seats filled?', !fnCheckPumpNumber(i));
+        // }
+        return pumpPreferences, pumpsSeatsArr, failList;
+        // console.log(pumpPreferences, ffPreferences);
+      })
+      .then(result => {
+        console.log("in the then", result);
+      });
   });
 });
 
