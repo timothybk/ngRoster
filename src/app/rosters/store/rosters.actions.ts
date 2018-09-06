@@ -4,6 +4,8 @@ import { Action } from '@ngrx/store';
 import { FfPumpTotal } from '../../shared/ff-pump-total.model';
 import { FfCount } from '../../shared/ff-count.model';
 
+import { ShiftsApiResponseModel, ShiftsApiResponse } from '../../shared/shifts-api-response.model';
+
 export const UPDATE_BUILDER = 'UPDATE_BUILDER';
 export const UPDATE_N2 = 'UPDATE_N2';
 export const ROSTERS_ERROR = 'ROSTERS_ERROR';
@@ -41,7 +43,7 @@ export class FetchFfPumpTotals implements Action {
 export class SetFfPumpTotals implements Action {
   readonly type = SET_FF_PUMP_TOTALS;
 
-  constructor(public payload: FfCount[][]) {}
+  constructor(public payload: ShiftsApiResponse) {}
 }
 
 export class FetchShifts implements Action {

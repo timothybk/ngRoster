@@ -8,21 +8,17 @@ import { FfCount } from "../../shared/ff-count.model";
 export interface State {
   allShifts: Shifts[];
   pumps: Pump[];
-  flyerWeighted: FfCount[];
-  runnerWeighted: FfCount[];
-  rescuepumpWeighted: FfCount[];
-  salvageWeighted: FfCount[];
-  brontoWeighted: FfCount[];
+  pumpPreferences: [];
+  pumpSeating: [];
+  failList: [];
 }
 
 const initialState: State = {
   allShifts: [],
   pumps: [{ name: "test", seats: ["one", "two"], qualifications: ["nil"] }],
-  flyerWeighted: [],
-  runnerWeighted: [],
-  rescuepumpWeighted: [],
-  salvageWeighted: [],
-  brontoWeighted: [],
+  pumpPreferences: [],
+  pumpSeating: [],
+  failList: [],
 };
 
 export function rostersReducer(
@@ -43,11 +39,9 @@ export function rostersReducer(
     case RostersActions.SET_FF_PUMP_TOTALS:
       return {
         ...state,
-        flyerWeighted: [ ...action.payload[0] ],
-        runnerWeighted: [ ...action.payload[1] ],
-        rescuepumpWeighted: [ ...action.payload[2] ],
-        salvageWeighted: [ ...action.payload[3] ],
-        brontoWeighted: [ ...action.payload[4] ],
+        pumpPreferences: [ ...action.payload[0] ],
+        pumpSeating: [ ...action.payload[1] ],
+        failList: [ ...action.payload[2] ]
       };
     case RostersActions.ROSTERS_ERROR:
     default:
