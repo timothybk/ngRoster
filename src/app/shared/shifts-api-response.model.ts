@@ -1,5 +1,5 @@
 export interface ShiftsApiResponse {
-  pumppreferences: [];
-  pumpseating: [];
-  faillist: [];
+  pumppreferences: any[];
+  pumpseating: any[];
+  faillist: any[];
 }

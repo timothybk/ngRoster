@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { FfPumpTotal } from '../../shared/ff-pump-total.model';
 import { FfCount } from '../../shared/ff-count.model';
 
-import { ShiftsApiResponseModel, ShiftsApiResponse } from '../../shared/shifts-api-response.model';
+import { ShiftsApiResponse } from '../../shared/shifts-api-response.model';
 
 export const UPDATE_BUILDER = 'UPDATE_BUILDER';
 export const UPDATE_N2 = 'UPDATE_N2';
