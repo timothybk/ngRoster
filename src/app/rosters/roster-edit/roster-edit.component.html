@@ -6,16 +6,13 @@
           <ng-template matStepLabel>Flyer</ng-template>
           <mat-form-field>
             <mat-select placeholder="Firefighters" formControlName="firstCtrl" multiple [(value)]="selected">
-              <mat-option *ngFor="let firefighterEl of (rostersState | async).flyerWeighted" value="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
             </mat-select>
           </mat-form-field>
           <div>
             <button mat-button matStepperNext>Next</button>
           </div>
         </form>
-      </div>
-      <div class="col">
-        <h1>{{selected}}</h1>
       </div>
     </div>
   </mat-step>
