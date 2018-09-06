@@ -8,7 +8,7 @@ import { FfCount } from "../../shared/ff-count.model";
 export interface State {
   allShifts: Shifts[];
   pumps: Pump[];
-  pumpPreferences: [];
+  pumpPreferences: Array<Array<any>>;
   pumpSeating: [];
   failList: [];
 }
@@ -16,7 +16,7 @@ export interface State {
 const initialState: State = {
   allShifts: [],
   pumps: [{ name: "test", seats: ["one", "two"], qualifications: ["nil"] }],
-  pumpPreferences: [],
+  pumpPreferences: [['flyer', []], ['flyer', []], ['flyer', []], ['flyer', []], ['flyer', []]],
   pumpSeating: [],
   failList: [],
 };
