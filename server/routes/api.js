@@ -142,7 +142,7 @@ router.post("/deletefirefighter", (req, res, next) => {
 router.get("/ffpumptotals", (req, res) => {
   const promiseFirefighters = FireFighter.find()
     .where("name")
-    .nin(["Seeney", "Ruaro"])
+    .nin(["Seeney", "Ruaro", "dummy"])
     .exec();
 
   const promiseAppliances = Appliance.find()
@@ -159,7 +159,7 @@ router.get("/ffpumptotals", (req, res) => {
           return ShiftInstance.find({ firefighter: firefighter._id })
             .where("pump")
             .equals(appliance._id)
-            .sort('date')
+            .sort("date")
             .limit(1)
             .then(result => {
               if (result.length) {
@@ -171,7 +171,7 @@ router.get("/ffpumptotals", (req, res) => {
                 return {
                   pump: appliance.name,
                   date: new Date()
-                }
+                };
               }
             });
         })
@@ -280,7 +280,7 @@ router.get("/ffpumptotals", (req, res) => {
 
       for (const result of sorted) {
         justNames.push(result.pump);
-      };
+      }
 
       return [rawResult.firefighter, justNames];
     };
@@ -348,6 +348,7 @@ router.get("/ffpumptotals", (req, res) => {
       const pumpKey = [];
       const ffKey = [];
       const failList = [];
+      let tempFailList = [];
 
       const pumpsSeatsArr = [[], [], [], [], []];
 
@@ -375,21 +376,20 @@ router.get("/ffpumptotals", (req, res) => {
       };
 
       const fnFfFromPumpRecipPref = (pumpIndex, pumpRecipPref) => {
-        console.log('pumpIndex: ', pumpIndex, ' pumpRecipPref: ', pumpRecipPref)
+        console.log(
+          "pumpIndex: ",
+          pumpIndex,
+          " pumpRecipPref: ",
+          pumpRecipPref
+        );
         return pumpPreferences[pumpIndex][1][pumpRecipPref];
       };
 
-      for (const pump of pumpPreferences) {
-        pumpKey.push(pump[0]);
-      }
+      const fnClearTempFailList = () => {
+        tempFailList = [];
+      };
 
-      for (const ff of ffPreferences) {
-        ffKey.push(ff[0]);
-      }
-
-      for (let k = 0; k < ffPreferences.length; k++) {
-        const firefighter = ffPreferences[k];
-        console.log(firefighter[0]);
+      const fnMarriageLogic = firefighter => {
         for (let l = 0; l < firefighter[1].length; l++) {
           const preference = firefighter[1][l];
           // console.log(pumpIndex, pumpKey[pumpIndex], pumpRecipPref);
@@ -416,16 +416,19 @@ router.get("/ffpumptotals", (req, res) => {
               " swaping ",
               pumpRecipPref
             );
-            const oldFFString = fnFfFromPumpRecipPref(pumpIndex, pumpsSeatsArr[pumpIndex][3]);
-            console.log('old ff string: ', oldFFString);
+            const oldFFString = fnFfFromPumpRecipPref(
+              pumpIndex,
+              pumpsSeatsArr[pumpIndex][3]
+            );
+            console.log("old ff string: ", oldFFString);
             const oldFFIndex = fnGetFfIndex(oldFFString);
-            console.log('old ff index: ', oldFFIndex);
-            failList.push(ffPreferences[oldFFIndex]);
+            console.log("old ff index: ", oldFFIndex);
+            tempFailList.push(ffPreferences[oldFFIndex]);
             pumpsSeatsArr[pumpIndex][3] = pumpRecipPref;
             fnSortSeatsArr(pumpIndex);
 
             console.log(preference, " now has ", pumpsSeatsArr[pumpIndex]);
-            console.log("faillist now has", oldFFString);
+            console.log("tempFailList now has", oldFFString);
             break;
           } else if (l === firefighter[1].length - 1) {
             failList.push(firefighter);
@@ -445,17 +448,36 @@ router.get("/ffpumptotals", (req, res) => {
               pumpsSeatsArr[pumpIndex],
               " ignoring ",
               pumpRecipPref,
-              ' trying next preference'
-            )
+              " trying next preference"
+            );
           }
         }
+      };
+
+      for (const pump of pumpPreferences) {
+        pumpKey.push(pump[0]);
       }
 
-      // iterate through fail list
-      // for (let i = 0; i < failList.length; i++) {
-      //   const failure = failList[i];
-      //   console.log(failure);
-      // }
+      for (const ff of ffPreferences) {
+        ffKey.push(ff[0]);
+      }
+
+      for (let k = 0; k < ffPreferences.length; k++) {
+        const firefighter = ffPreferences[k];
+        console.log(firefighter[0]);
+        fnMarriageLogic(firefighter);
+      }
+
+      // iterate through temp fail list
+      while (tempFailList.length > 0) {
+        const copyTempFailList = [...tempFailList];
+        fnClearTempFailList();
+        for (let i = 0; i < copyTempFailList.length; i++) {
+          console.log(copyTempFailList, tempFailList);
+          const firefighter = copyTempFailList[i];
+          fnMarriageLogic(firefighter);
+        }
+      }
 
       for (let i = 0; i < pumpsSeatsArr.length; i++) {
         const pumpString = pumpKey[i];
@@ -468,7 +490,14 @@ router.get("/ffpumptotals", (req, res) => {
 
         console.log(pumpString, pumpsSeatsArr[i]);
       }
-      console.log(failList);
+      console.log(
+        "///fail list///\n",
+        failList,
+        "\n///fail list///\n",
+        "\n///TEMP fail list///\n",
+        tempFailList,
+        "\n///TEMP fail list///"
+      );
       // console.log(pumpPreferences, ffPreferences);
     });
   });
