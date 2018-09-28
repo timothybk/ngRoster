@@ -140,128 +140,380 @@ router.post("/deletefirefighter", (req, res, next) => {
 
 // Get all shifts
 router.get("/ffpumptotals", (req, res) => {
-  ShiftInstance.aggregate()
-    .group({
-      _id: { firefighter: "$firefighter", pump: "$pump" },
-      total: { $sum: 1 }
-    })
-    .lookup({
-      from: "shiftinstances",
-      localField: "_id.firefighter",
-      foreignField: "firefighter",
-      as: "allFfShifts"
-    })
-    .lookup({
-      from: "shiftinstances",
-      localField: "_id.pump",
-      foreignField: "pump",
-      as: "allPumpShifts"
-    })
-    .lookup({
-      from: "firefighters",
-      localField: "_id.firefighter",
-      foreignField: "_id",
-      as: "_id.firefighter"
-    })
-    .lookup({
-      from: "appliances",
-      localField: "_id.pump",
-      foreignField: "_id",
-      as: "_id.pump"
-    })
-    .project({
-      _id: 0,
-      ff: { $arrayElemAt: ["$_id.firefighter", 0] },
-      pump: { $arrayElemAt: ["$_id.pump", 0] },
-      total: 1,
-      allFfShifts: { $size: "$allFfShifts" },
-      allPumpShifts: { $size: "$allPumpShifts"},
-      // ++++++++++++
-      // for below
-      // estimated seats per pump(eseatspp): 3.2
-      // total seats(tsea): 16
-      // estimated shifts per pump total(eshiftpp): 7.5
-      // total shifts(tshifts): 203
-      // expected percent of ff shifts = (eseatpp / tsea) * 100
-      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
-      ExpectedPercentageofFFShifts: 20,
-      ExpectedPercentageofPumpShifts: 3.7
-    })
-    .project({
-      firefighter: "$ff.name",
-      pump: "$pump.name",
-      total: 1,
-      allFfShifts: "$allFfShifts",
-      allPumpShifts: "$allPumpShifts",
-      fractionOfFfTotal: { $divide: ["$total", "$allFfShifts"]},
-      fractionOfPumpTotal: { $divide: ["$total", "$allPumpShifts"]}
-    })
-    .project({
-      firefighter: "$firefighter",
-      pump: "$pump",
-      total: 1,
-      allFfShifts: "$allFfShifts",
-      allPumpShifts: "$allPumpShifts",
-      percentageOfFfTotal: { $multiply: [ "$fractionOfFfTotal", 100 ] },
-      percentageOfPumpTotal: { $multiply: [ "$fractionOfPumpTotal", 100 ] },
-      // ++++++++++++
-      // for below
-      // estimated seats per pump(eseatspp): 3.2
-      // total seats(tsea): 16
-      // estimated shifts per pump total(eshiftpp): 7.5
-      // total shifts(tshifts): 203
-      // expected percent of ff shifts = (eseatpp / tsea) * 100
-      // ExpectedPercentageofPumpShifts = eshiftpp / tshifts *100
-      ExpectedPercentageofFFShifts: { $literal: 20},
-      ExpectedPercentageofPumpShifts: { $literal: 3.7}
-    })
-    .project({
-      firefighter: "$firefighter",
-      pump: "$pump",
-      weightedResult: {$add: [-3.2, "$percentageOfFfTotal", -20, "$percentageOfPumpTotal"]}
-    })
-    .sort("pump weightedResult")
-    .then(resultList => {
-      const curatedResult = [
-        [],
-        [],
-        [],
-        [],
-        []
-      ];
-      for (resultEl of resultList) {
-        const ffCountObj = {
-          firefighter: resultEl.firefighter,
-          count: resultEl.weightedResult
-        };
-        switch (resultEl.pump) {
-          case "flyer":
-            curatedResult[0].push(ffCountObj);
-            break;
-          case "runner":
-            curatedResult[1].push(ffCountObj);
-            break;
-          case "rescuepump":
-            curatedResult[2].push(ffCountObj);
-            break;
-          case "salvage":
-            curatedResult[3].push(ffCountObj);
-            break;
-          case "bronto":
-            curatedResult[4].push(ffCountObj);
-            break;
+  const promiseFirefighters = FireFighter.find()
+    .where("name")
+    .nin(["Seeney", "Ruaro", "dummy"])
+    .exec();
 
-          default:
-            console.log("default", resultEl.pump);
-            break;
+  const promiseAppliances = Appliance.find()
+    .populate("qualifications")
+    .exec();
+
+  Promise.all([promiseFirefighters, promiseAppliances]).then(ffsAndPumps => {
+    const firefighters = ffsAndPumps[0];
+    const appliances = ffsAndPumps[1];
+
+    const fnGetShifts = firefighter => {
+      return Promise.all(
+        appliances.map(appliance => {
+          return ShiftInstance.find({ firefighter: firefighter._id })
+            .where("pump")
+            .equals(appliance._id)
+            .sort("date")
+            .limit(1)
+            .then(result => {
+              if (result.length) {
+                return {
+                  pump: appliance.name,
+                  date: result[0].date
+                };
+              } else {
+                return {
+                  pump: appliance.name,
+                  date: new Date()
+                };
+              }
+            });
+        })
+      ).then(result => {
+        return {
+          firefighter: firefighter.name,
+          pumps: result
+        };
+      });
+    };
+
+    const fnGetShiftByPump = pump => {
+      return Promise.all(
+        firefighters.map(firefighter => {
+          return ShiftInstance.find({ pump: pump._id })
+            .where("firefighter")
+            .equals(firefighter._id)
+            .then(result => {
+              return {
+                firefighter: firefighter.name,
+                count: result.length
+              };
+            });
+        })
+      ).then(result => {
+        return {
+          pump: pump.name,
+          firefighters: result
+        };
+      });
+    };
+
+    const fnTallyandFormat = rawResult => {
+      const tallyResult = {};
+      tallyResult.firefighter = rawResult.firefighter;
+      tallyResult.total = 0;
+      tallyResult.pumps = [];
+
+      for (const pump of rawResult.pumps) {
+        tallyResult.pumps.push({
+          name: pump.pump,
+          count: pump.count
+        });
+        tallyResult.total += pump.count;
+      }
+
+      return tallyResult;
+    };
+
+    const fnTallyandFormatPump = rawResult => {
+      const tallyResult = {};
+      tallyResult.pump = rawResult.pump;
+      tallyResult.total = 0;
+      tallyResult.firefighters = [];
+
+      for (const firefighter of rawResult.firefighters) {
+        tallyResult.firefighters.push({
+          name: firefighter.firefighter,
+          count: firefighter.count
+        });
+        tallyResult.total += firefighter.count;
+      }
+
+      return tallyResult;
+    };
+
+    const fnFindPercentage = tallyResult => {
+      const percentageResult = {
+        firefighter: tallyResult.firefighter,
+        pumps: []
+      };
+
+      for (const pump of tallyResult.pumps) {
+        percentageResult.pumps.push({
+          name: pump.name,
+          percentage: (pump.count / tallyResult.total) * 100
+        });
+      }
+
+      return percentageResult;
+    };
+
+    const fnFindPercentagePump = tallyResult => {
+      const percentageResult = {
+        pump: tallyResult.pump,
+        firefighters: []
+      };
+
+      for (const firefighter of tallyResult.firefighters) {
+        percentageResult.firefighters.push({
+          name: firefighter.name,
+          percentage: (firefighter.count / tallyResult.total) * 100
+        });
+      }
+
+      return percentageResult;
+    };
+
+    const fnSortInFF = rawResult => {
+      const pumps = rawResult.pumps;
+      const sorted = pumps.sort((a, b) => {
+        return a.date - b.date;
+      });
+
+      const justNames = [];
+
+      for (const result of sorted) {
+        justNames.push(result.pump);
+      }
+
+      return [rawResult.firefighter, justNames];
+    };
+
+    const fnSortInPump = percentageResult => {
+      const firefighters = percentageResult.firefighters;
+      const sorted = firefighters.sort((a, b) => {
+        return a.percentage - b.percentage;
+      });
+
+      const justNames = [];
+
+      for (const result of sorted) {
+        justNames.push(result.name);
+      }
+
+      return [percentageResult.pump, justNames];
+    };
+
+    const fnQualCheckFf = pumpFfList => {
+      const pumpTruthey = [];
+
+      for (const pumper of pumpFfList[1]) {
+        const actualPump = appliances.find(pump => pump.name === pumper);
+
+        const pumpQuals = actualPump.qualifications;
+
+        if (pumpQuals.length > 0) {
+          const actualFf = firefighters.find(ff => ff.name === pumpFfList[0]);
+          const index = actualFf.qualifications.indexOf(pumpQuals[0].name);
+
+          if (index > -1) {
+            pumpTruthey.push(pumper);
+          }
+        } else {
+          pumpTruthey.push(pumper);
         }
       }
-      res.status(200).json(curatedResult);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send(err);
+
+      return [pumpFfList[0], pumpTruthey];
+    };
+
+    const promisePumpSorted = Promise.all(
+      appliances.map(fnGetShiftByPump)
+    ).then(rawResults => {
+      const tallyResult = rawResults.map(fnTallyandFormatPump);
+      const percentageResult = tallyResult.map(fnFindPercentagePump);
+      const justSorted = percentageResult.map(fnSortInPump);
+
+      return justSorted;
     });
+
+    const promiseFfSorted = Promise.all(firefighters.map(fnGetShifts)).then(
+      rawResults => {
+        const justSorted = rawResults.map(fnSortInFF);
+        const checked = justSorted.map(fnQualCheckFf);
+
+        return checked;
+      }
+    );
+
+    Promise.all([promisePumpSorted, promiseFfSorted])
+      .then(result => {
+        const pumpPreferences = result[0];
+        const ffPreferences = result[1];
+        const pumpKey = [];
+        const ffKey = [];
+        const failList = [];
+        let tempFailList = [];
+
+        const pumpsSeatsArr = [[], [], [], [], []];
+
+        const fnCheckPumpNumber = pumpIndex => {
+          const actualPump = appliances[pumpIndex];
+
+          const pumpSeats = actualPump.seats;
+
+          if (pumpsSeatsArr[pumpIndex].length < pumpSeats.length) {
+            return true;
+          } else {
+            return false;
+          }
+        };
+
+        const fnGetPumpIndex = pumpString => {
+          return pumpKey.indexOf(pumpString);
+        };
+
+        const fnGetFfIndex = ffString => {
+          return ffKey.indexOf(ffString);
+        };
+
+        const fnSortSeatsArr = pumpIndex => {
+          pumpsSeatsArr[pumpIndex].sort(function(a, b) {
+            return a - b;
+          });
+          return;
+        };
+
+        const fnFfFromPumpRecipPref = (pumpIndex, pumpRecipPref) => {
+          // console.log(
+          //   "pumpIndex: ",
+          //   pumpIndex,
+          //   " pumpRecipPref: ",
+          //   pumpRecipPref
+          // );
+          return pumpPreferences[pumpIndex][1][pumpRecipPref];
+        };
+
+        const fnClearTempFailList = () => {
+          tempFailList = [];
+        };
+
+        const fnMarriageLogic = firefighter => {
+          for (let l = 0; l < firefighter[1].length; l++) {
+            const preference = firefighter[1][l];
+            // console.log(pumpIndex, pumpKey[pumpIndex], pumpRecipPref);
+
+            const pumpIndex = fnGetPumpIndex(preference);
+            const seatsAvailable = fnCheckPumpNumber(pumpIndex);
+            const pumpRecipPref = pumpPreferences[pumpIndex][1].indexOf(
+              firefighter[0]
+            );
+
+            if (seatsAvailable) {
+              pumpsSeatsArr[pumpIndex].push(pumpRecipPref);
+
+              fnSortSeatsArr(pumpIndex);
+
+              // console.log("added to ", preference, " there are still seats");
+
+              break;
+            } else if (pumpsSeatsArr[pumpIndex][3] > pumpRecipPref) {
+              // console.log(
+              //   preference,
+              //   " had ",
+              //   pumpsSeatsArr[pumpIndex],
+              //   " swaping ",
+              //   pumpRecipPref
+              // );
+              const oldFFString = fnFfFromPumpRecipPref(
+                pumpIndex,
+                pumpsSeatsArr[pumpIndex][3]
+              );
+              // console.log("old ff string: ", oldFFString);
+              const oldFFIndex = fnGetFfIndex(oldFFString);
+              // console.log("old ff index: ", oldFFIndex);
+              tempFailList.push(ffPreferences[oldFFIndex]);
+              pumpsSeatsArr[pumpIndex][3] = pumpRecipPref;
+              fnSortSeatsArr(pumpIndex);
+
+              // console.log(preference, " now has ", pumpsSeatsArr[pumpIndex]);
+              // console.log("tempFailList now has", oldFFString);
+              break;
+            } else if (l === firefighter[1].length - 1) {
+              failList.push(firefighter);
+              // console.log(
+              //   preference,
+              //   " has ",
+              //   pumpsSeatsArr[pumpIndex],
+              //   " ignoring ",
+              //   pumpRecipPref,
+              //   " that was last preference"
+              // );
+              // console.log("faillist now has", firefighter);
+            } else {
+              // console.log(
+              //   preference,
+              //   " has ",
+              //   pumpsSeatsArr[pumpIndex],
+              //   " ignoring ",
+              //   pumpRecipPref,
+              //   " trying next preference"
+              // );
+            }
+          }
+        };
+
+        for (const pump of pumpPreferences) {
+          pumpKey.push(pump[0]);
+        }
+
+        for (const ff of ffPreferences) {
+          ffKey.push(ff[0]);
+        }
+
+        for (let k = 0; k < ffPreferences.length; k++) {
+          const firefighter = ffPreferences[k];
+          // console.log(firefighter[0]);
+          fnMarriageLogic(firefighter);
+        }
+
+        // iterate through temp fail list
+        while (tempFailList.length > 0) {
+          const copyTempFailList = [...tempFailList];
+          fnClearTempFailList();
+          for (let i = 0; i < copyTempFailList.length; i++) {
+            // console.log(copyTempFailList, tempFailList);
+            const firefighter = copyTempFailList[i];
+            fnMarriageLogic(firefighter);
+          }
+        }
+
+        //
+        // convert pref indexes to strings
+        //
+
+        // for (let i = 0; i < pumpsSeatsArr.length; i++) {
+        //   const pump = pumpsSeatsArr[i];
+        //   if (!fnCheckPumpNumber(i)) {
+        //     console.log(pumpPreferences[i])
+        //   }
+        // }
+
+        // for (let i = 0; i < pumpsSeatsArr.length; i++) {
+        //   const pumpString = pumpKey[i];
+        //   const currentPumpPrefs = pumpPreferences[i][1];
+        //   for (let j = 0; j < pumpsSeatsArr[i].length; j++) {
+        //     const ffRecipIndex = pumpsSeatsArr[i][j];
+        //     const ffString = currentPumpPrefs[ffRecipIndex];
+        //     pumpsSeatsArr[i][j] = ffString;
+        //   }
+
+        //   console.log(pumpString, pumpsSeatsArr[i], ' all seats filled?', !fnCheckPumpNumber(i));
+        // }
+        return [pumpPreferences, pumpsSeatsArr, failList];
+        // console.log(pumpPreferences, ffPreferences);
+      })
+      .then(result => {
+        console.log(result);
+        res.status(200).json(result);
+      });
+  });
 });
 
 // Get all pumps
