@@ -6,16 +6,13 @@
           <ng-template matStepLabel>Flyer</ng-template>
           <mat-form-field>
             <mat-select placeholder="Firefighters" formControlName="firstCtrl" multiple [(value)]="selected">
-              <mat-option *ngFor="let firefighterEl of (rostersState | async).flyerWeighted" value="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
             </mat-select>
           </mat-form-field>
           <div>
             <button mat-button matStepperNext>Next</button>
           </div>
         </form>
-      </div>
-      <div class="col">
-        <h1>{{selected}}</h1>
       </div>
     </div>
   </mat-step>
@@ -24,7 +21,7 @@
       <ng-template matStepLabel>Runner</ng-template>
       <mat-form-field>
         <mat-select placeholder="Firefighters" formControlName="secondCtrl" multiple>
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).runnerWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[1][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div>
@@ -38,7 +35,7 @@
       <ng-template matStepLabel>Rescue Pump</ng-template>
       <mat-form-field>
         <mat-select placeholder="Firefighters" formControlName="thirdCtrl" multiple>
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).rescuepumpWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[2][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div>
@@ -52,7 +49,7 @@
       <ng-template matStepLabel>Salvage</ng-template>
       <mat-form-field>
         <mat-select placeholder="Firefighters" formControlName="fourthCtrl" multiple>
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).salvageWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[3][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div>
@@ -66,7 +63,7 @@
       <ng-template matStepLabel>Bronto</ng-template>
       <mat-form-field>
         <mat-select placeholder="Firefighters" formControlName="fifthCtrl" multiple>
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).brontoWeighted" [value]="firefighterEl.firefighter">{{firefighterEl.firefighter}}</mat-option>
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[4][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div>
