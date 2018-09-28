@@ -3,22 +3,22 @@
     <form [formGroup]="flyerFormGroup">
       <ng-template matStepLabel>Flyer</ng-template>
       <mat-form-field>
-        <mat-select placeholder="Driver" formControlName="firstCtrlDriver">
+        <mat-select placeholder="Driver" formControlName="flyerCtrlDriver">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field>
-        <mat-select placeholder="Number One" formControlName="firstCtrl1">
+        <mat-select placeholder="Number One" formControlName="flyerCtrl1">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field>
-        <mat-select placeholder="Number Two" formControlName="firstCtrl2">
+        <mat-select placeholder="Number Two" formControlName="flyerCtrl2">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field>
-        <mat-select placeholder="Number Three" formControlName="firstCtrl3">
+        <mat-select placeholder="Number Three" formControlName="flyerCtrl3">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -31,7 +31,22 @@
     <form [formGroup]="runnerFormGroup">
       <ng-template matStepLabel>Runner</ng-template>
       <mat-form-field>
-        <mat-select placeholder="Firefighters" formControlName="secondCtrl" multiple>
+        <mat-select placeholder="Driver" formControlName="runnerCtrlDriver">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[1][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number One" formControlName="runnerCtrl1">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[1][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number Two" formControlName="runnerCtrl2">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[1][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number Three" formControlName="runnerCtrl3">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[1][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -45,7 +60,22 @@
     <form [formGroup]="rescuePumpFormGroup">
       <ng-template matStepLabel>Rescue Pump</ng-template>
       <mat-form-field>
-        <mat-select placeholder="Firefighters" formControlName="thirdCtrl" multiple>
+        <mat-select placeholder="Driver" formControlName="rpCtrlDriver">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[2][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number One" formControlName="rpCtrl1">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[2][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number Two" formControlName="rpCtrl2">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[2][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number Three" formControlName="rpCtrl3">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[2][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -59,7 +89,12 @@
     <form [formGroup]="salvageFormGroup">
       <ng-template matStepLabel>Salvage</ng-template>
       <mat-form-field>
-        <mat-select placeholder="Firefighters" formControlName="fourthCtrl" multiple>
+        <mat-select placeholder="Driver" formControlName="salvageCtrlDriver">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[3][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Offsider" formControlName="salvageCtrlOffsider">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[3][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -73,7 +108,12 @@
     <form [formGroup]="brontoFormGroup">
       <ng-template matStepLabel>Bronto</ng-template>
       <mat-form-field>
-        <mat-select placeholder="Firefighters" formControlName="fifthCtrl" multiple>
+        <mat-select placeholder="Driver" formControlName="brontoCtrlDriver">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[4][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Offsider" formControlName="brontoCtrlOffsider">
           <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[4][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
         </mat-select>
       </mat-form-field>

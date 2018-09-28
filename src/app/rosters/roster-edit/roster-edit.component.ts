@@ -27,22 +27,31 @@ export class RosterEditComponent implements OnInit {
 
   ngOnInit() {
     this.flyerFormGroup = this._formBuilder.group({
-      firstCtrlDriver: ['', Validators.required],
-      firstCtrl1: ['', Validators.required],
-      firstCtrl2: ['', Validators.required],
-      firstCtrl3: ['', Validators.required]
+      flyerCtrlDriver: ['', Validators.required],
+      flyerCtrl1: ['', Validators.required],
+      flyerCtrl2: ['', Validators.required],
+      flyerCtrl3: ['', Validators.required]
     });
     this.runnerFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      runnerCtrlDriver: ['', Validators.required],
+      runnerCtrl1: ['', Validators.required],
+      runnerCtrl2: ['', Validators.required],
+      runnerCtrl3: ['', Validators.required]
     });
     this.rescuePumpFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required]
+      rpCtrlDriver: ['', Validators.required],
+      rpCtrl1: ['', Validators.required],
+      rpCtrl2: ['', Validators.required],
+      rpCtrl3: ['', Validators.required]
+
     });
     this.salvageFormGroup = this._formBuilder.group({
-      fourthCtrl: ['', Validators.required]
+      salvageCtrlDriver: ['', Validators.required],
+      salvageCtrlOffsider: ['', Validators.required]
     });
     this.brontoFormGroup = this._formBuilder.group({
-      fifthCtrl: ['', Validators.required]
+      brontoCtrlDriver: ['', Validators.required],
+      brontoCtrlOffsider: ['', Validators.required]
     });
     this.store.dispatch(new RostersActions.FetchFfPumpTotals());
   }
