@@ -30,7 +30,7 @@ export class RosterEditComponent implements OnInit {
       firstCtrlDriver: ['', Validators.required],
       firstCtrl1: ['', Validators.required],
       firstCtrl2: ['', Validators.required],
-      firstCtrl3: ['', Validators.required],
+      firstCtrl3: ['', Validators.required]
     });
     this.runnerFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
