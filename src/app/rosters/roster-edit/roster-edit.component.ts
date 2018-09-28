@@ -19,11 +19,7 @@ export class RosterEditComponent implements OnInit {
   salvageFormGroup: FormGroup;
   brontoFormGroup: FormGroup;
 
-  selected = ['test']
-
   rostersState: Observable<fromRosters.State>
-
-  toppingList = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 
   constructor(private store: Store<fromApp.AppState>, private _formBuilder: FormBuilder) {
     this.rostersState = this.store.select('rosters');
@@ -31,7 +27,10 @@ export class RosterEditComponent implements OnInit {
 
   ngOnInit() {
     this.flyerFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      firstCtrlDriver: ['', Validators.required],
+      firstCtrl1: ['', Validators.required],
+      firstCtrl2: ['', Validators.required],
+      firstCtrl3: ['', Validators.required],
     });
     this.runnerFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]

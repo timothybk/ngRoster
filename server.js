@@ -21,7 +21,7 @@ const app = express();
 //mlab uri
 const mongodbUri = 'mongodb://tim:fred@ds133281.mlab.com:33281/station_training_program'
 mongoose.Promise = global.Promise;
-mongoose.connect(mongodbUri);
+mongoose.connect(mongodbUri, { useNewUrlParser: true });
 
 // Parsers for POST data
 app.use(bodyParser.json());

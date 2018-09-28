@@ -1,20 +1,31 @@
 <mat-horizontal-stepper #stepper>
   <mat-step [stepControl]="flyerFormGroup">
-    <div class="row">
-      <div class="col">
-        <form [formGroup]="flyerFormGroup">
-          <ng-template matStepLabel>Flyer</ng-template>
-          <mat-form-field>
-            <mat-select placeholder="Firefighters" formControlName="firstCtrl" multiple [(value)]="selected">
-              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperNext>Next</button>
-          </div>
-        </form>
+    <form [formGroup]="flyerFormGroup">
+      <ng-template matStepLabel>Flyer</ng-template>
+      <mat-form-field>
+        <mat-select placeholder="Driver" formControlName="firstCtrlDriver">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number One" formControlName="firstCtrl1">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number Two" formControlName="firstCtrl2">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Number Three" formControlName="firstCtrl3">
+          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
       </div>
-    </div>
+    </form>
   </mat-step>
   <mat-step [stepControl]="runnerFormGroup">
     <form [formGroup]="runnerFormGroup">
