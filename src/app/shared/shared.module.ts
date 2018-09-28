@@ -3,6 +3,7 @@ import { KeysPipe } from './keys.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatButtonModule,
         MatCheckboxModule,
         MatInputModule,
@@ -24,6 +25,7 @@ import {MatButtonModule,
   exports: [
     CommonModule,
     NgbModule,
+    FlexLayoutModule,
     KeysPipe,
     RoundPipe,
     MatButtonModule,
