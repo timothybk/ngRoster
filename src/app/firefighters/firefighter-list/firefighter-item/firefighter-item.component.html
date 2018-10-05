@@ -1,9 +1,13 @@
-<a style="cursor: pointer;" class="list-group-item clearfix"
-[routerLink]='[index]'
-routerLinkActive='active'
->
-  <div class="pull-left">
-    <h4 class="list-group-item-heading">{{firefighter.name}}</h4>
-    <p class="list-group-item-text">{{firefighter.number}}</p>
-  </div>
-</a>
+<mat-card style="cursor: pointer;" [routerLink]='[index]' routerLinkActive='active'>
+  <mat-card-header>
+    <mat-card-title>
+      {{firefighter.name}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{firefighter.rank}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    {{firefighter.number}}
+  </mat-card-content>
+</mat-card>
