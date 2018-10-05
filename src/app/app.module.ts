@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { FirefighterEffects } from './firefighters/store/firefighters.effects';
@@ -34,7 +33,6 @@ import { AuthGuard } from './auth/auth-guard.service';
     CoreModule,
     SharedModule,
     AuthModule,
-    NgbModule.forRoot(),
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([FirefighterEffects, RostersEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({
