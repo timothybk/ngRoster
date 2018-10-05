@@ -5,34 +5,34 @@
       <button fxFlex fxFlexOffset="10px" mat-raised-button color="accent" (click)="onCancel()">Cancel</button>
     </div>
 
-    <div class="form-group">
-      <label for="number">number</label>
-      <input type="number" id='number' class="form-control" formControlName="number">
+    <div fxFlex fxFlexOffset="10px">
+      <mat-form-field>
+        <input matInput placeholder="number" type="number" id='number' formControlName="number">
+      </mat-form-field>
     </div>
 
-    <div class="form-group">
-      <label for="rank">rank</label>
-      <input type="text" id='rank' class="form-control" formControlName="rank">
+    <div fxFlex fxFlexOffset="10px">
+      <mat-form-field>
+        <input matInput placeholder="rank" type="text" id='rank' formControlName="rank">
+      </mat-form-field>
     </div>
 
-    <div class="form-group">
-      <label for="name">name</label>
-      <input type="text" id='name' class="form-control" formControlName="name">
+    <div fxFlex fxFlexOffset="10px">
+      <mat-form-field>
+        <input matInput placeholder="name" type="text" id='name' formControlName="name">
+      </mat-form-field>
     </div>
 
-    <div class="form-group">
-      <label for="md">MD</label>
-      <input type="checkbox" class="form-control" formControlName="md">
+    <div fxFlex fxFlexOffset="10px">
+      <mat-checkbox formControlName="md">Motor Driver</mat-checkbox>
     </div>
 
-    <div class="form-group">
-      <label for="rescue">Rescue</label>
-      <input type="checkbox" class="form-control" formControlName="rescue">
+    <div fxFlex fxFlexOffset="10px">
+      <mat-checkbox formControlName="rescue">Rescue</mat-checkbox>
     </div>
 
-    <div class="form-group">
-      <label for="aerial">Aerial</label>
-      <input type="checkbox" class="form-control" formControlName="aerial">
+    <div fxFlex fxFlexOffset="10px">
+      <mat-checkbox formControlName="aerial">Aerial</mat-checkbox>
     </div>
 
   </div>
