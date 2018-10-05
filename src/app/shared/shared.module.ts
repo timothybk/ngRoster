@@ -16,7 +16,9 @@ import {MatButtonModule,
         MatTabsModule,
         MatStepperModule,
         MatSelectModule,
-        MatCardModule} from '@angular/material';
+        MatCardModule,
+        MatListModule
+      } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import {MatButtonModule,
     MatTabsModule,
     MatStepperModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatListModule
   ]
 })
 export class SharedModule {}
