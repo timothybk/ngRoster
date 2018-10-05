@@ -1,60 +1,39 @@
-<div class="row">
-  <div class="col-12">
-    <form [formGroup]='firefighterForm' (ngSubmit)="onSubmit()">
-      <div class="row">
-        <div class="col-12">
-          <button type="submit" class="btn btn-success" [disabled]='!firefighterForm.valid'>Save</button>
-          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="number">number</label>
-            <input type="number" id='number' class="form-control" formControlName="number">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="rank">rank</label>
-            <input type="text" id='rank' class="form-control" formControlName="rank">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="name">name</label>
-            <input type="text" id='name' class="form-control" formControlName="name">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="md">MD</label>
-            <input type="checkbox" class="form-control" formControlName="md">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="rescue">Rescue</label>
-            <input type="checkbox" class="form-control" formControlName="rescue">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="aerial">Aerial</label>
-            <input type="checkbox" class="form-control" formControlName="aerial">
-          </div>
-        </div>
-      </div>
-    </form>
+<form [formGroup]='firefighterForm' (ngSubmit)="onSubmit()">
+  <div fxLayout="column">
+    <div fxLayout>
+      <button fxFlex mat-raised-button type="submit" color="primary" [disabled]='!firefighterForm.valid'>Save</button>
+      <button fxFlex fxFlexOffset="10px" mat-raised-button color="accent" (click)="onCancel()">Cancel</button>
+    </div>
+
+    <div class="form-group">
+      <label for="number">number</label>
+      <input type="number" id='number' class="form-control" formControlName="number">
+    </div>
+
+    <div class="form-group">
+      <label for="rank">rank</label>
+      <input type="text" id='rank' class="form-control" formControlName="rank">
+    </div>
+
+    <div class="form-group">
+      <label for="name">name</label>
+      <input type="text" id='name' class="form-control" formControlName="name">
+    </div>
+
+    <div class="form-group">
+      <label for="md">MD</label>
+      <input type="checkbox" class="form-control" formControlName="md">
+    </div>
+
+    <div class="form-group">
+      <label for="rescue">Rescue</label>
+      <input type="checkbox" class="form-control" formControlName="rescue">
+    </div>
+
+    <div class="form-group">
+      <label for="aerial">Aerial</label>
+      <input type="checkbox" class="form-control" formControlName="aerial">
+    </div>
+
   </div>
-</div>
+</form>
