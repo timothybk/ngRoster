@@ -2,26 +2,36 @@
   <mat-step [stepControl]="flyerFormGroup">
     <form [formGroup]="flyerFormGroup">
       <ng-template matStepLabel>Flyer</ng-template>
-      <mat-form-field>
-        <mat-select placeholder="Driver" formControlName="flyerCtrlDriver">
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select placeholder="Number One" formControlName="flyerCtrl1">
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select placeholder="Number Two" formControlName="flyerCtrl2">
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select placeholder="Number Three" formControlName="flyerCtrl3">
-          <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div fxLayout="row wrap" fxLayoutGap="20px">
+        <div>
+          <mat-form-field>
+            <mat-select placeholder="Driver" formControlName="flyerCtrlDriver">
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-select placeholder="Number One" formControlName="flyerCtrl1">
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-select placeholder="Number Two" formControlName="flyerCtrl2">
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-select placeholder="Number Three" formControlName="flyerCtrl3">
+              <mat-option *ngFor="let firefighterEl of (rostersState | async).pumpPreferences[0][1]" value="firefighterEl">{{firefighterEl}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
       <div>
         <button mat-button matStepperNext>Next</button>
       </div>
