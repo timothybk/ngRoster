@@ -1,7 +1,7 @@
 <div>
   <div fxflex fxlayout="column">
     <div fxflex>
-      <button mat-raised-button color="primary" (click)='onNewFirefighter()'>New Firefighter</button>
+      <button fxFlex mat-raised-button color="primary" (click)='onNewFirefighter()'>New Firefighter</button>
     </div>
     <div fxflex>
       <app-firefighter-item *ngFor='let firefighterEl of (firefightersState | async).firefighters; let i = index'
