@@ -1,8 +1,5 @@
-import { Shifts } from './../../shared/shifts.model';
 import { Pump } from './../../shared/pump.model';
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
-import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
@@ -12,7 +9,6 @@ import { map, switchMap } from "rxjs/operators";
 import * as fromApp from './../../store/app.reducer';
 import * as RostersActions from './rosters.actions';
 import * as FirefighterActions from '../../firefighters/store/firefighters.actions';
-import { ShiftInstance } from '../../shared/shift-instance.model';
 import { ShiftsApiResponse } from '../../shared/shifts-api-response.model';
 import { Router } from '@angular/router';
 
