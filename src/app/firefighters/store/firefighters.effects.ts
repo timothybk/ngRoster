@@ -1,16 +1,12 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Observable ,  from } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
-import { Qualification } from './../../shared/qualification.model';
 import { Firefighter } from './../../shared/firefighter.model';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { map, switchMap } from "rxjs/operators";
 
-import * as RostersActions from '../../rosters/store/rosters.actions';
 import * as firefighterActions from './firefighters.actions';
 import * as fromApp from '../../store/app.reducer';
-import * as fromFirefighters from '../store/firefighters.reducers';
 
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
